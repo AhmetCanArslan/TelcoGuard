@@ -192,6 +192,31 @@ export async function apiGetUsers() {
   return res.data
 }
 
+export async function apiCreateUser(data: {
+  name: string; email: string; password: string; phone?: string; role?: string
+}) {
+  const res = await apiFetch<FieldEngineer>('/users', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  })
+  return res.data
+}
+
+export async function apiUpdateUser(id: number, data: Partial<{
+  name: string; email: string; phone: string; role: string; active: boolean
+}>) {
+  const res = await apiFetch<unknown>(`/users/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  })
+  return res.data
+}
+
+export async function apiDeleteUser(id: number) {
+  const res = await apiFetch<unknown>(`/users/${id}`, { method: 'DELETE' })
+  return res.data
+}
+
 /* ---- Simulator (proxied to port 3001) ---- */
 
 async function simFetch<T>(path: string, options: RequestInit = {}) {

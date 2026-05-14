@@ -71,6 +71,9 @@ export interface FieldEngineer {
   longitude?: number;
   is_online: boolean;
   active: boolean;
+  created_at?: string;
+  updated_at?: string;
+  last_seen_at?: string;
 }
 
 export type AnomalyType = 'CPU_SPIKE' | 'USER_DROP' | 'LATENCY_BURST' | 'PACKET_STORM' | 'STATION_DOWN';

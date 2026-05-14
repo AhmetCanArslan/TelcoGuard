@@ -2,15 +2,16 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import {
   FaTachometerAlt, FaBell, FaHardHat, FaChartLine,
-  FaBolt, FaSignOutAlt
+  FaBolt, FaUserShield, FaSignOutAlt
 } from 'react-icons/fa'
 
 const navItems = [
-  { path: '/',           label: 'Dashboard',         icon: <FaTachometerAlt /> },
-  { path: '/alarms',     label: 'Alarm Yönetimi',    icon: <FaBell /> },
-  { path: '/engineers',  label: 'Saha Mühendisleri', icon: <FaHardHat /> },
-  { path: '/reports',    label: 'Raporlama',         icon: <FaChartLine /> },
-  { path: '/simulator',  label: 'Simülatör',         icon: <FaBolt /> },
+  { path: '/',           label: 'Dashboard',         icon: <FaTachometerAlt />, roles: undefined },
+  { path: '/alarms',     label: 'Alarm Yönetimi',    icon: <FaBell />,          roles: undefined },
+  { path: '/engineers',  label: 'Saha Mühendisleri', icon: <FaHardHat />,       roles: undefined },
+  { path: '/reports',    label: 'Raporlama',         icon: <FaChartLine />,     roles: undefined },
+  { path: '/simulator',  label: 'Simülatör',         icon: <FaBolt />,          roles: undefined },
+  { path: '/users',      label: 'Kullanıcı Yönetimi', icon: <FaUserShield />,   roles: ['ADMIN'] },
 ]
 
 export default function Sidebar() {
@@ -36,7 +37,9 @@ export default function Sidebar() {
       </div>
 
       <nav className="sidebar-nav">
-        {navItems.map(item => (
+        {navItems
+          .filter(item => !item.roles || (user && item.roles.includes(user.role)))
+          .map(item => (
           <div
             key={item.path}
             className={`nav-item ${location.pathname === item.path ? 'active' : ''}`}

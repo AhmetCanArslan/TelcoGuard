@@ -96,6 +96,7 @@ func seedUsers() error {
 	}
 
 	defaultUsers := []models.User{
+		{Name: "Admin", Email: config.AppConfig.DefaultAdminEmail, Password: hashPwd(config.AppConfig.DefaultAdminPassword), Role: models.RoleAdmin, Active: true},
 		{Name: "NOC Admin", Email: config.AppConfig.DefaultNocEmail, Password: hashPwd(config.AppConfig.DefaultNocPassword), Role: models.RoleNOCOperator, Active: true},
 		{Name: "Saha Mühendisi", Email: config.AppConfig.DefaultSahaEmail, Password: hashPwd(config.AppConfig.DefaultSahaPassword), Role: models.RoleFieldEngineer, Active: true},
 		{Name: "Şebeke Yöneticisi", Email: config.AppConfig.DefaultSebekeEmail, Password: hashPwd(config.AppConfig.DefaultSebekePassword), Role: models.RoleNetworkManager, Active: true},

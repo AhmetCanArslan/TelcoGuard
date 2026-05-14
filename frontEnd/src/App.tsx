@@ -9,6 +9,7 @@ import Alarms from './pages/Alarms'
 import Engineers from './pages/Engineers'
 import Reports from './pages/Reports'
 import SimulatorControl from './pages/SimulatorControl'
+import Users from './pages/Users'
 
 function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -38,6 +39,7 @@ export default function App() {
         <Route path="/engineers" element={<ProtectedPage><Engineers /></ProtectedPage>} />
         <Route path="/reports" element={<ProtectedPage><Reports /></ProtectedPage>} />
         <Route path="/simulator" element={<ProtectedPage><SimulatorControl /></ProtectedPage>} />
+        <Route path="/users" element={<ProtectedRoute allowedRoles={['ADMIN']}><AppLayout><Users /></AppLayout></ProtectedRoute>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AuthProvider>

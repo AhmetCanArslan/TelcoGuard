@@ -4,6 +4,7 @@ import (
 	"case1/auth"
 	"case1/handlers"
 	"case1/middleware"
+	"case1/models"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/websocket/v2"
@@ -44,9 +45,11 @@ func Setup(app *fiber.App) {
 	protected.Post("/me/password", handlers.UpdatePassword)
 	protected.Post("/auth/logout", handlers.Logout)
 
-	// Users
+	// Users (admin only)
 	users := protected.Group("/users")
+	users.Use(auth.RequireRole(models.RoleAdmin))
 	users.Get("", handlers.ListUsers)
+	users.Post("", handlers.CreateUser)
 	users.Get("/:id", handlers.GetUser)
 	users.Put("/:id", handlers.UpdateUser)
 	users.Delete("/:id", handlers.DeleteUser)

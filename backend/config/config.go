@@ -22,6 +22,8 @@ type Config struct {
 	JWTRefreshSecret        string
 	SimulatorSecret         string
 	FirebaseCredentialsPath string
+	DefaultAdminEmail       string
+	DefaultAdminPassword    string
 	DefaultNocEmail         string
 	DefaultNocPassword      string
 	DefaultSahaEmail        string
@@ -49,6 +51,8 @@ func Init() {
 		JWTRefreshSecret:        getEnv("JWT_REFRESH_SECRET", "default-refresh-secret-change-me"),
 		SimulatorSecret:         getEnv("SIMULATOR_SECRET", "simulator-local-secret"),
 		FirebaseCredentialsPath: getEnv("FIREBASE_CREDENTIALS_PATH", "./config/firebase-credentials.json"),
+		DefaultAdminEmail:       getEnv("DEFAULT_ADMIN_EMAIL", "admin@turkcell.com"),
+		DefaultAdminPassword:    getEnv("DEFAULT_ADMIN_PASSWORD", "admin"),
 		DefaultNocEmail:         getEnv("DEFAULT_NOC_EMAIL", "noc@turkcell.com"),
 		DefaultNocPassword:      getEnv("DEFAULT_NOC_PASSWORD", "noc"),
 		DefaultSahaEmail:        getEnv("DEFAULT_SAHA_EMAIL", "saha@turkcell.com"),
