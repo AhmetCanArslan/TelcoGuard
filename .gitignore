@@ -1,3 +1,4 @@
 .DS_Store
 .opencode/
 frontEnd/node_modules
+frontEnd/dist/
