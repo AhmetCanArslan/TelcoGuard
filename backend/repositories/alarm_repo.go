@@ -106,3 +106,12 @@ func (r *AlarmRepository) FindResolvedWithEngineer(page, perPage int) ([]models.
 	result := query.Order("resolved_at DESC").Offset(offset).Limit(perPage).Find(&alarms)
 	return alarms, total, result.Error
 }
+
+func (r *AlarmRepository) FindUnresolvedByStation(stationID uuid.UUID) ([]models.Alarm, error) {
+	var alarms []models.Alarm
+	result := database.DB.Where(
+		"station_id = ? AND status != ?",
+		stationID, models.AlarmStatusResolved,
+	).Find(&alarms)
+	return alarms, result.Error
+}

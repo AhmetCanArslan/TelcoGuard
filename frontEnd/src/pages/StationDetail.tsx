@@ -39,7 +39,7 @@ export default function StationDetail() {
 
   useEffect(() => {
     fetchData()
-    const interval = setInterval(fetchData, 15000)
+    const interval = setInterval(fetchData, 2000)
     return () => clearInterval(interval)
   }, [fetchData])
 
@@ -58,7 +58,10 @@ export default function StationDetail() {
     )
   }
 
-  const latest = metrics.length > 0 ? metrics[metrics.length - 1] : null
+  // metrics come newest-first from API, index 0 = latest
+  const latest = metrics.length > 0 ? metrics[0] : null
+  // reverse for charts (oldest-first = left-to-right time flow)
+  const chartMetrics = [...metrics].reverse()
 
   return (
     <>
@@ -75,23 +78,23 @@ export default function StationDetail() {
         <div className="stats-grid" style={{ marginBottom: 24 }}>
           <div className="stat-card">
             <div className="stat-icon yellow"><FaMicrochip /></div>
-            <div className="stat-info"><h3>{latest.cpu_usage}%</h3><p>CPU Kullanımı</p></div>
+            <div className="stat-info"><h3>{Number(latest.cpu_usage).toFixed(2)}%</h3><p>CPU Kullanımı</p></div>
           </div>
           <div className="stat-card">
             <div className="stat-icon blue"><FaMemory /></div>
-            <div className="stat-info"><h3>{latest.memory_usage}%</h3><p>Bellek Kullanımı</p></div>
+            <div className="stat-info"><h3>{Number(latest.memory_usage).toFixed(2)}%</h3><p>Bellek Kullanımı</p></div>
           </div>
           <div className="stat-card">
             <div className="stat-icon red"><FaNetworkWired /></div>
-            <div className="stat-info"><h3>{latest.packet_loss}%</h3><p>Paket Kaybı</p></div>
+            <div className="stat-info"><h3>{Number(latest.packet_loss).toFixed(2)}%</h3><p>Paket Kaybı</p></div>
           </div>
           <div className="stat-card">
             <div className="stat-icon green"><FaClock /></div>
-            <div className="stat-info"><h3>{latest.latency}ms</h3><p>Gecikme</p></div>
+            <div className="stat-info"><h3>{Number(latest.latency).toFixed(2)}ms</h3><p>Gecikme</p></div>
           </div>
           <div className="stat-card">
             <div className="stat-icon gray"><FaSignal /></div>
-            <div className="stat-info"><h3>{latest.rssi}dBm</h3><p>Sinyal (RSSI)</p></div>
+            <div className="stat-info"><h3>{Number(latest.rssi).toFixed(2)}dBm</h3><p>Sinyal (RSSI)</p></div>
           </div>
           <div className="stat-card">
             <div className="stat-icon yellow"><FaUsers /></div>
@@ -101,30 +104,30 @@ export default function StationDetail() {
       )}
 
       <div className="metrics-grid">
-        <MetricChart title="CPU Kullanımı" metrics={metrics} dataKey="cpu_usage" unit="%"
+        <MetricChart title="CPU Kullanımı" metrics={chartMetrics} dataKey="cpu_usage" unit="%"
           color="#FFCB05"
           warningThreshold={{ value: 75, label: 'Uyarı', color: '#FFCB05' }}
           criticalThreshold={{ value: 90, label: 'Kritik', color: '#EF4444' }}
         />
-        <MetricChart title="Bellek Kullanımı" metrics={metrics} dataKey="memory_usage" unit="%"
+        <MetricChart title="Bellek Kullanımı" metrics={chartMetrics} dataKey="memory_usage" unit="%"
           color="#1A6BC4"
           warningThreshold={{ value: 80, label: 'Uyarı', color: '#FFCB05' }}
           criticalThreshold={{ value: 95, label: 'Kritik', color: '#EF4444' }}
         />
-        <MetricChart title="Paket Kaybı" metrics={metrics} dataKey="packet_loss" unit="%"
+        <MetricChart title="Paket Kaybı" metrics={chartMetrics} dataKey="packet_loss" unit="%"
           color="#EF4444"
           warningThreshold={{ value: 5, label: 'Uyarı', color: '#FFCB05' }}
           criticalThreshold={{ value: 10, label: 'Kritik', color: '#EF4444' }}
         />
-        <MetricChart title="Gecikme (Latency)" metrics={metrics} dataKey="latency" unit="ms"
+        <MetricChart title="Gecikme (Latency)" metrics={chartMetrics} dataKey="latency" unit="ms"
           color="#10B981"
           warningThreshold={{ value: 50, label: 'Uyarı', color: '#FFCB05' }}
           criticalThreshold={{ value: 100, label: 'Kritik', color: '#EF4444' }}
         />
-        <MetricChart title="Sinyal Güçlüğü (RSSI)" metrics={metrics} dataKey="rssi" unit="dBm"
+        <MetricChart title="Sinyal Güçlüğü (RSSI)" metrics={chartMetrics} dataKey="rssi" unit="dBm"
           color="#A78BFA"
         />
-        <MetricChart title="Bağlı Kullanıcı" metrics={metrics} dataKey="connected_users" unit="adet"
+        <MetricChart title="Bağlı Kullanıcı" metrics={chartMetrics} dataKey="connected_users" unit="adet"
           color="#FFCB05"
           warningThreshold={{ value: 800, label: 'Uyarı', color: '#FFCB05' }}
           criticalThreshold={{ value: 950, label: 'Kritik', color: '#EF4444' }}

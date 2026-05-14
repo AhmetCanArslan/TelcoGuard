@@ -22,6 +22,12 @@ type Config struct {
 	JWTRefreshSecret        string
 	SimulatorSecret         string
 	FirebaseCredentialsPath string
+	FirebaseWebAPIKey       string
+	SmtpHost                string
+	SmtpPort                string
+	SmtpUser                string
+	SmtpPassword            string
+	SmtpFrom                string
 	DefaultAdminEmail       string
 	DefaultAdminPassword    string
 	DefaultNocEmail         string
@@ -51,6 +57,12 @@ func Init() {
 		JWTRefreshSecret:        getEnv("JWT_REFRESH_SECRET", "default-refresh-secret-change-me"),
 		SimulatorSecret:         getEnv("SIMULATOR_SECRET", "simulator-local-secret"),
 		FirebaseCredentialsPath: getEnv("FIREBASE_CREDENTIALS_PATH", "./config/firebase-credentials.json"),
+		FirebaseWebAPIKey:       getEnv("FIREBASE_WEB_API_KEY", ""),
+		SmtpHost:                getEnv("SMTP_HOST", ""),
+		SmtpPort:                getEnv("SMTP_PORT", "587"),
+		SmtpUser:                getEnv("SMTP_USER", ""),
+		SmtpPassword:            getEnv("SMTP_PASSWORD", ""),
+		SmtpFrom:                getEnv("SMTP_FROM", "noreply@telcoguard.com"),
 		DefaultAdminEmail:       getEnv("DEFAULT_ADMIN_EMAIL", "admin@turkcell.com"),
 		DefaultAdminPassword:    getEnv("DEFAULT_ADMIN_PASSWORD", "admin"),
 		DefaultNocEmail:         getEnv("DEFAULT_NOC_EMAIL", "noc@turkcell.com"),

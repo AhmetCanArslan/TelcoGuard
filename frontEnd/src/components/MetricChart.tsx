@@ -61,7 +61,7 @@ export default function MetricChart({
                 fontSize: 12,
                 fontFamily: 'var(--font-data)',
               }}
-              formatter={(value: number) => [`${value} ${unit}`, title]}
+              formatter={(value: number) => [`${Number(value).toFixed(2)} ${unit}`, title]}
             />
             {warningThreshold && (
               <ReferenceLine

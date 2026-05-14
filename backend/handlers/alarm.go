@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"case1/auth"
+	"case1/models"
 	"case1/services"
 	"case1/utils"
 	ws "case1/websocket"
@@ -203,5 +204,54 @@ func ResolveAlarm(c *fiber.Ctx) error {
 		return utils.BadRequest(c, err.Error())
 	}
 	go Hub.BroadcastTyped(ws.MessageTypeAlarmUpdate, ws.AlarmPayload{Alarm: alarm})
+
+	go recalculateStationStatus(alarm.StationID)
+
 	return utils.Success(c, alarm, "Alarm resolved")
+}
+
+func recalculateStationStatus(stationID uuid.UUID) {
+	unresolved, err := alarmService.GetUnresolvedByStation(stationID)
+	if err != nil {
+		return
+	}
+
+	var newStatus models.StationStatus
+	if len(unresolved) == 0 {
+		newStatus = models.StationStatusActive
+	} else {
+		hasCritical := false
+		for _, a := range unresolved {
+			if a.Severity == models.AlarmSeverityCritical {
+				hasCritical = true
+				break
+			}
+		}
+		if hasCritical {
+			newStatus = models.StationStatusCritical
+		} else {
+			newStatus = models.StationStatusWarning
+		}
+	}
+
+	stationService := services.NewStationService()
+	station, err := stationService.GetByID(stationID)
+	if err != nil {
+		return
+	}
+
+	oldStatus := string(station.Status)
+	if oldStatus == string(newStatus) {
+		return
+	}
+
+	if err := stationService.UpdateStatus(stationID, newStatus); err != nil {
+		return
+	}
+
+	Hub.BroadcastTyped(ws.MessageTypeStationStatus, ws.StationStatusPayload{
+		StationID: stationID.String(),
+		OldStatus: oldStatus,
+		NewStatus: string(newStatus),
+	})
 }

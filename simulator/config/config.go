@@ -26,7 +26,7 @@ func Init() {
 		ServerHost:      getEnv("HOST", "0.0.0.0"),
 		BackendURL:      getEnv("BACKEND_URL", "http://localhost:3000"),
 		SimulatorSecret: getEnv("SIMULATOR_SECRET", "simulator-local-secret"),
-		TickIntervalMs:  getEnvInt("TICK_INTERVAL_MS", 3000),
+		TickIntervalMs:  getEnvInt("TICK_INTERVAL_MS", 2000),
 	}
 
 	log.Println("✅ Simulator configuration loaded")

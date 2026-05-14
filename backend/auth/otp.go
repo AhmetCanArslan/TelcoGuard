@@ -75,18 +75,19 @@ func MarkOTPUsed(otp *models.OtpCode) {
 }
 
 func SendOTP(contact, method, code string) {
-	if IsFirebaseEnabled() {
-		// Sync user to Firebase Auth so frontend can use Firebase features
-		email := contact
-		phone := ""
-		if method == "sms" {
-			phone = contact
-			email = contact + "@placeholder.com"
+	if method == "email" {
+		if err := SendOTPEmail(contact, code); err != nil {
+			log.Printf("⚠️  OTP delivery failed for %s: %v", contact, err)
 		}
-		if _, err := SyncFirebaseUser(email, phone, contact); err != nil {
+		return
+	}
+
+	if IsFirebaseEnabled() {
+		email := contact + "@placeholder.com"
+		if _, err := SyncFirebaseUser(email, contact, contact); err != nil {
 			log.Printf("⚠️  Failed to sync Firebase user for %s: %v", contact, err)
 		}
-		log.Printf("📧 [Firebase] OTP for %s (%s): %s (synced to Firebase Auth)", contact, method, code)
+		log.Printf("📧 [SMS] OTP for %s: %s", contact, code)
 	} else {
 		log.Printf("📧 [DEV MODE] OTP for %s (%s): %s", contact, method, code)
 	}

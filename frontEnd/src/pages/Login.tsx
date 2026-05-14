@@ -3,7 +3,7 @@
    ====================================================== */
 
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { FaShieldAlt, FaEnvelope, FaLock, FaSignInAlt, FaExclamationTriangle } from 'react-icons/fa'
 
@@ -105,6 +105,12 @@ export default function Login() {
               </>
             )}
           </button>
+
+          <div style={{ textAlign: 'center', marginTop: 12 }}>
+            <Link to="/forgot-password" className="forgot-link">
+              Şifremi Unuttum?
+            </Link>
+          </div>
         </form>
 
         <p className="login-footer-text">

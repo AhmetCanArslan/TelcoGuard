@@ -1,8 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
 import { FaDownload } from 'react-icons/fa'
 import AlarmTable from '../components/AlarmTable'
-import { apiGetAlarms, apiAcknowledgeAlarm, apiAssignAlarm, apiResolveAlarm } from '../services/api'
-import type { Alarm } from '../types'
+import EngineerSelectModal from '../components/EngineerSelectModal'
+import ResolveModal from '../components/ResolveModal'
+import { apiGetAlarms, apiGetMyAlarms, apiAcknowledgeAlarm, apiAssignAlarm, apiResolveAlarm } from '../services/api'
+import { useAuth } from '../context/AuthContext'
+import type { Alarm, FieldEngineer } from '../types'
 
 function exportToCSV(alarms: Alarm[]) {
   const headers = ['ID', 'İstasyon', 'Metrik', 'Şiddet', 'Durum', 'Mesaj', 'Atanan', 'Çözüm Notu', 'Oluşturulma', 'Çözülme']
@@ -13,7 +16,7 @@ function exportToCSV(alarms: Alarm[]) {
     a.severity,
     a.status,
     `"${(a.message || '').replace(/"/g, '""')}"`,
-    a.assigned_to?.name || '-',
+    a.assigned_user?.name || '-',
     `"${(a.resolution_note || '').replace(/"/g, '""')}"`,
     new Date(a.created_at).toLocaleString('tr-TR'),
     a.resolved_at ? new Date(a.resolved_at).toLocaleString('tr-TR') : '-',
@@ -33,17 +36,26 @@ function exportToCSV(alarms: Alarm[]) {
 export default function Alarms() {
   const [alarms, setAlarms] = useState<Alarm[]>([])
   const [loading, setLoading] = useState(true)
+  const [assignTargetAlarmId, setAssignTargetAlarmId] = useState<string | null>(null)
+  const [resolveTargetAlarmId, setResolveTargetAlarmId] = useState<string | null>(null)
+  const { user } = useAuth()
 
   const fetchAlarms = useCallback(async () => {
     try {
-      const res = await apiGetAlarms({ per_page: 100 })
-      setAlarms(res.data)
+      let data: Alarm[] = []
+      if (user?.role === 'FIELD_ENGINEER') {
+        data = await apiGetMyAlarms()
+      } else {
+        const res = await apiGetAlarms({ per_page: 100 })
+        data = res.data
+      }
+      setAlarms(data)
     } catch {
       // silently fail, data stays stale
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [user])
 
   useEffect(() => {
     fetchAlarms()
@@ -58,18 +70,28 @@ export default function Alarms() {
     } catch { /* show toast in the future */ }
   }
 
-  const handleAssign = async (id: string) => {
+  const handleAssign = (id: string) => {
+    setAssignTargetAlarmId(id)
+  }
+
+  const handleEngineerSelected = async (engineer: FieldEngineer) => {
+    if (!assignTargetAlarmId) return
     try {
-      await apiAssignAlarm(id)
+      await apiAssignAlarm(assignTargetAlarmId, engineer.id)
+      setAssignTargetAlarmId(null)
       fetchAlarms()
     } catch { /* show toast in the future */ }
   }
 
-  const handleResolve = async (id: string) => {
-    const note = prompt('Çözüm notu:')
-    if (!note) return
+  const handleResolve = (id: string) => {
+    setResolveTargetAlarmId(id)
+  }
+
+  const handleResolveConfirm = async (note: string) => {
+    if (!resolveTargetAlarmId) return
     try {
-      await apiResolveAlarm(id, note)
+      await apiResolveAlarm(resolveTargetAlarmId, note)
+      setResolveTargetAlarmId(null)
       fetchAlarms()
     } catch { /* show toast in the future */ }
   }
@@ -94,6 +116,20 @@ export default function Alarms() {
         onAssign={handleAssign}
         onResolve={handleResolve}
       />
+
+      {assignTargetAlarmId && (
+        <EngineerSelectModal
+          onSelect={handleEngineerSelected}
+          onClose={() => setAssignTargetAlarmId(null)}
+        />
+      )}
+
+      {resolveTargetAlarmId && (
+        <ResolveModal
+          onResolve={handleResolveConfirm}
+          onClose={() => setResolveTargetAlarmId(null)}
+        />
+      )}
     </>
   )
 }

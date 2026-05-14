@@ -114,3 +114,7 @@ func (s *AlarmService) GetByFilter(severity, status, stationID string, page, per
 func (s *AlarmService) GetByAssignee(userID uint, status string) ([]models.Alarm, error) {
 	return s.repo.FindByAssignee(userID, status)
 }
+
+func (s *AlarmService) GetUnresolvedByStation(stationID uuid.UUID) ([]models.Alarm, error) {
+	return s.repo.FindUnresolvedByStation(stationID)
+}
