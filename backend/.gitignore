@@ -31,4 +31,7 @@ vendor/
 # Build output
 /case1
 
+# Firebase credentials
+config/firebase-credentials.json
+
 .
