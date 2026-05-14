@@ -1,6 +1,7 @@
 package websocket
 
 import (
+	"encoding/json"
 	"log"
 )
 
@@ -25,13 +26,13 @@ func (h *Hub) Run() {
 		select {
 		case client := <-h.register:
 			h.clients[client] = true
-			log.Printf("🔌 Client connected. Total clients: %d", len(h.clients))
+			log.Printf("🔌 Client connected. Total: %d", len(h.clients))
 
 		case client := <-h.unregister:
 			if _, ok := h.clients[client]; ok {
 				delete(h.clients, client)
 				close(client.send)
-				log.Printf("🔌 Client disconnected. Total clients: %d", len(h.clients))
+				log.Printf("🔌 Client disconnected. Total: %d", len(h.clients))
 			}
 
 		case message := <-h.broadcast:
@@ -39,7 +40,6 @@ func (h *Hub) Run() {
 				select {
 				case client.send <- message:
 				default:
-					// Client's send channel is full, close it
 					close(client.send)
 					delete(h.clients, client)
 				}
@@ -50,6 +50,23 @@ func (h *Hub) Run() {
 
 func (h *Hub) Broadcast(message []byte) {
 	h.broadcast <- message
+}
+
+func (h *Hub) BroadcastTyped(msgType MessageType, payload interface{}) {
+	data, err := json.Marshal(payload)
+	if err != nil {
+		log.Printf("Failed to marshal WS payload: %v", err)
+		return
+	}
+	msg := WSMessage{
+		Type:    msgType,
+		Payload: data,
+	}
+	bytes, err := json.Marshal(msg)
+	if err != nil {
+		return
+	}
+	h.Broadcast(bytes)
 }
 
 func (h *Hub) Register(client *Client) {

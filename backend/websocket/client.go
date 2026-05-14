@@ -1,6 +1,7 @@
 package websocket
 
 import (
+	"encoding/json"
 	"log"
 
 	"github.com/gofiber/websocket/v2"
@@ -36,8 +37,12 @@ func (c *Client) ReadMessage() {
 		}
 
 		if messageType == websocket.TextMessage {
-			// Broadcast message to all connected clients
-			c.hub.Broadcast(data)
+			var msg WSMessage
+			if err := json.Unmarshal(data, &msg); err == nil {
+				if msg.Type == MessageTypeSubscribe || msg.Type == MessageTypeUnsubscribe {
+					log.Printf("Client %s topic: %s", msg.Type, msg.Topic)
+				}
+			}
 		}
 	}
 }
@@ -49,15 +54,12 @@ func (c *Client) WriteMessage() {
 		select {
 		case message, ok := <-c.send:
 			if !ok {
-				// Hub closed the channel
 				c.conn.WriteMessage(websocket.CloseMessage, []byte{})
 				return
 			}
-
 			if err := c.conn.WriteMessage(websocket.TextMessage, message); err != nil {
 				return
 			}
-
 		}
 	}
 }
