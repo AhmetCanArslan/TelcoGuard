@@ -37,8 +37,8 @@ func DefaultInt(value string, fallback int) int {
 		return fallback
 	}
 	var result int
-	fmt.Sscanf(value, "%d", &result)
-	if result == 0 {
+	n, err := fmt.Sscanf(value, "%d", &result)
+	if err != nil || n != 1 {
 		return fallback
 	}
 	return result
