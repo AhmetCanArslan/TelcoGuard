@@ -15,8 +15,12 @@ const API_BASE = '/api/v1'
 /* ---- Generic fetch wrapper ---- */
 
 interface APIResponse<T = unknown> {
+  // API can return either `message` for success or `error` for failures
+  // Preserve both fields for proper error handling
+
   success: boolean
-  message: string
+  message?: string
+  error?: string
   data: T
   meta?: {
     page: number
@@ -76,7 +80,7 @@ async function apiFetch<T>(
 
   const data: APIResponse<T> = await res.json()
   if (!res.ok) {
-    throw new Error(data.message || `Request failed: ${res.status}`)
+    throw new Error(data.message || data.error || `Request failed: ${res.status}`)
   }
   return data
 }
