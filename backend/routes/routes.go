@@ -81,6 +81,9 @@ func Setup(app *fiber.App) {
 	summary.Get("/fixed-issues", handlers.SummaryFixedIssues)
 	summary.Get("/locations", handlers.SummaryLocations)
 
+	// Simulator proxy - all requests to /api/simulator/* go to simulator service
+	app.All("/api/simulator/*", handlers.ProxySimulator)
+
 	// WebSocket
 	app.Get("/ws", websocket.New(handlers.WebSocketHandler))
 

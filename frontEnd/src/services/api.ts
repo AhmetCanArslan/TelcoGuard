@@ -16,7 +16,8 @@ const API_BASE = '/api/v1'
 
 interface APIResponse<T = unknown> {
   success: boolean
-  message: string
+  message?: string
+  error?: string
   data: T
   meta?: {
     page: number
@@ -76,7 +77,7 @@ async function apiFetch<T>(
 
   const data: APIResponse<T> = await res.json()
   if (!res.ok) {
-    throw new Error(data.message || `Request failed: ${res.status}`)
+    throw new Error(data.error || data.message || `Request failed: ${res.status}`)
   }
   return data
 }
@@ -257,8 +258,8 @@ async function simFetch<T>(path: string, options: RequestInit = {}) {
     ...(options.headers as Record<string, string> || {}),
   }
   const res = await fetch(`/api/simulator${path}`, { ...options, headers })
-  const data = await res.json() as { success: boolean; message?: string; data?: T }
-  if (!data.success) throw new Error(data.message || 'Simulator request failed')
+  const data = await res.json() as { success: boolean; message?: string; error?: string; data?: T }
+  if (!data.success) throw new Error(data.error || data.message || 'Simulator request failed')
   return data.data as T
 }
 

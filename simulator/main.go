@@ -7,6 +7,8 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
 func main() {
@@ -18,7 +20,27 @@ func main() {
 
 	app := fiber.New(fiber.Config{
 		AppName: "TelcoGuard Simulator",
+		ErrorHandler: func(c *fiber.Ctx, err error) error {
+			code := fiber.StatusInternalServerError
+			if fe, ok := err.(*fiber.Error); ok {
+				code = fe.Code
+			}
+			log.Printf("❌ Simulator error: %v", err)
+			return c.Status(code).JSON(fiber.Map{
+				"success": false,
+				"error":   err.Error(),
+			})
+		},
 	})
+
+	// Global middleware
+	app.Use(recover.New())
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     "*",
+		AllowMethods:     "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
+		AllowCredentials: false,
+	}))
 
 	routes.Setup(app, runner)
 
