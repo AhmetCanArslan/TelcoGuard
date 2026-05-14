@@ -6,6 +6,7 @@ import (
 	"case1/database"
 	"case1/models"
 	"case1/utils"
+	"case1/websocket"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -337,3 +338,17 @@ func GetMe(c *fiber.Ctx) error {
 	user.Password = ""
 	return utils.Success(c, user, "User retrieved")
 }
+
+func Logout(c *fiber.Ctx) error {
+	userID := auth.GetUserID(c)
+	if userID > 0 {
+		database.DB.Model(&models.User{}).Where("id = ?", userID).Update("is_online", false)
+		// Notify others via WS
+		go Hub.BroadcastTyped(websocket.MessageTypeUserStatus, websocket.UserStatusPayload{
+			UserID:   userID,
+			IsOnline: false,
+		})
+	}
+	return utils.Success(c, nil, "Logged out successfully")
+}
+

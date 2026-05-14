@@ -229,3 +229,9 @@ export async function apiSimulatorInjectAnomaly(
 export async function apiSimulatorStatus() {
   return simFetch<{ running: boolean; stations_count: number; metrics_sent: number }>('/status')
 }
+
+export async function apiLogout(): Promise<void> {
+  await apiFetch('/auth/logout', { method: 'POST' })
+}
+
+

@@ -11,7 +11,8 @@ type Hub struct {
 	clients    map[*Client]bool
 	broadcast  chan []byte
 	register   chan *Client
-	unregister chan *Client
+	unregister      chan *Client
+	userConnections map[uint]int
 }
 
 func NewHub() *Hub {
@@ -20,6 +21,7 @@ func NewHub() *Hub {
 		broadcast:  make(chan []byte, 256),
 		register:   make(chan *Client),
 		unregister: make(chan *Client),
+		userConnections: make(map[uint]int),
 	}
 }
 
@@ -30,8 +32,12 @@ func (h *Hub) Run() {
 			h.clients[client] = true
 			log.Printf("🔌 Client connected. UserID: %d. Total: %d", client.UserID, len(h.clients))
 			if client.UserID > 0 {
-				database.DB.Model(&models.User{}).Where("id = ?", client.UserID).Update("is_online", true)
-				h.BroadcastTyped(MessageTypeUserStatus, UserStatusPayload{UserID: client.UserID, IsOnline: true})
+				h.userConnections[client.UserID]++
+				// Only update DB and broadcast if this is the first connection
+				if h.userConnections[client.UserID] == 1 {
+					database.DB.Model(&models.User{}).Where("id = ?", client.UserID).Update("is_online", true)
+					h.BroadcastTyped(MessageTypeUserStatus, UserStatusPayload{UserID: client.UserID, IsOnline: true})
+				}
 			}
 
 		case client := <-h.unregister:
@@ -40,8 +46,13 @@ func (h *Hub) Run() {
 				close(client.send)
 				log.Printf("🔌 Client disconnected. UserID: %d. Total: %d", client.UserID, len(h.clients))
 				if client.UserID > 0 {
-					database.DB.Model(&models.User{}).Where("id = ?", client.UserID).Update("is_online", false)
-					h.BroadcastTyped(MessageTypeUserStatus, UserStatusPayload{UserID: client.UserID, IsOnline: false})
+					h.userConnections[client.UserID]--
+					// Only update DB and broadcast if this was the last connection
+					if h.userConnections[client.UserID] <= 0 {
+						delete(h.userConnections, client.UserID)
+						database.DB.Model(&models.User{}).Where("id = ?", client.UserID).Update("is_online", false)
+						h.BroadcastTyped(MessageTypeUserStatus, UserStatusPayload{UserID: client.UserID, IsOnline: false})
+					}
 				}
 			}
 

@@ -4,7 +4,7 @@
    ====================================================== */
 
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
-import { apiLogin, apiGetMe, type LoginResponse } from '../services/api'
+import { apiLogin, apiGetMe, apiLogout, type LoginResponse } from '../services/api'
 import {
   getAccessToken, setTokens, clearTokens,
   getStoredUser, setStoredUser, type StoredUser
@@ -70,6 +70,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const logout = useCallback(() => {
+    apiLogout().catch(() => {})
     wsService.disconnect()
     clearTokens()
     setUser(null)

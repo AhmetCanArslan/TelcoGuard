@@ -42,6 +42,7 @@ func Setup(app *fiber.App) {
 	// Me
 	protected.Get("/me", handlers.GetMe)
 	protected.Post("/me/password", handlers.UpdatePassword)
+	protected.Post("/auth/logout", handlers.Logout)
 
 	// Users
 	users := protected.Group("/users")
