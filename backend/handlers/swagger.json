@@ -1,0 +1,516 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "TelcoGuard API",
+    "description": "TelcoGuard — Gercek Zamanli Sebeke Izleme ve Anomali Tespit Platformu\n\nTurkcell CodeNight 2026",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Turkcell CodeNight 2026"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local development server"
+    }
+  ],
+  "tags": [
+    {"name": "auth", "description": "Authentication & Authorization"},
+    {"name": "users", "description": "User management"},
+    {"name": "stations", "description": "Base station operations"},
+    {"name": "metrics", "description": "Telemetry metrics"},
+    {"name": "alarms", "description": "Alarm lifecycle management"},
+    {"name": "dashboard", "description": "Dashboard & analytics"},
+    {"name": "health", "description": "Health checks"},
+    {"name": "documentation", "description": "API documentation"}
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": ["health"],
+        "summary": "Health check",
+        "description": "Get server health status",
+        "responses": {
+          "200": {
+            "description": "Server is running",
+            "content": {
+              "application/json": {
+                "schema": {"$ref": "#/components/schemas/APIResponse"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/swagger": {
+      "get": {
+        "tags": ["documentation"],
+        "summary": "Swagger UI",
+        "description": "Interactive API documentation",
+        "responses": {
+          "200": {"description": "HTML page with Swagger UI"}
+        }
+      }
+    },
+    "/swagger.json": {
+      "get": {
+        "tags": ["documentation"],
+        "summary": "Swagger JSON",
+        "description": "OpenAPI specification in JSON format",
+        "responses": {
+          "200": {
+            "description": "OpenAPI JSON spec",
+            "content": {
+              "application/json": {
+                "schema": {"type": "object"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/register": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Register a new user",
+        "description": "Create a new user account with email and password",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {"$ref": "#/components/schemas/RegisterRequest"}
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {"$ref": "#/components/schemas/APIResponse"}
+              }
+            }
+          },
+          "400": {"description": "Invalid input"}
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Login",
+        "description": "Authenticate with email and password",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {"$ref": "#/components/schemas/LoginRequest"}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {"$ref": "#/components/schemas/APIResponse"}
+              }
+            }
+          },
+          "401": {"description": "Invalid credentials"}
+        }
+      }
+    },
+    "/api/v1/auth/otp/send": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Send OTP",
+        "description": "Send one-time password via email or SMS",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {"$ref": "#/components/schemas/OTPRequest"}
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "OTP sent successfully"}
+        }
+      }
+    },
+    "/api/v1/auth/otp/verify": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Verify OTP",
+        "description": "Verify one-time password and receive JWT tokens",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {"$ref": "#/components/schemas/OTPVerifyRequest"}
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "OTP verified"},
+          "401": {"description": "Invalid or expired OTP"}
+        }
+      }
+    },
+    "/api/v1/auth/refresh": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Refresh access token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "refresh_token": {"type": "string"}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "Token refreshed"},
+          "401": {"description": "Invalid refresh token"}
+        }
+      }
+    },
+    "/api/v1/me": {
+      "get": {
+        "tags": ["auth"],
+        "summary": "Get current user",
+        "security": [{"BearerAuth": []}],
+        "responses": {
+          "200": {"description": "User profile"},
+          "401": {"description": "Unauthorized"}
+        }
+      }
+    },
+    "/api/v1/users": {
+      "get": {
+        "tags": ["users"],
+        "summary": "List users",
+        "security": [{"BearerAuth": []}],
+        "responses": {
+          "200": {"description": "List of users"},
+          "401": {"description": "Unauthorized"}
+        }
+      }
+    },
+    "/api/v1/users/{id}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Get user by ID",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "integer"}}
+        ],
+        "responses": {
+          "200": {"description": "User found"},
+          "404": {"description": "User not found"}
+        }
+      },
+      "put": {
+        "tags": ["users"],
+        "summary": "Update user",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "integer"}}
+        ],
+        "responses": {
+          "200": {"description": "User updated"}
+        }
+      },
+      "delete": {
+        "tags": ["users"],
+        "summary": "Delete user",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "integer"}}
+        ],
+        "responses": {
+          "200": {"description": "User deleted"}
+        }
+      }
+    },
+    "/api/v1/stations": {
+      "get": {
+        "tags": ["stations"],
+        "summary": "List all stations",
+        "description": "Get all base stations with their current status",
+        "security": [{"BearerAuth": []}],
+        "responses": {
+          "200": {"description": "List of stations"}
+        }
+      }
+    },
+    "/api/v1/stations/{id}": {
+      "get": {
+        "tags": ["stations"],
+        "summary": "Get station by ID",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "string", "format": "uuid"}}
+        ],
+        "responses": {
+          "200": {"description": "Station details"},
+          "404": {"description": "Station not found"}
+        }
+      }
+    },
+    "/api/v1/stations/{id}/metrics": {
+      "post": {
+        "tags": ["metrics"],
+        "summary": "Ingest metric data",
+        "description": "Submit telemetry metrics for a station (simulator endpoint)",
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "string", "format": "uuid"}}
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {"$ref": "#/components/schemas/MetricPayload"}
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "Metric ingested"}
+        }
+      },
+      "get": {
+        "tags": ["metrics"],
+        "summary": "Get metrics for a station",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "string", "format": "uuid"}},
+          {"name": "from", "in": "query", "schema": {"type": "string", "format": "date-time"}},
+          {"name": "to", "in": "query", "schema": {"type": "string", "format": "date-time"}}
+        ],
+        "responses": {
+          "200": {"description": "Time-series metrics"}
+        }
+      }
+    },
+    "/api/v1/stations/{id}/metrics/latest": {
+      "get": {
+        "tags": ["metrics"],
+        "summary": "Get latest metric",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "string", "format": "uuid"}}
+        ],
+        "responses": {
+          "200": {"description": "Latest metric"},
+          "404": {"description": "No metrics found"}
+        }
+      }
+    },
+    "/api/v1/alarms": {
+      "get": {
+        "tags": ["alarms"],
+        "summary": "List alarms",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {"name": "severity", "in": "query", "schema": {"type": "string", "enum": ["WARNING", "CRITICAL"]}},
+          {"name": "status", "in": "query", "schema": {"type": "string", "enum": ["OPEN", "ACKNOWLEDGED", "IN_PROGRESS", "RESOLVED"]}},
+          {"name": "station", "in": "query", "schema": {"type": "string"}},
+          {"name": "page", "in": "query", "schema": {"type": "integer", "default": 1}},
+          {"name": "per_page", "in": "query", "schema": {"type": "integer", "default": 20}}
+        ],
+        "responses": {
+          "200": {"description": "List of alarms"}
+        }
+      }
+    },
+    "/api/v1/alarms/assigned": {
+      "get": {
+        "tags": ["alarms"],
+        "summary": "Get assigned alarms",
+        "description": "Get alarms assigned to the current field engineer",
+        "security": [{"BearerAuth": []}],
+        "responses": {
+          "200": {"description": "Assigned alarms"}
+        }
+      }
+    },
+    "/api/v1/alarms/{id}": {
+      "get": {
+        "tags": ["alarms"],
+        "summary": "Get alarm by ID",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "string", "format": "uuid"}}
+        ],
+        "responses": {
+          "200": {"description": "Alarm details"},
+          "404": {"description": "Alarm not found"}
+        }
+      }
+    },
+    "/api/v1/alarms/{id}/acknowledge": {
+      "patch": {
+        "tags": ["alarms"],
+        "summary": "Acknowledge alarm",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "string", "format": "uuid"}}
+        ],
+        "responses": {
+          "200": {"description": "Alarm acknowledged"}
+        }
+      }
+    },
+    "/api/v1/alarms/{id}/assign": {
+      "patch": {
+        "tags": ["alarms"],
+        "summary": "Assign alarm",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "string", "format": "uuid"}}
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user_id": {"type": "integer"}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "Alarm assigned"}
+        }
+      }
+    },
+    "/api/v1/alarms/{id}/resolve": {
+      "patch": {
+        "tags": ["alarms"],
+        "summary": "Resolve alarm",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "string", "format": "uuid"}}
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "resolution_note": {"type": "string"}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "Alarm resolved"}
+        }
+      }
+    },
+    "/api/v1/dashboard/summary": {
+      "get": {
+        "tags": ["dashboard"],
+        "summary": "Dashboard summary",
+        "description": "Get real-time dashboard statistics",
+        "security": [{"BearerAuth": []}],
+        "responses": {
+          "200": {"description": "Dashboard summary data"}
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "APIResponse": {
+        "type": "object",
+        "properties": {
+          "success": {"type": "boolean"},
+          "data": {"type": "object"},
+          "message": {"type": "string"},
+          "error": {"type": "string"},
+          "meta": {"$ref": "#/components/schemas/Meta"}
+        }
+      },
+      "Meta": {
+        "type": "object",
+        "properties": {
+          "page": {"type": "integer"},
+          "per_page": {"type": "integer"},
+          "total": {"type": "integer"},
+          "total_pages": {"type": "integer"}
+        }
+      },
+      "RegisterRequest": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "email": {"type": "string"},
+          "password": {"type": "string"},
+          "role": {"type": "string", "enum": ["ADMIN", "NOC_OPERATOR", "FIELD_ENGINEER", "NETWORK_MANAGER"]},
+          "phone": {"type": "string"},
+          "latitude": {"type": "number"},
+          "longitude": {"type": "number"}
+        },
+        "required": ["name", "email", "password"]
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {"type": "string"},
+          "password": {"type": "string"}
+        },
+        "required": ["email", "password"]
+      },
+      "OTPRequest": {
+        "type": "object",
+        "properties": {
+          "contact": {"type": "string"},
+          "method": {"type": "string", "enum": ["email", "sms"]}
+        },
+        "required": ["contact", "method"]
+      },
+      "OTPVerifyRequest": {
+        "type": "object",
+        "properties": {
+          "contact": {"type": "string"},
+          "code": {"type": "string"}
+        },
+        "required": ["contact", "code"]
+      },
+      "MetricPayload": {
+        "type": "object",
+        "properties": {
+          "cpu_usage": {"type": "number"},
+          "memory_usage": {"type": "number"},
+          "packet_loss": {"type": "number"},
+          "latency": {"type": "number"},
+          "rssi": {"type": "number"},
+          "connected_users": {"type": "integer"}
+        }
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Enter your JWT token in the format: Bearer <token>"
+      }
+    }
+  }
+}

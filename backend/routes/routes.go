@@ -6,10 +6,7 @@ import (
 	"case1/middleware"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/swagger"
 	"github.com/gofiber/websocket/v2"
-
-	_ "case1/docs"
 )
 
 func Setup(app *fiber.App) {
@@ -18,7 +15,8 @@ func Setup(app *fiber.App) {
 	app.Use(middleware.CORS())
 
 	// Swagger documentation
-	app.Get("/swagger/*", swagger.HandlerDefault)
+	app.Get("/swagger", handlers.SwaggerUI)
+	app.Get("/swagger.json", handlers.SwaggerJSON)
 
 	// Health check
 	app.Get("/health", handlers.Health)
