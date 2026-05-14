@@ -60,14 +60,14 @@ func Setup(app *fiber.App) {
 	stations.Get("/:id/metrics", handlers.GetMetrics)
 	stations.Get("/:id/metrics/latest", handlers.GetLatestMetric)
 
-	// Alarms
+	// Alarms (Management: Admin, NOC | Field Operations: Engineer)
 	alarms := protected.Group("/alarms")
-	alarms.Get("", handlers.ListAlarms)
-	alarms.Get("/assigned", handlers.GetMyAlarms)
-	alarms.Get("/:id", handlers.GetAlarm)
-	alarms.Patch("/:id/acknowledge", handlers.AcknowledgeAlarm)
-	alarms.Patch("/:id/assign", handlers.AssignAlarm)
-	alarms.Patch("/:id/resolve", handlers.ResolveAlarm)
+	alarms.Get("", auth.RequireRole(models.RoleAdmin, models.RoleNOCOperator), handlers.ListAlarms)
+	alarms.Get("/assigned", auth.RequireRole(models.RoleAdmin, models.RoleNOCOperator, models.RoleFieldEngineer), handlers.GetMyAlarms)
+	alarms.Get("/:id", auth.RequireRole(models.RoleAdmin, models.RoleNOCOperator, models.RoleFieldEngineer), handlers.GetAlarm)
+	alarms.Patch("/:id/acknowledge", auth.RequireRole(models.RoleAdmin, models.RoleNOCOperator), handlers.AcknowledgeAlarm)
+	alarms.Patch("/:id/assign", auth.RequireRole(models.RoleAdmin, models.RoleNOCOperator), handlers.AssignAlarm)
+	alarms.Patch("/:id/resolve", auth.RequireRole(models.RoleAdmin, models.RoleNOCOperator, models.RoleFieldEngineer), handlers.ResolveAlarm)
 
 	// Dashboard
 	protected.Get("/dashboard/summary", handlers.DashboardSummary)

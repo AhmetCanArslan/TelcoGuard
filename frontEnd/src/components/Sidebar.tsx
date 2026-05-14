@@ -7,10 +7,10 @@ import {
 
 const navItems = [
   { path: '/',           label: 'Dashboard',         icon: <FaTachometerAlt />, roles: undefined },
-  { path: '/alarms',     label: 'Alarm Yönetimi',    icon: <FaBell />,          roles: undefined },
+  { path: '/alarms',     label: 'Alarm Yönetimi',    icon: <FaBell />,          roles: ['ADMIN', 'NOC_OPERATOR'] },
   { path: '/engineers',  label: 'Saha Mühendisleri', icon: <FaHardHat />,       roles: ['ADMIN', 'NOC_OPERATOR'] },
   { path: '/reports',    label: 'Raporlama',         icon: <FaChartLine />,     roles: undefined },
-  { path: '/simulator',  label: 'Simülatör',         icon: <FaBolt />,          roles: undefined },
+  { path: '/simulator',  label: 'Simülatör',         icon: <FaBolt />,          roles: ['ADMIN'] },
   { path: '/users',      label: 'Kullanıcı Yönetimi', icon: <FaUserShield />,   roles: ['ADMIN'] },
 ]
 
