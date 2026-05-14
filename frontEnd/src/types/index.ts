@@ -1,5 +1,5 @@
 /* ======================================================
-   TelcoGuard – Type Definitions
+   TelcoGuard – Type Definitions (aligned with backend)
    ====================================================== */
 
 export type StationStatus = 'ACTIVE' | 'WARNING' | 'CRITICAL' | 'OFFLINE';
@@ -19,14 +19,14 @@ export interface BaseStation {
 
 export interface Metric {
   id: string;
-  stationId: string;
+  station_id: string;
   timestamp: string;
-  cpuUsage: number;
-  memoryUsage: number;
-  packetLoss: number;
+  cpu_usage: number;
+  memory_usage: number;
+  packet_loss: number;
   latency: number;
   rssi: number;
-  connectedUsers: number;
+  connected_users: number;
 }
 
 export type AlarmSeverity = 'WARNING' | 'CRITICAL';
@@ -34,39 +34,43 @@ export type AlarmStatus = 'OPEN' | 'ACKNOWLEDGED' | 'IN_PROGRESS' | 'RESOLVED';
 
 export interface Alarm {
   id: string;
-  stationId: string;
-  stationCode: string;
-  stationName: string;
-  metricName: string;
+  station_id: string;
+  station?: BaseStation;
+  metric_name: string;
   severity: AlarmSeverity;
   status: AlarmStatus;
   message: string;
-  assignedTo?: string;
-  resolutionNote?: string;
-  createdAt: string;
-  resolvedAt?: string;
+  assigned_to?: number;
+  assigned_user?: { id: number; name: string; email: string; role: string };
+  resolution_note?: string;
+  created_at: string;
+  acknowledged_at?: string;
+  resolved_at?: string;
 }
 
 export interface DashboardSummary {
-  totalStations: number;
-  activeStations: number;
-  warningStations: number;
-  criticalStations: number;
-  offlineStations: number;
-  openAlarms: number;
-  criticalAlarms: number;
-  onlineEngineers: number;
-  resolvedToday: number;
-  inProgressAlarms: number;
+  total_stations: number;
+  active_stations: number;
+  warning_stations: number;
+  critical_stations: number;
+  offline_stations: number;
+  open_alarms: number;
+  critical_alarms: number;
+  online_engineers: number;
+  resolved_today: number;
+  in_progress_alarms: number;
 }
 
 export interface FieldEngineer {
-  id: string;
+  id: number;
   name: string;
-  status: 'ONLINE' | 'OFFLINE' | 'BUSY';
-  latitude: number;
-  longitude: number;
-  activeAlarms: number;
+  email: string;
+  role: string;
+  phone?: string;
+  latitude?: number;
+  longitude?: number;
+  is_online: boolean;
+  active: boolean;
 }
 
 export type AnomalyType = 'CPU_SPIKE' | 'USER_DROP' | 'LATENCY_BURST' | 'PACKET_STORM' | 'STATION_DOWN';
