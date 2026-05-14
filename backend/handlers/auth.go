@@ -137,6 +137,9 @@ func Login(c *fiber.Ctx) error {
 		return utils.InternalServerError(c, "Failed to generate tokens")
 	}
 
+	// Update online status in DB
+	database.DB.Model(&user).Update("is_online", true)
+
 	// Sync user to Firebase Auth and generate custom token
 	var firebaseToken string
 	if auth.IsFirebaseEnabled() {

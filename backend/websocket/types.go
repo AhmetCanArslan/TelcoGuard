@@ -12,6 +12,7 @@ const (
 	MessageTypeDashboardSnapshot MessageType = "dashboard_snapshot"
 	MessageTypeSubscribe        MessageType = "subscribe"
 	MessageTypeUnsubscribe      MessageType = "unsubscribe"
+	MessageTypeUserStatus       MessageType = "user_status"
 )
 
 type WSMessage struct {
@@ -43,4 +44,9 @@ type AlarmPayload struct {
 
 type DashboardSnapshotPayload struct {
 	Summary interface{} `json:"summary"`
+}
+
+type UserStatusPayload struct {
+	UserID   uint `json:"user_id"`
+	IsOnline bool `json:"is_online"`
 }

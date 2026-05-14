@@ -9,6 +9,7 @@ import {
   getAccessToken, setTokens, clearTokens,
   getStoredUser, setStoredUser, type StoredUser
 } from '../services/auth'
+import { wsService } from '../services/websocket'
 
 interface AuthContextType {
   user: StoredUser | null
@@ -69,6 +70,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const logout = useCallback(() => {
+    wsService.disconnect()
     clearTokens()
     setUser(null)
   }, [])

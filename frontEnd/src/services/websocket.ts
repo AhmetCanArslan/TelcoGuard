@@ -9,6 +9,7 @@ export type WSMessageType =
   | 'new_alarm'
   | 'alarm_update'
   | 'dashboard_snapshot'
+  | 'user_status'
 
 export interface WSMessage {
   type: WSMessageType
@@ -27,12 +28,15 @@ class WebSocketService {
   private url: string
 
   constructor() {
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
-    this.url = `${protocol}//${window.location.host}/ws`
+    this.url = '' // Will be built in connect()
   }
 
   connect() {
     if (this.ws?.readyState === WebSocket.OPEN) return
+
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+    const token = localStorage.getItem('telcoguard_access_token')
+    this.url = `${protocol}//${window.location.host}/ws${token ? `?token=${token}` : ''}`
 
     try {
       this.ws = new WebSocket(this.url)

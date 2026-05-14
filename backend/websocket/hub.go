@@ -1,6 +1,8 @@
 package websocket
 
 import (
+	"case1/database"
+	"case1/models"
 	"encoding/json"
 	"log"
 )
@@ -26,13 +28,21 @@ func (h *Hub) Run() {
 		select {
 		case client := <-h.register:
 			h.clients[client] = true
-			log.Printf("🔌 Client connected. Total: %d", len(h.clients))
+			log.Printf("🔌 Client connected. UserID: %d. Total: %d", client.UserID, len(h.clients))
+			if client.UserID > 0 {
+				database.DB.Model(&models.User{}).Where("id = ?", client.UserID).Update("is_online", true)
+				h.BroadcastTyped(MessageTypeUserStatus, UserStatusPayload{UserID: client.UserID, IsOnline: true})
+			}
 
 		case client := <-h.unregister:
 			if _, ok := h.clients[client]; ok {
 				delete(h.clients, client)
 				close(client.send)
-				log.Printf("🔌 Client disconnected. Total: %d", len(h.clients))
+				log.Printf("🔌 Client disconnected. UserID: %d. Total: %d", client.UserID, len(h.clients))
+				if client.UserID > 0 {
+					database.DB.Model(&models.User{}).Where("id = ?", client.UserID).Update("is_online", false)
+					h.BroadcastTyped(MessageTypeUserStatus, UserStatusPayload{UserID: client.UserID, IsOnline: false})
+				}
 			}
 
 		case message := <-h.broadcast:

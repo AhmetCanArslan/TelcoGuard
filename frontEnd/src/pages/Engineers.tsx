@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { apiGetUsers } from '../services/api'
+import { wsService } from '../services/websocket'
 import type { FieldEngineer } from '../types'
 
 export default function Engineers() {
@@ -7,15 +8,30 @@ export default function Engineers() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    apiGetUsers()
-      .then(users => {
-        const fieldEngineers = (users as FieldEngineer[]).filter(
-          u => u.role === 'FIELD_ENGINEER'
-        )
-        setEngineers(fieldEngineers)
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false))
+    const fetchUsers = () => {
+      apiGetUsers()
+        .then(users => {
+          const fieldEngineers = (users as FieldEngineer[]).filter(
+            u => u.role === 'FIELD_ENGINEER'
+          )
+          setEngineers(fieldEngineers)
+        })
+        .catch(() => {})
+        .finally(() => setLoading(false))
+    }
+
+    fetchUsers()
+
+    const unbind = wsService.on('user_status', (msg) => {
+      const payload = msg.payload as { user_id: number; is_online: boolean }
+      setEngineers(prev => prev.map(eng => 
+        eng.id === payload.user_id 
+          ? { ...eng, is_online: payload.is_online } 
+          : eng
+      ))
+    })
+
+    return () => unbind()
   }, [])
 
   if (loading) {
