@@ -15,6 +15,9 @@ const API_BASE = '/api/v1'
 /* ---- Generic fetch wrapper ---- */
 
 interface APIResponse<T = unknown> {
+  // API can return either `message` for success or `error` for failures
+  // Preserve both fields for proper error handling
+
   success: boolean
   message?: string
   error?: string

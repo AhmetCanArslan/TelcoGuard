@@ -23,7 +23,15 @@ export default function Login() {
       await login(email, password)
       navigate('/')
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Giriş başarısız')
+      let msg = 'Giriş başarısız';
+      if (err instanceof Error) {
+        if (err.message.includes('Invalid credentials')) {
+          msg = 'Şifre Yanlış';
+        } else {
+          msg = err.message;
+        }
+      }
+      setError(msg);
     } finally {
       setLoading(false)
     }
