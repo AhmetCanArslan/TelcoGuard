@@ -22,6 +22,12 @@ type Config struct {
 	JWTRefreshSecret       string
 	SimulatorSecret        string
 	FirebaseCredentialsPath string
+	DefaultNocEmail         string
+	DefaultNocPassword      string
+	DefaultSahaEmail        string
+	DefaultSahaPassword     string
+	DefaultSebekeEmail      string
+	DefaultSebekePassword   string
 }
 
 var AppConfig *Config
@@ -43,6 +49,12 @@ func Init() {
 		JWTRefreshSecret:        getEnv("JWT_REFRESH_SECRET", "default-refresh-secret-change-me"),
 		SimulatorSecret:         getEnv("SIMULATOR_SECRET", "simulator-local-secret"),
 		FirebaseCredentialsPath: getEnv("FIREBASE_CREDENTIALS_PATH", ""),
+		DefaultNocEmail:         getEnv("DEFAULT_NOC_EMAIL", "noc@turkcell.com"),
+		DefaultNocPassword:      getEnv("DEFAULT_NOC_PASSWORD", "noc"),
+		DefaultSahaEmail:        getEnv("DEFAULT_SAHA_EMAIL", "saha@turkcell.com"),
+		DefaultSahaPassword:     getEnv("DEFAULT_SAHA_PASSWORD", "saha"),
+		DefaultSebekeEmail:      getEnv("DEFAULT_SEBEKE_EMAIL", "sebeke@turkcell.com"),
+		DefaultSebekePassword:   getEnv("DEFAULT_SEBEKE_PASSWORD", "sebeke"),
 	}
 
 	log.Println("✅ Configuration loaded successfully")

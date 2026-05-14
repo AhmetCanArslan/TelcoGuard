@@ -4,6 +4,7 @@ import (
 	"case1/models"
 	"case1/repositories"
 	"case1/services"
+	ws "case1/websocket"
 	"log"
 
 	"github.com/google/uuid"
@@ -24,6 +25,7 @@ type Engine struct {
 	correlator        *Correlator
 	alarmService      *services.AlarmService
 	stationRepo       *repositories.StationRepository
+	hub               *ws.Hub
 }
 
 func NewEngine() *Engine {
@@ -35,6 +37,10 @@ func NewEngine() *Engine {
 		alarmService:      services.NewAlarmService(),
 		stationRepo:       repositories.NewStationRepository(),
 	}
+}
+
+func (e *Engine) SetHub(hub *ws.Hub) {
+	e.hub = hub
 }
 
 func (e *Engine) Process(metric *models.Metric) ([]models.Alarm, error) {
@@ -86,6 +92,10 @@ func (e *Engine) Process(metric *models.Metric) ([]models.Alarm, error) {
 			continue
 		}
 		createdAlarms = append(createdAlarms, *alarm)
+		// Broadcast new alarm via WebSocket
+		if e.hub != nil {
+			e.hub.BroadcastTyped(ws.MessageTypeNewAlarm, ws.AlarmPayload{Alarm: alarm})
+		}
 	}
 
 	// Update station status based on max severity

@@ -1,10 +1,12 @@
 package database
 
 import (
+	"case1/config"
 	"case1/models"
 	"log"
 
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func Seed() error {
@@ -15,6 +17,10 @@ func Seed() error {
 	}
 
 	if err := seedBaseStations(); err != nil {
+		return err
+	}
+
+	if err := seedUsers(); err != nil {
 		return err
 	}
 
@@ -80,5 +86,31 @@ func seedBaseStations() error {
 		return err
 	}
 	log.Println("✅ Base stations seeded (20 stations)")
+	return nil
+}
+
+func seedUsers() error {
+	var count int64
+	DB.Model(&models.User{}).Count(&count)
+	if count > 0 {
+		log.Println("⏭️  Users already seeded")
+		return nil
+	}
+
+	hashPwd := func(pwd string) string {
+		hash, _ := bcrypt.GenerateFromPassword([]byte(pwd), bcrypt.DefaultCost)
+		return string(hash)
+	}
+
+	users := []models.User{
+		{Name: "NOC Admin", Email: config.AppConfig.DefaultNocEmail, Password: hashPwd(config.AppConfig.DefaultNocPassword), Role: models.RoleNOCOperator, Active: true},
+		{Name: "Saha Mühendisi", Email: config.AppConfig.DefaultSahaEmail, Password: hashPwd(config.AppConfig.DefaultSahaPassword), Role: models.RoleFieldEngineer, Active: true},
+		{Name: "Şebeke Yöneticisi", Email: config.AppConfig.DefaultSebekeEmail, Password: hashPwd(config.AppConfig.DefaultSebekePassword), Role: models.RoleNetworkManager, Active: true},
+	}
+
+	if err := DB.Create(&users).Error; err != nil {
+		return err
+	}
+	log.Println("✅ Default users seeded")
 	return nil
 }

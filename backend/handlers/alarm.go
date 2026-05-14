@@ -4,6 +4,7 @@ import (
 	"case1/auth"
 	"case1/services"
 	"case1/utils"
+	ws "case1/websocket"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
@@ -110,6 +111,7 @@ func AcknowledgeAlarm(c *fiber.Ctx) error {
 	if err != nil {
 		return utils.BadRequest(c, err.Error())
 	}
+	go Hub.BroadcastTyped(ws.MessageTypeAlarmUpdate, ws.AlarmPayload{Alarm: alarm})
 	return utils.Success(c, alarm, "Alarm acknowledged")
 }
 
@@ -165,6 +167,7 @@ func AssignAlarm(c *fiber.Ctx) error {
 	if err != nil {
 		return utils.BadRequest(c, err.Error())
 	}
+	go Hub.BroadcastTyped(ws.MessageTypeAlarmUpdate, ws.AlarmPayload{Alarm: alarm})
 	return utils.Success(c, alarm, "Alarm assigned")
 }
 
@@ -199,5 +202,6 @@ func ResolveAlarm(c *fiber.Ctx) error {
 	if err != nil {
 		return utils.BadRequest(c, err.Error())
 	}
+	go Hub.BroadcastTyped(ws.MessageTypeAlarmUpdate, ws.AlarmPayload{Alarm: alarm})
 	return utils.Success(c, alarm, "Alarm resolved")
 }

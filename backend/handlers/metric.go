@@ -5,6 +5,7 @@ import (
 	"case1/models"
 	"case1/services"
 	"case1/utils"
+	ws "case1/websocket"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -15,6 +16,11 @@ var (
 	metricService = services.NewMetricService()
 	anomalyEngine = anomaly.NewEngine()
 )
+
+func init() {
+	// Wire Hub into anomaly engine for WS broadcasts
+	anomalyEngine.SetHub(Hub)
+}
 
 type MetricPayload struct {
 	CpuUsage       float64 `json:"cpu_usage"`
@@ -62,6 +68,18 @@ func IngestMetric(c *fiber.Ctx) error {
 	}
 
 	go anomalyEngine.Process(metric)
+
+	// Broadcast metric update via WebSocket
+	go Hub.BroadcastTyped(ws.MessageTypeMetricUpdate, ws.MetricUpdatePayload{
+		StationID:      stationID.String(),
+		Timestamp:      metric.Timestamp.Format("2006-01-02T15:04:05Z07:00"),
+		CpuUsage:       metric.CpuUsage,
+		MemoryUsage:    metric.MemoryUsage,
+		PacketLoss:     metric.PacketLoss,
+		Latency:        metric.Latency,
+		Rssi:           metric.Rssi,
+		ConnectedUsers: metric.ConnectedUsers,
+	})
 
 	return utils.Success(c, nil, "Metric ingested")
 }
