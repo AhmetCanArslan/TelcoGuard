@@ -6,11 +6,12 @@ FROM golang:1.22.2-alpine AS builder
 WORKDIR /app
 
 COPY go.mod go.sum ./
+ENV GOTOOLCHAIN=local
 RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o case1 main.go
+RUN CGO_ENABLED=0 GOTOOLCHAIN=local GOOS=linux go build -a -installsuffix cgo -o case1 main.go
 
 # Stage 2: Runtime
 FROM alpine:latest

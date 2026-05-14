@@ -16,8 +16,8 @@ func Logger() fiber.Handler {
 func CORS() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		c.Set("Access-Control-Allow-Origin", "*")
-		c.Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-		c.Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		c.Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
+		c.Set("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization")
 
 		if c.Method() == "OPTIONS" {
 			return c.SendStatus(fiber.StatusNoContent)
@@ -38,7 +38,9 @@ func ErrorHandler() fiber.ErrorHandler {
 		log.Printf("❌ Error: %v", err)
 
 		return c.Status(code).JSON(fiber.Map{
-			"error": err.Error(),
+			"success": false,
+			"error":   err.Error(),
+			"message": err.Error(),
 		})
 	}
 }

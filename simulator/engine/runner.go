@@ -10,13 +10,13 @@ import (
 )
 
 type Runner struct {
-	mu              sync.RWMutex
-	running         bool
-	generators      map[string]*Generator
-	anomalyManager  *AnomalyManager
-	backendClient   *client.BackendClient
-	ticker          *time.Ticker
-	stopChan        chan bool
+	mu             sync.RWMutex
+	running        bool
+	generators     map[string]*Generator
+	anomalyManager *AnomalyManager
+	backendClient  *client.BackendClient
+	ticker         *time.Ticker
+	stopChan       chan struct{}
 }
 
 func NewRunner() *Runner {
@@ -29,7 +29,7 @@ func NewRunner() *Runner {
 		generators:     generators,
 		anomalyManager: NewAnomalyManager(),
 		backendClient:  client.NewBackendClient(),
-		stopChan:       make(chan bool),
+		stopChan:       make(chan struct{}),
 	}
 }
 
@@ -40,6 +40,14 @@ func (r *Runner) Start() {
 		return
 	}
 	r.running = true
+	// Ensure stopChan is fresh (in case Stop was called before)
+	select {
+	case <-r.stopChan:
+		// Channel was closed, recreate it
+		r.stopChan = make(chan struct{})
+	default:
+		// Channel is still open
+	}
 	r.mu.Unlock()
 
 	tickMs := config.AppConfig.TickIntervalMs
@@ -69,7 +77,13 @@ func (r *Runner) Stop() {
 		return
 	}
 	r.running = false
-	close(r.stopChan)
+	// Safe close: check if already closed via non-blocking receive
+	select {
+	case <-r.stopChan:
+		// Already closed
+	default:
+		close(r.stopChan)
+	}
 	log.Println("⏹️  Simulator stopped")
 }
 
@@ -108,9 +122,9 @@ func (r *Runner) GetStatus() map[string]interface{} {
 	defer r.mu.RUnlock()
 
 	return map[string]interface{}{
-		"running":           r.running,
-		"station_count":     len(r.generators),
-		"active_anomalies":  r.anomalyManager.ListActive(),
-		"backend_url":       config.AppConfig.BackendURL,
+		"running":          r.running,
+		"station_count":    len(r.generators),
+		"active_anomalies": r.anomalyManager.ListActive(),
+		"backend_url":      config.AppConfig.BackendURL,
 	}
 }
