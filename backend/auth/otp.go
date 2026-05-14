@@ -42,29 +42,28 @@ func StoreOTP(contact, method, code string) error {
 }
 
 func ValidateOTP(contact, code string) (*models.OtpCode, error) {
-	hash := hashOTP(code)
 	var otp models.OtpCode
 	result := database.DB.Where(
-		"contact = ? AND code_hash = ? AND used = false AND expires_at > ?",
-		strings.ToLower(strings.TrimSpace(contact)), hash, time.Now(),
-	).First(&otp)
+		"contact = ? AND used = false AND expires_at > ?",
+		strings.ToLower(strings.TrimSpace(contact)), time.Now(),
+	).Order("created_at DESC").First(&otp)
 
 	if result.Error != nil {
 		return nil, fmt.Errorf("invalid or expired OTP")
 	}
 
-	if otp.Attempts >= 3 {
-		return nil, fmt.Errorf("too many attempts")
-	}
-
 	otp.Attempts++
-	if otp.Attempts >= 3 {
-		otp.Used = true
-	}
 	database.DB.Save(&otp)
 
 	if otp.Attempts >= 3 {
+		otp.Used = true
+		database.DB.Save(&otp)
 		return nil, fmt.Errorf("too many attempts")
+	}
+
+	hash := hashOTP(code)
+	if otp.CodeHash != hash {
+		return nil, fmt.Errorf("invalid or expired OTP")
 	}
 
 	return &otp, nil
@@ -77,9 +76,17 @@ func MarkOTPUsed(otp *models.OtpCode) {
 
 func SendOTP(contact, method, code string) {
 	if IsFirebaseEnabled() {
-		log.Printf("📧 [Firebase] Would send OTP %s to %s via %s", code, contact, method)
-		// TODO: integrate Firebase email action or SMS via Firebase
-		// For now, log since hackathon scope prioritizes working local flow
+		// Sync user to Firebase Auth so frontend can use Firebase features
+		email := contact
+		phone := ""
+		if method == "sms" {
+			phone = contact
+			email = contact + "@placeholder.com"
+		}
+		if _, err := SyncFirebaseUser(email, phone, contact); err != nil {
+			log.Printf("⚠️  Failed to sync Firebase user for %s: %v", contact, err)
+		}
+		log.Printf("📧 [Firebase] OTP for %s (%s): %s (synced to Firebase Auth)", contact, method, code)
 	} else {
 		log.Printf("📧 [DEV MODE] OTP for %s (%s): %s", contact, method, code)
 	}

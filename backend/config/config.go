@@ -9,18 +9,18 @@ import (
 )
 
 type Config struct {
-	DBHost                 string
-	DBPort                 string
-	DBUser                 string
-	DBPassword             string
-	DBName                 string
-	DBSSLMode              string
-	ServerPort             string
-	ServerHost             string
-	Env                    string
-	JWTSecret              string
-	JWTRefreshSecret       string
-	SimulatorSecret        string
+	DBHost                  string
+	DBPort                  string
+	DBUser                  string
+	DBPassword              string
+	DBName                  string
+	DBSSLMode               string
+	ServerPort              string
+	ServerHost              string
+	Env                     string
+	JWTSecret               string
+	JWTRefreshSecret        string
+	SimulatorSecret         string
 	FirebaseCredentialsPath string
 	DefaultNocEmail         string
 	DefaultNocPassword      string
@@ -48,13 +48,14 @@ func Init() {
 		JWTSecret:               getEnv("JWT_SECRET", "default-jwt-secret-change-me"),
 		JWTRefreshSecret:        getEnv("JWT_REFRESH_SECRET", "default-refresh-secret-change-me"),
 		SimulatorSecret:         getEnv("SIMULATOR_SECRET", "simulator-local-secret"),
-		FirebaseCredentialsPath: getEnv("FIREBASE_CREDENTIALS_PATH", ""),
+		FirebaseCredentialsPath: getEnv("FIREBASE_CREDENTIALS_PATH", "./config/firebase-credentials.json"),
 		DefaultNocEmail:         getEnv("DEFAULT_NOC_EMAIL", "noc@turkcell.com"),
 		DefaultNocPassword:      getEnv("DEFAULT_NOC_PASSWORD", "noc"),
 		DefaultSahaEmail:        getEnv("DEFAULT_SAHA_EMAIL", "saha@turkcell.com"),
 		DefaultSahaPassword:     getEnv("DEFAULT_SAHA_PASSWORD", "saha"),
 		DefaultSebekeEmail:      getEnv("DEFAULT_SEBEKE_EMAIL", "sebeke@turkcell.com"),
 		DefaultSebekePassword:   getEnv("DEFAULT_SEBEKE_PASSWORD", "sebeke"),
+
 	}
 
 	log.Println("✅ Configuration loaded successfully")

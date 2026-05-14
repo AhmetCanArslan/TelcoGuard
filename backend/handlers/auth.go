@@ -6,6 +6,7 @@ import (
 	"case1/database"
 	"case1/models"
 	"case1/utils"
+	"log"
 
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/crypto/bcrypt"
@@ -37,9 +38,10 @@ type OTPVerifyRequest struct {
 }
 
 type TokenResponse struct {
-	AccessToken  string      `json:"access_token"`
-	RefreshToken string      `json:"refresh_token"`
-	User         models.User `json:"user"`
+	AccessToken         string      `json:"access_token"`
+	RefreshToken        string      `json:"refresh_token"`
+	FirebaseCustomToken string      `json:"firebase_custom_token,omitempty"`
+	User                models.User `json:"user"`
 }
 
 // Register godoc
@@ -89,6 +91,13 @@ func Register(c *fiber.Ctx) error {
 		return utils.BadRequest(c, "User already exists or invalid data")
 	}
 
+	// Sync user to Firebase Auth
+	if auth.IsFirebaseEnabled() {
+		if _, err := auth.SyncFirebaseUser(user.Email, user.Phone, user.Name); err != nil {
+			log.Printf("⚠️  Failed to sync user to Firebase: %v", err)
+		}
+	}
+
 	user.Password = ""
 	return utils.Success(c, user, "User registered successfully")
 }
@@ -128,11 +137,20 @@ func Login(c *fiber.Ctx) error {
 		return utils.InternalServerError(c, "Failed to generate tokens")
 	}
 
+	// Sync user to Firebase Auth and generate custom token
+	var firebaseToken string
+	if auth.IsFirebaseEnabled() {
+		if fbUID, err := auth.SyncFirebaseUser(user.Email, user.Phone, user.Name); err == nil {
+			firebaseToken, _ = auth.GenerateFirebaseCustomToken(fbUID)
+		}
+	}
+
 	user.Password = ""
 	return utils.Success(c, TokenResponse{
-		AccessToken:  accessToken,
-		RefreshToken: refreshToken,
-		User:         user,
+		AccessToken:         accessToken,
+		RefreshToken:        refreshToken,
+		FirebaseCustomToken: firebaseToken,
+		User:                user,
 	}, "Login successful")
 }
 
@@ -242,11 +260,20 @@ func VerifyOTP(c *fiber.Ctx) error {
 		return utils.InternalServerError(c, "Failed to generate tokens")
 	}
 
+	// Sync user to Firebase Auth and generate custom token
+	var firebaseToken string
+	if auth.IsFirebaseEnabled() {
+		if fbUID, err := auth.SyncFirebaseUser(user.Email, user.Phone, user.Name); err == nil {
+			firebaseToken, _ = auth.GenerateFirebaseCustomToken(fbUID)
+		}
+	}
+
 	user.Password = ""
 	return utils.Success(c, TokenResponse{
-		AccessToken:  accessToken,
-		RefreshToken: refreshToken,
-		User:         user,
+		AccessToken:         accessToken,
+		RefreshToken:        refreshToken,
+		FirebaseCustomToken: firebaseToken,
+		User:                user,
 	}, "OTP verified successfully")
 }
 

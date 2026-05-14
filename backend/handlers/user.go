@@ -40,7 +40,7 @@ func UpdateUser(c *fiber.Ctx) error {
 		return utils.BadRequest(c, "Invalid request body")
 	}
 
-	updateData := fiber.Map{}
+	updateData := map[string]interface{}{}
 	if req.Name != "" {
 		updateData["name"] = req.Name
 	}
