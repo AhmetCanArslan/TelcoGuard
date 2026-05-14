@@ -1,9 +1,61 @@
+import { useState, useEffect, useCallback } from 'react'
+import {
+  FaBroadcastTower, FaCheckCircle, FaExclamationTriangle,
+  FaTimesCircle, FaPowerOff, FaBell, FaWrench, FaHardHat
+} from 'react-icons/fa'
 import StatCard from '../components/StatCard'
 import NetworkMap from '../components/NetworkMap'
 import AlarmTable from '../components/AlarmTable'
-import { mockStations, mockAlarms, mockSummary } from '../data/mockData'
+import { apiGetDashboardSummary, apiGetStations, apiGetAlarms } from '../services/api'
+import { wsService } from '../services/websocket'
+import type { BaseStation, Alarm, DashboardSummary } from '../types'
 
 export default function Dashboard() {
+  const [summary, setSummary] = useState<DashboardSummary | null>(null)
+  const [stations, setStations] = useState<BaseStation[]>([])
+  const [alarms, setAlarms] = useState<Alarm[]>([])
+  const [error, setError] = useState('')
+
+  const fetchData = useCallback(async () => {
+    try {
+      const [s, st, al] = await Promise.all([
+        apiGetDashboardSummary(),
+        apiGetStations(),
+        apiGetAlarms({ per_page: 10 }),
+      ])
+      setSummary(s)
+      setStations(st)
+      setAlarms(al.data)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Veri yüklenemedi')
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchData()
+    const interval = setInterval(fetchData, 30000)
+
+    wsService.connect()
+    const unsub1 = wsService.on('dashboard_snapshot', (msg) => {
+      setSummary(msg.payload as DashboardSummary)
+    })
+    const unsub2 = wsService.on('new_alarm', () => { fetchData() })
+    const unsub3 = wsService.on('station_status', () => { fetchData() })
+
+    return () => {
+      clearInterval(interval)
+      unsub1(); unsub2(); unsub3()
+    }
+  }, [fetchData])
+
+  if (error) {
+    return <div style={{ textAlign: 'center', paddingTop: 80, color: 'var(--status-critical)' }}>{error}</div>
+  }
+
+  if (!summary) {
+    return <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 120 }}><div className="loading-spinner" /></div>
+  }
+
   return (
     <>
       <div className="page-header">
@@ -14,25 +66,22 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Summary Stats */}
       <div className="stats-grid">
-        <StatCard icon="📡" value={mockSummary.totalStations}  label="Toplam İstasyon"   colorClass="yellow" />
-        <StatCard icon="✅" value={mockSummary.activeStations}  label="Aktif İstasyon"    colorClass="green" />
-        <StatCard icon="⚠️" value={mockSummary.warningStations} label="Uyarı Durumunda"   colorClass="yellow" />
-        <StatCard icon="🔴" value={mockSummary.criticalStations} label="Kritik Durum"     colorClass="red" />
-        <StatCard icon="📴" value={mockSummary.offlineStations}  label="Çevrimdışı"       colorClass="gray" />
-        <StatCard icon="🔔" value={mockSummary.openAlarms}       label="Açık Alarm"       colorClass="red" />
-        <StatCard icon="🛠️" value={mockSummary.inProgressAlarms} label="Müdahale Ediliyor" colorClass="navy" />
-        <StatCard icon="👷" value={mockSummary.onlineEngineers}  label="Çevrimiçi Müh."   colorClass="green" />
+        <StatCard icon={<FaBroadcastTower />}       value={summary.total_stations}    label="Toplam İstasyon"   colorClass="yellow" />
+        <StatCard icon={<FaCheckCircle />}           value={summary.active_stations}   label="Aktif İstasyon"    colorClass="green" />
+        <StatCard icon={<FaExclamationTriangle />}   value={summary.warning_stations}  label="Uyarı Durumunda"   colorClass="yellow" />
+        <StatCard icon={<FaTimesCircle />}           value={summary.critical_stations} label="Kritik Durum"      colorClass="red" />
+        <StatCard icon={<FaPowerOff />}              value={summary.offline_stations}   label="Çevrimdışı"       colorClass="gray" />
+        <StatCard icon={<FaBell />}                  value={summary.open_alarms}        label="Açık Alarm"       colorClass="red" />
+        <StatCard icon={<FaWrench />}                value={summary.in_progress_alarms} label="Müdahale Ediliyor" colorClass="blue" />
+        <StatCard icon={<FaHardHat />}               value={summary.online_engineers}   label="Çevrimiçi Müh."   colorClass="green" />
       </div>
 
-      {/* Map */}
       <div className="dashboard-grid">
-        <NetworkMap stations={mockStations} />
+        <NetworkMap stations={stations} />
       </div>
 
-      {/* Recent Alarms */}
-      <AlarmTable alarms={mockAlarms} compact />
+      <AlarmTable alarms={alarms} compact />
     </>
   )
 }

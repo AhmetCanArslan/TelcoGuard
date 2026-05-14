@@ -2,6 +2,7 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, ReferenceLine
 } from 'recharts'
+import { FaChartArea } from 'react-icons/fa'
 import type { Metric } from '../types'
 
 interface ThresholdLine {
@@ -21,7 +22,7 @@ interface Props {
 }
 
 export default function MetricChart({
-  title, metrics, dataKey, unit, color = '#FFCC00',
+  title, metrics, dataKey, unit, color = '#FFCB05',
   warningThreshold, criticalThreshold
 }: Props) {
   const data = metrics.map(m => ({
@@ -32,7 +33,7 @@ export default function MetricChart({
   return (
     <div className="chart-panel">
       <div className="chart-panel-header">
-        <span>📉</span> {title} <span style={{ opacity: 0.5, fontWeight: 400, marginLeft: 'auto' }}>({unit})</span>
+        <FaChartArea /> {title} <span style={{ opacity: 0.5, fontWeight: 400, marginLeft: 'auto', fontFamily: 'var(--font-data)' }}>({unit})</span>
       </div>
       <div className="chart-body">
         <ResponsiveContainer width="100%" height={220}>
@@ -53,11 +54,12 @@ export default function MetricChart({
             />
             <Tooltip
               contentStyle={{
-                background: '#1B2838',
-                border: '1px solid rgba(255,204,0,0.2)',
+                background: '#111111',
+                border: '1px solid rgba(255,203,5,0.2)',
                 borderRadius: 8,
                 color: '#F0F0F0',
                 fontSize: 12,
+                fontFamily: 'var(--font-data)',
               }}
               formatter={(value: number) => [`${value} ${unit}`, title]}
             />

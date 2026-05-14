@@ -1,13 +1,13 @@
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
 import { useNavigate } from 'react-router-dom'
+import { FaMapMarkerAlt } from 'react-icons/fa'
 import type { BaseStation } from '../types'
 
-/* Custom colored markers via divIcon */
 function createStationIcon(status: string) {
   const colorMap: Record<string, string> = {
     ACTIVE:   '#10B981',
-    WARNING:  '#FFCC00',
+    WARNING:  '#FFCB05',
     CRITICAL: '#EF4444',
     OFFLINE:  '#6B7280',
   }
@@ -32,7 +32,7 @@ export default function NetworkMap({ stations }: Props) {
   return (
     <div className="map-container full-width">
       <div className="map-header">
-        <span>📍</span> İstasyon Haritası — İstanbul
+        <FaMapMarkerAlt /> İstasyon Haritası — İstanbul
       </div>
       <MapContainer
         center={[41.015, 29.01]}

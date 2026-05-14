@@ -1,6 +1,14 @@
-import { useState } from 'react'
-import { mockStations } from '../data/mockData'
-import type { AnomalyType } from '../types'
+import { useState, useEffect, useCallback } from 'react'
+import {
+  FaBroadcastTower, FaBolt, FaPlay, FaStop,
+  FaClipboardList, FaTrash, FaPowerOff
+} from 'react-icons/fa'
+import {
+  apiSimulatorStart, apiSimulatorStop,
+  apiSimulatorInjectAnomaly, apiSimulatorStatus,
+  apiGetStations
+} from '../services/api'
+import type { AnomalyType, BaseStation } from '../types'
 
 const anomalyTypes: { value: AnomalyType; label: string; desc: string }[] = [
   { value: 'CPU_SPIKE',     label: 'CPU Spike',        desc: 'CPU %95+ sürekli 30sn' },
@@ -12,60 +20,97 @@ const anomalyTypes: { value: AnomalyType; label: string; desc: string }[] = [
 
 export default function SimulatorControl() {
   const [running, setRunning] = useState(false)
-  const [selectedStation, setSelectedStation] = useState(mockStations[0].id)
+  const [stations, setStations] = useState<BaseStation[]>([])
+  const [selectedStation, setSelectedStation] = useState('')
   const [selectedAnomaly, setSelectedAnomaly] = useState<AnomalyType>('CPU_SPIKE')
   const [duration, setDuration] = useState(60)
   const [logs, setLogs] = useState<string[]>([])
+  const [actionLoading, setActionLoading] = useState(false)
 
   const addLog = (msg: string) => {
     setLogs(prev => [`[${new Date().toLocaleTimeString('tr-TR')}] ${msg}`, ...prev].slice(0, 20))
   }
 
-  const toggleSimulator = () => {
-    if (running) {
-      setRunning(false)
-      addLog('⏹ Simülatör durduruldu')
-    } else {
-      setRunning(true)
-      addLog('▶️ Simülatör başlatıldı — metrik üretimi aktif')
+  const fetchStatus = useCallback(async () => {
+    try {
+      const status = await apiSimulatorStatus()
+      setRunning(status.running)
+    } catch {
+      // simulator may be offline
+    }
+  }, [])
+
+  useEffect(() => {
+    apiGetStations().then(s => {
+      setStations(s)
+      if (s.length > 0) setSelectedStation(s[0].code)
+    }).catch(() => {})
+    fetchStatus()
+  }, [fetchStatus])
+
+  useEffect(() => {
+    if (!running) return
+    const interval = setInterval(fetchStatus, 5000)
+    return () => clearInterval(interval)
+  }, [running, fetchStatus])
+
+  const toggleSimulator = async () => {
+    setActionLoading(true)
+    try {
+      if (running) {
+        await apiSimulatorStop()
+        setRunning(false)
+        addLog('Simülatör durduruldu')
+      } else {
+        await apiSimulatorStart()
+        setRunning(true)
+        addLog('Simülatör başlatıldı — metrik üretimi aktif')
+      }
+    } catch (err) {
+      addLog(`Hata: ${err instanceof Error ? err.message : 'Bilinmeyen hata'}`)
+    } finally {
+      setActionLoading(false)
     }
   }
 
-  const injectAnomaly = () => {
-    const station = mockStations.find(s => s.id === selectedStation)
-    const anomaly = anomalyTypes.find(a => a.value === selectedAnomaly)
-    addLog(`⚡ Anomali enjekte edildi: ${anomaly?.label} → ${station?.code} (${duration}s)`)
+  const injectAnomaly = async () => {
+    setActionLoading(true)
+    try {
+      await apiSimulatorInjectAnomaly(selectedStation, selectedAnomaly, duration)
+      const anomaly = anomalyTypes.find(a => a.value === selectedAnomaly)
+      addLog(`Anomali enjekte edildi: ${anomaly?.label} → ${selectedStation} (${duration}s)`)
+    } catch (err) {
+      addLog(`Hata: ${err instanceof Error ? err.message : 'Enjeksiyon başarısız'}`)
+    } finally {
+      setActionLoading(false)
+    }
   }
 
   const selectStyle: React.CSSProperties = {
-    background: 'var(--navy-700)',
+    background: 'var(--bg-elevated)',
     border: '1px solid var(--border-color)',
     color: 'var(--text-primary)',
     padding: '8px 12px',
     borderRadius: 'var(--radius-sm)',
     fontSize: 13,
-    fontFamily: 'inherit',
+    fontFamily: 'var(--font-heading)',
     width: '100%',
   }
 
-  const inputStyle: React.CSSProperties = {
-    ...selectStyle,
-    width: 100,
-  }
+  const inputStyle: React.CSSProperties = { ...selectStyle, width: 100 }
 
   return (
     <>
       <div className="page-header">
         <h2>Simülatör Kontrol</h2>
-        <button className="btn-primary" onClick={toggleSimulator}>
-          {running ? '⏹ Durdur' : '▶️ Başlat'}
+        <button className="btn-primary" onClick={toggleSimulator} disabled={actionLoading}>
+          {running ? <><FaStop /> Durdur</> : <><FaPlay /> Başlat</>}
         </button>
       </div>
 
       <div className="stats-grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
-        {/* Simulator Status */}
         <div className="chart-panel">
-          <div className="chart-panel-header"><span>📡</span> Simülatör Durumu</div>
+          <div className="chart-panel-header"><FaBroadcastTower /> Simülatör Durumu</div>
           <div className="chart-body" style={{ textAlign: 'center', padding: 32 }}>
             <div style={{
               width: 80, height: 80, borderRadius: '50%',
@@ -74,9 +119,12 @@ export default function SimulatorControl() {
               margin: '0 auto 16px',
               border: `3px solid ${running ? 'var(--status-active)' : 'var(--status-offline)'}`,
             }}>
-              <span style={{ fontSize: 32 }}>{running ? '📡' : '📴'}</span>
+              {running
+                ? <FaBroadcastTower style={{ fontSize: 28, color: 'var(--status-active)' }} />
+                : <FaPowerOff style={{ fontSize: 28, color: 'var(--status-offline)' }} />
+              }
             </div>
-            <h3 style={{ fontSize: 18, marginBottom: 4 }}>
+            <h3 style={{ fontSize: 18, marginBottom: 4, fontFamily: 'var(--font-heading)' }}>
               {running ? 'Çalışıyor' : 'Durduruldu'}
             </h3>
             <p style={{ fontSize: 13, color: 'var(--text-secondary)' }}>
@@ -85,14 +133,13 @@ export default function SimulatorControl() {
           </div>
         </div>
 
-        {/* Anomaly Injection */}
         <div className="chart-panel">
-          <div className="chart-panel-header"><span>⚡</span> Anomali Enjeksiyonu</div>
+          <div className="chart-panel-header"><FaBolt /> Anomali Enjeksiyonu</div>
           <div className="chart-body" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div>
               <label style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 4, display: 'block' }}>İstasyon</label>
               <select style={selectStyle} value={selectedStation} onChange={e => setSelectedStation(e.target.value)}>
-                {mockStations.map(s => <option key={s.id} value={s.id}>{s.code} — {s.name}</option>)}
+                {stations.map(s => <option key={s.id} value={s.code}>{s.code} — {s.name}</option>)}
               </select>
             </div>
             <div>
@@ -106,19 +153,18 @@ export default function SimulatorControl() {
                 <label style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 4, display: 'block' }}>Süre (sn)</label>
                 <input type="number" style={inputStyle} value={duration} onChange={e => setDuration(+e.target.value)} min={10} max={300} />
               </div>
-              <button className="btn-primary" onClick={injectAnomaly} style={{ flex: 1, padding: '9px 20px' }}>
-                ⚡ Enjekte Et
+              <button className="btn-primary" onClick={injectAnomaly} disabled={actionLoading} style={{ flex: 1, padding: '9px 20px' }}>
+                <FaBolt /> Enjekte Et
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Event Log */}
       <div className="alarm-panel" style={{ marginTop: 24 }}>
         <div className="alarm-panel-header">
-          <h3><span>📋</span> Olay Günlüğü</h3>
-          <button className="filter-btn" onClick={() => setLogs([])}>Temizle</button>
+          <h3><FaClipboardList /> Olay Günlüğü</h3>
+          <button className="filter-btn" onClick={() => setLogs([])}><FaTrash /> Temizle</button>
         </div>
         <div style={{ padding: 16, maxHeight: 300, overflowY: 'auto' }}>
           {logs.length === 0 ? (
@@ -131,9 +177,9 @@ export default function SimulatorControl() {
                 padding: '8px 12px',
                 borderBottom: '1px solid rgba(255,255,255,0.03)',
                 fontSize: 13,
-                fontFamily: 'monospace',
-                color: log.includes('Kritik') ? 'var(--status-critical)' :
-                       log.includes('Anomali') ? 'var(--yellow-500)' : 'var(--text-secondary)',
+                fontFamily: 'var(--font-data)',
+                color: log.includes('Hata') ? 'var(--status-critical)' :
+                       log.includes('Anomali') ? 'var(--accent)' : 'var(--text-secondary)',
               }}>
                 {log}
               </div>

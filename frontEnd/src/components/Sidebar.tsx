@@ -1,16 +1,27 @@
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
+import {
+  FaTachometerAlt, FaBell, FaHardHat, FaChartLine,
+  FaBolt, FaSignOutAlt
+} from 'react-icons/fa'
 
 const navItems = [
-  { path: '/',           label: 'Dashboard',       icon: '📊' },
-  { path: '/alarms',     label: 'Alarm Yönetimi',  icon: '🔔' },
-  { path: '/engineers',  label: 'Saha Mühendisleri', icon: '👷' },
-  { path: '/reports',    label: 'Raporlama',        icon: '📈' },
-  { path: '/simulator',  label: 'Simülatör',        icon: '⚡' },
+  { path: '/',           label: 'Dashboard',         icon: <FaTachometerAlt /> },
+  { path: '/alarms',     label: 'Alarm Yönetimi',    icon: <FaBell /> },
+  { path: '/engineers',  label: 'Saha Mühendisleri', icon: <FaHardHat /> },
+  { path: '/reports',    label: 'Raporlama',         icon: <FaChartLine /> },
+  { path: '/simulator',  label: 'Simülatör',         icon: <FaBolt /> },
 ]
 
 export default function Sidebar() {
   const location = useLocation()
   const navigate = useNavigate()
+  const { user, logout } = useAuth()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
 
   return (
     <aside className="sidebar">
@@ -31,7 +42,7 @@ export default function Sidebar() {
             className={`nav-item ${location.pathname === item.path ? 'active' : ''}`}
             onClick={() => navigate(item.path)}
           >
-            <span style={{ fontSize: 18 }}>{item.icon}</span>
+            {item.icon}
             {item.label}
           </div>
         ))}
@@ -39,12 +50,17 @@ export default function Sidebar() {
 
       <div className="sidebar-footer">
         <div className="user-info">
-          <div className="user-avatar">NO</div>
+          <div className="user-avatar">
+            {user ? user.name.split(' ').map(n => n[0]).join('').slice(0, 2) : 'NO'}
+          </div>
           <div className="user-details">
-            <div className="user-name">NOC Operatörü</div>
-            <div className="user-role">Şebeke İzleme</div>
+            <div className="user-name">{user?.name || 'NOC Operatörü'}</div>
+            <div className="user-role">{user?.role || 'Şebeke İzleme'}</div>
           </div>
         </div>
+        <button className="sidebar-logout-btn" onClick={handleLogout}>
+          <FaSignOutAlt /> Çıkış Yap
+        </button>
       </div>
     </aside>
   )
