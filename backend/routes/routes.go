@@ -45,14 +45,13 @@ func Setup(app *fiber.App) {
 	protected.Post("/me/password", handlers.UpdatePassword)
 	protected.Post("/auth/logout", handlers.Logout)
 
-	// Users (admin only)
+	// Users (Read: Admin, NOC, Network Manager | Write: Admin)
 	users := protected.Group("/users")
-	users.Use(auth.RequireRole(models.RoleAdmin))
-	users.Get("", handlers.ListUsers)
-	users.Post("", handlers.CreateUser)
-	users.Get("/:id", handlers.GetUser)
-	users.Put("/:id", handlers.UpdateUser)
-	users.Delete("/:id", handlers.DeleteUser)
+	users.Get("", auth.RequireRole(models.RoleAdmin, models.RoleNOCOperator, models.RoleNetworkManager), handlers.ListUsers)
+	users.Get("/:id", auth.RequireRole(models.RoleAdmin, models.RoleNOCOperator, models.RoleNetworkManager), handlers.GetUser)
+	users.Post("", auth.RequireRole(models.RoleAdmin), handlers.CreateUser)
+	users.Put("/:id", auth.RequireRole(models.RoleAdmin), handlers.UpdateUser)
+	users.Delete("/:id", auth.RequireRole(models.RoleAdmin), handlers.DeleteUser)
 
 	// Stations
 	stations := protected.Group("/stations")

@@ -30,6 +30,8 @@ type Config struct {
 	DefaultSahaPassword     string
 	DefaultSebekeEmail      string
 	DefaultSebekePassword   string
+	DefaultAdminEmail       string
+	DefaultAdminPassword    string
 }
 
 var AppConfig *Config
