@@ -4,6 +4,32 @@ import AlarmTable from '../components/AlarmTable'
 import { apiGetAlarms, apiAcknowledgeAlarm, apiAssignAlarm, apiResolveAlarm } from '../services/api'
 import type { Alarm } from '../types'
 
+function exportToCSV(alarms: Alarm[]) {
+  const headers = ['ID', 'İstasyon', 'Metrik', 'Şiddet', 'Durum', 'Mesaj', 'Atanan', 'Çözüm Notu', 'Oluşturulma', 'Çözülme']
+  const rows = alarms.map(a => [
+    a.id,
+    a.station?.name || a.station_id,
+    a.metric_name,
+    a.severity,
+    a.status,
+    `"${(a.message || '').replace(/"/g, '""')}"`,
+    a.assigned_to?.name || '-',
+    `"${(a.resolution_note || '').replace(/"/g, '""')}"`,
+    new Date(a.created_at).toLocaleString('tr-TR'),
+    a.resolved_at ? new Date(a.resolved_at).toLocaleString('tr-TR') : '-',
+  ])
+
+  const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n')
+  const bom = '\uFEFF'
+  const blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `telcoguard_alarms_${new Date().toISOString().slice(0, 10)}.csv`
+  link.click()
+  URL.revokeObjectURL(url)
+}
+
 export default function Alarms() {
   const [alarms, setAlarms] = useState<Alarm[]>([])
   const [loading, setLoading] = useState(true)
@@ -48,6 +74,10 @@ export default function Alarms() {
     } catch { /* show toast in the future */ }
   }
 
+  const handleExportCSV = () => {
+    exportToCSV(alarms)
+  }
+
   if (loading) {
     return <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 120 }}><div className="loading-spinner" /></div>
   }
@@ -56,7 +86,7 @@ export default function Alarms() {
     <>
       <div className="page-header">
         <h2>Alarm Yönetimi</h2>
-        <button className="btn-primary"><FaDownload /> CSV İndir</button>
+        <button className="btn-primary" onClick={handleExportCSV}><FaDownload /> CSV İndir</button>
       </div>
       <AlarmTable
         alarms={alarms}
