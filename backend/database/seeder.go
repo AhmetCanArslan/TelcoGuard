@@ -52,13 +52,6 @@ func seedThresholdConfigs() error {
 }
 
 func seedBaseStations() error {
-	var count int64
-	DB.Model(&models.BaseStation{}).Count(&count)
-	if count > 0 {
-		log.Println("⏭️  Base stations already seeded")
-		return nil
-	}
-
 	stations := []models.BaseStation{
 		{ID: uuid.MustParse("11111111-1111-1111-1111-111111111111"), Code: "BSC-001", Name: "Levent-K1", Latitude: 41.0732, Longitude: 29.0199, Region: "Marmara", Type: models.StationTypeNR5G, Capacity: 1000, Status: models.StationStatusActive},
 		{ID: uuid.MustParse("11111111-1111-1111-1111-111111111112"), Code: "BSC-002", Name: "Kadıköy-M3", Latitude: 40.9887, Longitude: 29.0277, Region: "Marmara", Type: models.StationTypeLTE, Capacity: 800, Status: models.StationStatusActive},
@@ -71,21 +64,39 @@ func seedBaseStations() error {
 		{ID: uuid.MustParse("11111111-1111-1111-1111-111111111119"), Code: "BSC-009", Name: "Bahçelievler-BA2", Latitude: 41.0072, Longitude: 28.8821, Region: "Marmara", Type: models.StationTypeNR5G, Capacity: 880, Status: models.StationStatusActive},
 		{ID: uuid.MustParse("11111111-1111-1111-1111-11111111111a"), Code: "BSC-010", Name: "Bakırköy-BAK1", Latitude: 40.9756, Longitude: 28.8899, Region: "Marmara", Type: models.StationTypeLTE, Capacity: 780, Status: models.StationStatusActive},
 		{ID: uuid.MustParse("11111111-1111-1111-1111-11111111111b"), Code: "BSC-011", Name: "Maltepe-MAL1", Latitude: 40.9619, Longitude: 29.1342, Region: "Marmara", Type: models.StationTypeNR5G, Capacity: 920, Status: models.StationStatusActive},
-		{ID: uuid.MustParse("11111111-1111-1111-1111-11111111111c"), Code: "BSC-012", Name: "Pendik-PEN1", Latitude: 40.8897, Longitude: 29.2410, Region: "Marmara", Type: models.StationTypeLTE, Capacity: 850, Status: models.StationStatusActive},
-		{ID: uuid.MustParse("11111111-1111-1111-1111-11111111111d"), Code: "BSC-013", Name: "Bağcılar-BAG1", Latitude: 41.2268, Longitude: 29.2046, Region: "Marmara", Type: models.StationTypeNR5G, Capacity: 1150, Status: models.StationStatusActive},
-		{ID: uuid.MustParse("11111111-1111-1111-1111-11111111111e"), Code: "BSC-014", Name: "Eyüpsultan-EYU1", Latitude: 41.0667, Longitude: 28.9133, Region: "Marmara", Type: models.StationTypeLTE, Capacity: 750, Status: models.StationStatusActive},
-		{ID: uuid.MustParse("11111111-1111-1111-1111-11111111111f"), Code: "BSC-015", Name: "Avcılar-AVC1", Latitude: 41.0085, Longitude: 28.7454, Region: "Marmara", Type: models.StationTypeNR5G, Capacity: 1000, Status: models.StationStatusActive},
+		{ID: uuid.MustParse("11111111-1111-1111-1111-11111111111c"), Code: "BSC-012", Name: "Pendik-PEN1", Latitude: 40.8897, Longitude: 29.2410, Region: "Marmara", Type: models.StationTypeLTE, Capacity: 850, Status: models.StationStatusWarning},
+		{ID: uuid.MustParse("11111111-1111-1111-1111-11111111111d"), Code: "BSC-013", Name: "Bağcılar-BAG1", Latitude: 41.2268, Longitude: 29.2046, Region: "Marmara", Type: models.StationTypeNR5G, Capacity: 1150, Status: models.StationStatusWarning},
+		{ID: uuid.MustParse("11111111-1111-1111-1111-11111111111e"), Code: "BSC-014", Name: "Eyüpsultan-EYU1", Latitude: 41.0667, Longitude: 28.9133, Region: "Marmara", Type: models.StationTypeLTE, Capacity: 750, Status: models.StationStatusCritical},
+		{ID: uuid.MustParse("11111111-1111-1111-1111-11111111111f"), Code: "BSC-015", Name: "Avcılar-AVC1", Latitude: 41.0085, Longitude: 28.7454, Region: "Marmara", Type: models.StationTypeNR5G, Capacity: 1000, Status: models.StationStatusCritical},
 		{ID: uuid.MustParse("11111111-1111-1111-1111-111111111120"), Code: "BSC-016", Name: "İzmir-Alsancak-IZ1", Latitude: 38.4215, Longitude: 27.1467, Region: "Ege", Type: models.StationTypeNR5G, Capacity: 1100, Status: models.StationStatusActive},
 		{ID: uuid.MustParse("11111111-1111-1111-1111-111111111121"), Code: "BSC-017", Name: "İzmir-Konak-IZ2", Latitude: 38.4192, Longitude: 27.1441, Region: "Ege", Type: models.StationTypeLTE, Capacity: 900, Status: models.StationStatusActive},
-		{ID: uuid.MustParse("11111111-1111-1111-1111-111111111122"), Code: "BSC-018", Name: "Aydın-AYD1", Latitude: 37.8442, Longitude: 27.8454, Region: "Ege", Type: models.StationTypeLTE, Capacity: 650, Status: models.StationStatusActive},
+		{ID: uuid.MustParse("11111111-1111-1111-1111-111111111122"), Code: "BSC-018", Name: "Aydın-AYD1", Latitude: 37.8442, Longitude: 27.8454, Region: "Ege", Type: models.StationTypeLTE, Capacity: 650, Status: models.StationStatusOffline},
 		{ID: uuid.MustParse("11111111-1111-1111-1111-111111111123"), Code: "BSC-019", Name: "Ankara-Çankaya-ANK1", Latitude: 39.8817, Longitude: 32.7940, Region: "İç Anadolu", Type: models.StationTypeNR5G, Capacity: 1050, Status: models.StationStatusActive},
-		{ID: uuid.MustParse("11111111-1111-1111-1111-111111111124"), Code: "BSC-020", Name: "Ankara-Keçiören-ANK2", Latitude: 39.9500, Longitude: 32.8500, Region: "İç Anadolu", Type: models.StationTypeLTE, Capacity: 800, Status: models.StationStatusActive},
+		{ID: uuid.MustParse("11111111-1111-1111-1111-111111111124"), Code: "BSC-020", Name: "Ankara-Keçiören-ANK2", Latitude: 39.9500, Longitude: 32.8500, Region: "İç Anadolu", Type: models.StationTypeLTE, Capacity: 800, Status: models.StationStatusOffline},
 	}
 
-	if err := DB.Create(&stations).Error; err != nil {
-		return err
+	for _, station := range stations {
+		var existing models.BaseStation
+		result := DB.First(&existing, "id = ?", station.ID)
+		if result.Error != nil {
+			if err := DB.Create(&station).Error; err != nil {
+				log.Printf("⚠️ Failed to seed station %s: %v", station.Code, err)
+			} else {
+				log.Printf("✅ Seeded station: %s (%s)", station.Code, station.Status)
+			}
+		} else {
+			if existing.Status != station.Status {
+				existing.Status = station.Status
+				if err := DB.Save(&existing).Error; err != nil {
+					log.Printf("⚠️ Failed to update station %s: %v", station.Code, err)
+				} else {
+					log.Printf("🔄 Updated station %s status: %s → %s", station.Code, result.RowsAffected, station.Status)
+				}
+			}
+		}
 	}
-	log.Println("✅ Base stations seeded (20 stations)")
+
+	log.Println("✅ Base stations seeded/updated (20 stations)")
 	return nil
 }
 

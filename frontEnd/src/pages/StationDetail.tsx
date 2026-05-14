@@ -7,11 +7,13 @@ import {
 import MetricChart from '../components/MetricChart'
 import AlarmTable from '../components/AlarmTable'
 import { apiGetStation, apiGetStationMetrics, apiGetAlarms } from '../services/api'
+import { useAuth } from '../context/AuthContext'
 import type { BaseStation, Metric, Alarm } from '../types'
 
 export default function StationDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const { user } = useAuth()
 
   const [station, setStation] = useState<BaseStation | null>(null)
   const [metrics, setMetrics] = useState<Metric[]>([])
@@ -19,13 +21,15 @@ export default function StationDetail() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
+  const canViewAlarms = user?.role === 'NOC_OPERATOR' || user?.role === 'ADMIN'
+
   const fetchData = useCallback(async () => {
     if (!id) return
     try {
       const [s, m, a] = await Promise.all([
         apiGetStation(id),
         apiGetStationMetrics(id),
-        apiGetAlarms({ station: id }),
+        canViewAlarms ? apiGetAlarms({ station: id }) : Promise.resolve({ data: [] }),
       ])
       setStation(s)
       setMetrics(m)
@@ -35,7 +39,7 @@ export default function StationDetail() {
     } finally {
       setLoading(false)
     }
-  }, [id])
+  }, [id, canViewAlarms])
 
   useEffect(() => {
     fetchData()
@@ -131,7 +135,7 @@ export default function StationDetail() {
         />
       </div>
 
-      {alarms.length > 0 && (
+      {canViewAlarms && alarms.length > 0 && (
         <div style={{ marginTop: 24 }}>
           <AlarmTable alarms={alarms} />
         </div>

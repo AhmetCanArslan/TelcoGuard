@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import {
   FaBroadcastTower, FaBell, FaCheckCircle, FaChartBar,
   FaChartLine, FaGlobe, FaHardHat, FaTrophy,
-  FaShieldAlt, FaFire, FaCheckDouble
+  FaShieldAlt, FaFire, FaCheckDouble, FaFilter, FaTimes
 } from 'react-icons/fa'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -17,6 +17,18 @@ import type {
   FixedIssue, LocationAnalysis
 } from '../types'
 
+interface SummaryFilters {
+  dateFrom: string
+  dateTo: string
+  trendDays: number
+}
+
+const emptyFilters: SummaryFilters = {
+  dateFrom: '',
+  dateTo: '',
+  trendDays: 7,
+}
+
 export default function Summary() {
   const [overview, setOverview] = useState<SummaryOverview | null>(null)
   const [trends, setTrends] = useState<TrendPoint[]>([])
@@ -26,24 +38,42 @@ export default function Summary() {
   const [fixedMeta, setFixedMeta] = useState({ page: 1, total: 0, total_pages: 1 })
   const [loading, setLoading] = useState(true)
   const [fixedPage, setFixedPage] = useState(1)
+  const [filters, setFilters] = useState<SummaryFilters>(emptyFilters)
+  const [showFilters, setShowFilters] = useState(false)
 
-  useEffect(() => {
+  const fetchData = () => {
+    setLoading(true)
     Promise.all([
       apiGetSummaryOverview(),
-      apiGetSummaryTrends(7),
+      apiGetSummaryTrends(filters.trendDays),
       apiGetSummaryEngineers(),
       apiGetSummaryLocations(),
       apiGetSummaryFixedIssues(1, 10),
     ]).then(([ov, tr, eng, loc, fi]) => {
+      let trendData = tr
+      if (filters.dateFrom) {
+        const from = new Date(filters.dateFrom)
+        trendData = trendData.filter(t => new Date(t.date) >= from)
+      }
+      if (filters.dateTo) {
+        const to = new Date(filters.dateTo)
+        to.setHours(23, 59, 59, 999)
+        trendData = trendData.filter(t => new Date(t.date) <= to)
+      }
+
       setOverview(ov)
-      setTrends(tr)
+      setTrends(trendData)
       setEngineers(eng)
       setLocations(loc)
       setFixedIssues(fi.data)
       setFixedMeta(prev => ({ ...prev, ...fi.meta! }))
     }).catch(() => {})
     .finally(() => setLoading(false))
-  }, [])
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [filters.trendDays])
 
   const loadFixedPage = async (page: number) => {
     try {
@@ -52,6 +82,21 @@ export default function Summary() {
       setFixedMeta(prev => ({ ...prev, ...fi.meta! }))
       setFixedPage(page)
     } catch {}
+  }
+
+  const handleFilterChange = (key: keyof SummaryFilters, value: string | number) => {
+    setFilters(prev => ({ ...prev, [key]: value }))
+  }
+
+  const clearFilters = () => {
+    setFilters(emptyFilters)
+  }
+
+  const hasActiveFilters = filters.dateFrom !== '' || filters.dateTo !== '' || filters.trendDays !== 7
+
+  const applyFilters = () => {
+    setFixedPage(1)
+    fetchData()
   }
 
   if (loading || !overview) {
@@ -67,11 +112,63 @@ export default function Summary() {
     <>
       <div className="page-header">
         <h2>Özet & Analiz</h2>
-        <div className="live-badge">
-          <span className="live-dot" />
-          {new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button className="btn-primary" onClick={() => setShowFilters(!showFilters)} style={{ background: showFilters ? 'var(--primary-light)' : undefined }}>
+            <FaFilter /> Filtreler {hasActiveFilters && <span style={{ marginLeft: 4, background: 'var(--accent)', color: 'var(--bg-primary)', borderRadius: 10, padding: '1px 6px', fontSize: 10 }}>●</span>}
+          </button>
+          <div className="live-badge">
+            <span className="live-dot" />
+            {new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}
+          </div>
         </div>
       </div>
+
+      {showFilters && (
+        <div className="filter-bar">
+          <div className="filter-row">
+            <div className="filter-group">
+              <label>Tarih (Başlangıç)</label>
+              <input
+                type="date"
+                value={filters.dateFrom}
+                onChange={e => handleFilterChange('dateFrom', e.target.value)}
+                className="filter-input"
+              />
+            </div>
+            <div className="filter-group">
+              <label>Tarih (Bitiş)</label>
+              <input
+                type="date"
+                value={filters.dateTo}
+                onChange={e => handleFilterChange('dateTo', e.target.value)}
+                className="filter-input"
+              />
+            </div>
+            <div className="filter-group">
+              <label>Trend Periyodu</label>
+              <select
+                value={filters.trendDays}
+                onChange={e => handleFilterChange('trendDays', Number(e.target.value))}
+                className="filter-input"
+              >
+                <option value={7}>7 Gün</option>
+                <option value={14}>14 Gün</option>
+                <option value={30}>30 Gün</option>
+                <option value={60}>60 Gün</option>
+                <option value={90}>90 Gün</option>
+              </select>
+            </div>
+            {hasActiveFilters && (
+              <button className="filter-clear-btn" onClick={clearFilters}>
+                <FaTimes /> Temizle
+              </button>
+            )}
+            <button className="btn-primary" onClick={applyFilters} style={{ alignSelf: 'flex-end' }}>
+              Uygula
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="stats-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))' }}>
         <div className="stat-card">
@@ -167,38 +264,51 @@ export default function Summary() {
 
         <div className="alarm-panel">
           <div className="alarm-panel-header">
-            <h3><FaFire /> Güvenilirlik & Risk Analizi</h3>
+            <h3><FaFire /> Bölge Sorun Analizi</h3>
           </div>
           <table className="alarm-table">
             <thead>
               <tr>
                 <th>Bölge</th>
-                <th>İst.</th>
-                <th>Alarm</th>
-                <th>Güvenilirlik</th>
-                <th>Risk Skoru</th>
+                <th>İstasyon</th>
+                <th>Toplam Alarm</th>
+                <th>Alarm/İstasyon</th>
+                <th>En Çok Sorun</th>
+                <th>Risk</th>
               </tr>
             </thead>
             <tbody>
-              {locations.map(l => (
-                <tr key={l.region}>
-                  <td style={{ fontWeight: 600, color: 'var(--accent)' }}>{l.region}</td>
-                  <td>{l.station_count}</td>
-                  <td>{l.alarm_count}</td>
-                  <td>
-                    <span className={`status-badge ${l.reliability_score >= 80 ? 'RESOLVED' : l.reliability_score >= 50 ? 'ACKNOWLEDGED' : 'OPEN'}`}
-                      style={{ fontSize: 11 }}>
-                      %{l.reliability_score}
-                    </span>
-                  </td>
-                  <td>
-                    <span className={`status-badge ${l.fraud_score < 20 ? 'RESOLVED' : l.fraud_score < 50 ? 'ACKNOWLEDGED' : 'OPEN'}`}
-                      style={{ fontSize: 11 }}>
-                      {l.fraud_score.toFixed(0)}
-                    </span>
-                  </td>
-                </tr>
-              ))}
+              {locations
+                .sort((a, b) => b.alarm_count - a.alarm_count)
+                .map(l => {
+                  const topIssue = l.alarm_count > l.station_count * 2 ? 'Yüksek Alarm Sıklığı' :
+                                   l.critical_count > 0 ? 'Kritik Arıza' :
+                                   l.warning_count > 0 ? 'Uyarı Durumu' : 'Normal'
+                  return (
+                    <tr key={l.region}>
+                      <td style={{ fontWeight: 600, color: 'var(--accent)' }}>{l.region}</td>
+                      <td>{l.station_count}</td>
+                      <td style={{ fontFamily: 'var(--font-data)', color: l.alarm_count > 10 ? 'var(--status-critical)' : 'var(--text-primary)' }}>
+                        {l.alarm_count}
+                      </td>
+                      <td style={{ fontFamily: 'var(--font-data)' }}>{l.alarms_per_station.toFixed(1)}</td>
+                      <td>
+                        <span className={`status-badge ${topIssue === 'Kritik Arıza' ? 'OPEN' : topIssue === 'Yüksek Alarm Sıklığı' ? 'ACKNOWLEDGED' : 'RESOLVED'}`}
+                          style={{ fontSize: 10 }}>
+                          {topIssue}
+                        </span>
+                      </td>
+                      <td>
+                        <span style={{
+                          fontFamily: 'var(--font-data)', fontWeight: 700,
+                          color: l.fraud_score >= 50 ? 'var(--status-critical)' : l.fraud_score >= 20 ? 'var(--accent)' : 'var(--status-active)'
+                        }}>
+                          {l.fraud_score.toFixed(0)}
+                        </span>
+                      </td>
+                    </tr>
+                  )
+                })}
             </tbody>
           </table>
           <div style={{ padding: '10px 16px', fontSize: 11, color: 'var(--text-muted)', borderTop: '1px solid var(--border-color)' }}>
