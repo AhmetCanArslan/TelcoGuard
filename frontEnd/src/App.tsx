@@ -10,6 +10,7 @@ import Engineers from './pages/Engineers'
 import Reports from './pages/Reports'
 import SimulatorControl from './pages/SimulatorControl'
 import Users from './pages/Users'
+import Summary from './pages/Summary'
 
 function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -20,7 +21,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
   )
 }
 
-function ProtectedPage({ children, allowedRoles }: { children: React.ReactNode, allowedRoles?: string[] }) {
+function ProtectedPage({ children, allowedRoles }: { children: React.ReactNode; allowedRoles?: string[] }) {
   return (
     <ProtectedRoute allowedRoles={allowedRoles}>
       <AppLayout>{children}</AppLayout>
@@ -37,9 +38,10 @@ export default function App() {
         <Route path="/stations/:id" element={<ProtectedPage><StationDetail /></ProtectedPage>} />
         <Route path="/alarms" element={<ProtectedPage allowedRoles={['ADMIN', 'NOC_OPERATOR']}><Alarms /></ProtectedPage>} />
         <Route path="/engineers" element={<ProtectedPage allowedRoles={['ADMIN', 'NOC_OPERATOR']}><Engineers /></ProtectedPage>} />
-        <Route path="/reports" element={<ProtectedPage><Reports /></ProtectedPage>} />
+        <Route path="/reports" element={<ProtectedPage allowedRoles={['ADMIN', 'NOC_OPERATOR']}><Reports /></ProtectedPage>} />
         <Route path="/simulator" element={<ProtectedPage allowedRoles={['ADMIN']}><SimulatorControl /></ProtectedPage>} />
         <Route path="/users" element={<ProtectedPage allowedRoles={['ADMIN']}><Users /></ProtectedPage>} />
+        <Route path="/summary" element={<ProtectedPage allowedRoles={['ADMIN', 'NETWORK_MANAGER']}><Summary /></ProtectedPage>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AuthProvider>

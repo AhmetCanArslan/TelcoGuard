@@ -83,3 +83,26 @@ func (r *AlarmRepository) Update(alarm *models.Alarm) error {
 func (r *AlarmRepository) UpdateStatus(id uuid.UUID, status models.AlarmStatus) error {
 	return database.DB.Model(&models.Alarm{}).Where("id = ?", id).Update("status", status).Error
 }
+
+func (r *AlarmRepository) FindByDateRange(from, to time.Time) ([]models.Alarm, error) {
+	var alarms []models.Alarm
+	result := database.DB.Preload("Station").Preload("AssignedUser").
+		Where("created_at BETWEEN ? AND ?", from, to).
+		Order("created_at DESC").
+		Find(&alarms)
+	return alarms, result.Error
+}
+
+func (r *AlarmRepository) FindResolvedWithEngineer(page, perPage int) ([]models.Alarm, int64, error) {
+	var alarms []models.Alarm
+	var total int64
+
+	query := database.DB.Model(&models.Alarm{}).
+		Preload("Station").Preload("AssignedUser").
+		Where("status = ? AND assigned_to IS NOT NULL", models.AlarmStatusResolved)
+
+	query.Count(&total)
+	offset := (page - 1) * perPage
+	result := query.Order("resolved_at DESC").Offset(offset).Limit(perPage).Find(&alarms)
+	return alarms, total, result.Error
+}

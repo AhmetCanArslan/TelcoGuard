@@ -77,3 +77,85 @@ export interface FieldEngineer {
 }
 
 export type AnomalyType = 'CPU_SPIKE' | 'USER_DROP' | 'LATENCY_BURST' | 'PACKET_STORM' | 'STATION_DOWN';
+
+export interface SummaryOverview {
+  total_stations: number;
+  active_stations: number;
+  warning_stations: number;
+  critical_stations: number;
+  offline_stations: number;
+  total_alarms: number;
+  open_alarms: number;
+  critical_alarms: number;
+  resolved_today: number;
+  online_engineers: number;
+  uptime_percent: number;
+  stations_by_region: Record<string, number>;
+  alarms_by_severity: Record<string, number>;
+  alarms_by_status: Record<string, number>;
+  users_by_role: Record<string, number>;
+  region_health: RegionHealthItem[];
+}
+
+export interface RegionHealthItem {
+  region: string;
+  total: number;
+  active: number;
+  warning: number;
+  critical: number;
+  offline: number;
+  health_score: number;
+}
+
+export interface TrendPoint {
+  date: string;
+  alarm_count: number;
+  critical: number;
+  warning: number;
+  avg_cpu: number;
+  avg_memory: number;
+  avg_latency: number;
+  avg_packet_loss: number;
+}
+
+export interface EngineerAnalytics {
+  user_id: number;
+  name: string;
+  email: string;
+  resolved_count: number;
+  critical_count: number;
+  avg_resolution_mins: number;
+  estimated_hours: number;
+  score: number;
+}
+
+export interface FixedIssue {
+  id: string;
+  station_id: string;
+  station_code: string;
+  station_name: string;
+  region: string;
+  metric_name: string;
+  severity: string;
+  message: string;
+  resolution_note: string;
+  assigned_to?: number;
+  engineer_name: string;
+  resolution_mins: number;
+  created_at: string;
+  resolved_at: string;
+}
+
+export interface LocationAnalysis {
+  region: string;
+  station_count: number;
+  alarm_count: number;
+  alarms_per_station: number;
+  health_score: number;
+  reliability_score: number;
+  fraud_score: number;
+  active_count: number;
+  warning_count: number;
+  critical_count: number;
+  offline_count: number;
+}

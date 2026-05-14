@@ -72,6 +72,15 @@ func Setup(app *fiber.App) {
 	// Dashboard
 	protected.Get("/dashboard/summary", handlers.DashboardSummary)
 
+	// Summary & Analytics (Admin + Network Manager)
+	summary := protected.Group("/summary")
+	summary.Use(auth.RequireRole(models.RoleAdmin, models.RoleNetworkManager))
+	summary.Get("/overview", handlers.SummaryOverview)
+	summary.Get("/trends", handlers.SummaryTrends)
+	summary.Get("/engineers", handlers.SummaryEngineers)
+	summary.Get("/fixed-issues", handlers.SummaryFixedIssues)
+	summary.Get("/locations", handlers.SummaryLocations)
+
 	// WebSocket
 	app.Get("/ws", websocket.New(handlers.WebSocketHandler))
 

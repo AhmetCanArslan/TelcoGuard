@@ -5,7 +5,8 @@
 
 import type {
   BaseStation, Alarm, Metric, DashboardSummary, FieldEngineer,
-  AlarmSeverity, AlarmStatus
+  AlarmSeverity, AlarmStatus, SummaryOverview, TrendPoint,
+  EngineerAnalytics, FixedIssue, LocationAnalysis
 } from '../types'
 import { getAccessToken, getRefreshToken, setTokens, clearTokens } from './auth'
 
@@ -214,6 +215,37 @@ export async function apiUpdateUser(id: number, data: Partial<{
 
 export async function apiDeleteUser(id: number) {
   const res = await apiFetch<unknown>(`/users/${id}`, { method: 'DELETE' })
+  return res.data
+}
+
+/* ---- Summary & Analytics (Admin + Network Manager) ---- */
+
+export async function apiGetSummaryOverview() {
+  const res = await apiFetch<SummaryOverview>('/summary/overview')
+  return res.data
+}
+
+export async function apiGetSummaryTrends(days = 7) {
+  const res = await apiFetch<TrendPoint[]>(`/summary/trends?days=${days}`)
+  return res.data
+}
+
+export async function apiGetSummaryEngineers(month?: number, year?: number) {
+  const params = new URLSearchParams()
+  if (month) params.set('month', String(month))
+  if (year) params.set('year', String(year))
+  const qs = params.toString() ? `?${params.toString()}` : ''
+  const res = await apiFetch<EngineerAnalytics[]>(`/summary/engineers${qs}`)
+  return res.data
+}
+
+export async function apiGetSummaryFixedIssues(page = 1, perPage = 20) {
+  const res = await apiFetch<FixedIssue[]>(`/summary/fixed-issues?page=${page}&per_page=${perPage}`)
+  return { data: res.data, meta: res.meta }
+}
+
+export async function apiGetSummaryLocations() {
+  const res = await apiFetch<LocationAnalysis[]>('/summary/locations')
   return res.data
 }
 

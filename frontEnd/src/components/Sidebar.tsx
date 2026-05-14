@@ -2,16 +2,17 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import {
   FaTachometerAlt, FaBell, FaHardHat, FaChartLine,
-  FaBolt, FaUserShield, FaSignOutAlt
+  FaBolt, FaUserShield, FaChartBar, FaSignOutAlt
 } from 'react-icons/fa'
 
 const navItems = [
-  { path: '/',           label: 'Dashboard',         icon: <FaTachometerAlt />, roles: undefined },
-  { path: '/alarms',     label: 'Alarm Yönetimi',    icon: <FaBell />,          roles: ['ADMIN', 'NOC_OPERATOR'] },
-  { path: '/engineers',  label: 'Saha Mühendisleri', icon: <FaHardHat />,       roles: ['ADMIN', 'NOC_OPERATOR'] },
-  { path: '/reports',    label: 'Raporlama',         icon: <FaChartLine />,     roles: undefined },
-  { path: '/simulator',  label: 'Simülatör',         icon: <FaBolt />,          roles: ['ADMIN'] },
-  { path: '/users',      label: 'Kullanıcı Yönetimi', icon: <FaUserShield />,   roles: ['ADMIN'] },
+  { path: '/',           label: 'Dashboard',            icon: <FaTachometerAlt />, roles: undefined },
+  { path: '/alarms',     label: 'Alarm Yönetimi',       icon: <FaBell />,          roles: ['ADMIN', 'NOC_OPERATOR'] },
+  { path: '/engineers',  label: 'Saha Mühendisleri',    icon: <FaHardHat />,       roles: ['ADMIN', 'NOC_OPERATOR'] },
+  { path: '/reports',    label: 'Raporlama',            icon: <FaChartLine />,     roles: ['ADMIN', 'NOC_OPERATOR'] },
+  { path: '/summary',    label: 'Özet & Analiz',        icon: <FaChartBar />,      roles: ['ADMIN', 'NETWORK_MANAGER'] },
+  { path: '/simulator',  label: 'Simülatör',            icon: <FaBolt />,          roles: ['ADMIN'] },
+  { path: '/users',      label: 'Kullanıcı Yönetimi',   icon: <FaUserShield />,   roles: ['ADMIN'] },
 ]
 
 export default function Sidebar() {
