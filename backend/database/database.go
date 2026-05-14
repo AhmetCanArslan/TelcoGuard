@@ -22,7 +22,14 @@ func Init() error {
 	log.Println("✅ Database connected successfully")
 
 	// Auto migrate models
-	if err := DB.AutoMigrate(&models.User{}, &models.Message{}); err != nil {
+	if err := DB.AutoMigrate(
+		&models.User{},
+		&models.BaseStation{},
+		&models.Metric{},
+		&models.Alarm{},
+		&models.ThresholdConfig{},
+		&models.OtpCode{},
+	); err != nil {
 		log.Fatalf("❌ Failed to migrate models: %v", err)
 		return err
 	}
