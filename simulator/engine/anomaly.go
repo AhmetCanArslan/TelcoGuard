@@ -125,3 +125,9 @@ func (am *AnomalyManager) ListActive() map[string]AnomalyType {
 	}
 	return result
 }
+
+func (am *AnomalyManager) ClearAll() {
+	am.mu.Lock()
+	defer am.mu.Unlock()
+	am.anomalies = make(map[string]*ActiveAnomaly)
+}

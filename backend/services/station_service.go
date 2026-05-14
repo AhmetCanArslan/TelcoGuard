@@ -28,3 +28,7 @@ func (s *StationService) GetByID(id uuid.UUID) (*models.BaseStation, error) {
 func (s *StationService) UpdateStatus(id uuid.UUID, status models.StationStatus) error {
 	return s.repo.UpdateStatus(id, status)
 }
+
+func (s *StationService) ResetAllToActive() error {
+	return s.repo.ResetAllToActive()
+}

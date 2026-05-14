@@ -94,3 +94,13 @@ func Status(runner *engine.Runner) fiber.Handler {
 		})
 	}
 }
+
+func ResetSimulator(runner *engine.Runner) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		runner.ResetAll()
+		return c.JSON(fiber.Map{
+			"success": true,
+			"message": "Simulator reset — all stations back to normal",
+		})
+	}
+}

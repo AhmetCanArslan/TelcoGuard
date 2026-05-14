@@ -190,6 +190,11 @@ export async function apiResolveAlarm(id: string, resolutionNote: string) {
   return res.data
 }
 
+export async function apiResetAllAlarms() {
+  const res = await apiFetch<unknown>('/alarms/reset', { method: 'POST' })
+  return res.data
+}
+
 /* ---- Users / Engineers ---- */
 
 export async function apiGetUsers() {
@@ -285,6 +290,10 @@ export async function apiSimulatorInjectAnomaly(
       duration_seconds: durationSeconds,
     }),
   })
+}
+
+export async function apiSimulatorReset() {
+  return simFetch<unknown>('/reset', { method: 'POST' })
 }
 
 export async function apiSimulatorStatus() {

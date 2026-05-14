@@ -84,6 +84,10 @@ func (r *AlarmRepository) UpdateStatus(id uuid.UUID, status models.AlarmStatus) 
 	return database.DB.Model(&models.Alarm{}).Where("id = ?", id).Update("status", status).Error
 }
 
+func (r *AlarmRepository) DeleteAll() error {
+	return database.DB.Exec("DELETE FROM alarms").Error
+}
+
 func (r *AlarmRepository) FindByDateRange(from, to time.Time) ([]models.Alarm, error) {
 	var alarms []models.Alarm
 	result := database.DB.Preload("Station").Preload("AssignedUser").

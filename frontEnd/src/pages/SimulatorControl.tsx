@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from 'react'
 import {
   FaBroadcastTower, FaBolt, FaPlay, FaStop,
-  FaClipboardList, FaTrash, FaPowerOff
+  FaClipboardList, FaTrash, FaPowerOff, FaUndo, FaSync
 } from 'react-icons/fa'
 import {
-  apiSimulatorStart, apiSimulatorStop,
+  apiSimulatorStart, apiSimulatorStop, apiSimulatorReset,
   apiSimulatorInjectAnomaly, apiSimulatorStatus,
-  apiGetStations
+  apiGetStations, apiResetAllAlarms
 } from '../services/api'
 import type { AnomalyType, BaseStation } from '../types'
 
@@ -86,6 +86,33 @@ export default function SimulatorControl() {
     }
   }
 
+  const resetSimulator = async () => {
+    setActionLoading(true)
+    try {
+      await apiSimulatorReset()
+      addLog('Simülatör sıfırlandı — tüm istasyonlar normale döndü')
+    } catch (err) {
+      addLog(`Hata: ${err instanceof Error ? err.message : 'Sıfırlama başarısız'}`)
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
+  const refreshAll = async () => {
+    setActionLoading(true)
+    try {
+      await apiResetAllAlarms()
+      await apiSimulatorReset()
+      addLog('🔄 Tüm alarmlar silindi, istasyonlar ACTIVE yapıldı, simülatör sıfırlandı')
+      // Refresh status after a short delay
+      setTimeout(() => fetchStatus(), 500)
+    } catch (err) {
+      addLog(`Hata: ${err instanceof Error ? err.message : 'Refresh başarısız'}`)
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
   const selectStyle: React.CSSProperties = {
     background: 'var(--bg-elevated)',
     border: '1px solid var(--border-color)',
@@ -103,9 +130,17 @@ export default function SimulatorControl() {
     <>
       <div className="page-header">
         <h2>Simülatör Kontrol</h2>
-        <button className="btn-primary" onClick={toggleSimulator} disabled={actionLoading}>
-          {running ? <><FaStop /> Durdur</> : <><FaPlay /> Başlat</>}
-        </button>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button className="btn-primary" onClick={refreshAll} disabled={actionLoading} style={{ background: 'var(--status-active)' }}>
+            <FaSync /> Refresh
+          </button>
+          <button className="btn-primary" onClick={resetSimulator} disabled={actionLoading} style={{ background: 'var(--primary-light)' }}>
+            <FaUndo /> Sıfırla
+          </button>
+          <button className="btn-primary" onClick={toggleSimulator} disabled={actionLoading}>
+            {running ? <><FaStop /> Durdur</> : <><FaPlay /> Başlat</>}
+          </button>
+        </div>
       </div>
 
       <div className="stats-grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
