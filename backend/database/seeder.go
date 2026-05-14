@@ -90,27 +90,30 @@ func seedBaseStations() error {
 }
 
 func seedUsers() error {
-	var count int64
-	DB.Model(&models.User{}).Count(&count)
-	if count > 0 {
-		log.Println("⏭️  Users already seeded")
-		return nil
-	}
-
 	hashPwd := func(pwd string) string {
 		hash, _ := bcrypt.GenerateFromPassword([]byte(pwd), bcrypt.DefaultCost)
 		return string(hash)
 	}
 
-	users := []models.User{
+	defaultUsers := []models.User{
 		{Name: "NOC Admin", Email: config.AppConfig.DefaultNocEmail, Password: hashPwd(config.AppConfig.DefaultNocPassword), Role: models.RoleNOCOperator, Active: true},
 		{Name: "Saha Mühendisi", Email: config.AppConfig.DefaultSahaEmail, Password: hashPwd(config.AppConfig.DefaultSahaPassword), Role: models.RoleFieldEngineer, Active: true},
 		{Name: "Şebeke Yöneticisi", Email: config.AppConfig.DefaultSebekeEmail, Password: hashPwd(config.AppConfig.DefaultSebekePassword), Role: models.RoleNetworkManager, Active: true},
 	}
 
-	if err := DB.Create(&users).Error; err != nil {
-		return err
+	for _, user := range defaultUsers {
+		var count int64
+		DB.Model(&models.User{}).Where("email = ?", user.Email).Count(&count)
+		if count == 0 {
+			if err := DB.Create(&user).Error; err != nil {
+				log.Printf("⚠️ Failed to seed user %s: %v", user.Email, err)
+			} else {
+				log.Printf("✅ Seeded default user: %s", user.Email)
+			}
+		} else {
+			log.Printf("⏭️ User %s already exists", user.Email)
+		}
 	}
-	log.Println("✅ Default users seeded")
+
 	return nil
 }
