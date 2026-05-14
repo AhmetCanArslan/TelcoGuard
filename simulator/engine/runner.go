@@ -156,8 +156,10 @@ func (r *Runner) tick() {
 			gen := r.generators[st.Code]
 			payload := gen.Generate()
 
-			if anomaly := r.anomalyManager.Get(st.Code); anomaly != nil {
-				payload = r.anomalyManager.ApplyAnomaly(st, payload, anomaly)
+			if anomalies := r.anomalyManager.Get(st.Code); len(anomalies) > 0 {
+				for _, anomaly := range anomalies {
+					payload = r.anomalyManager.ApplyAnomaly(st, payload, anomaly)
+				}
 			}
 
 			postStart := time.Now()
@@ -229,20 +231,28 @@ func (r *Runner) InjectAnomaly(stationCode string, anomalyType AnomalyType, dura
 	})
 }
 
+func (r *Runner) ResetAll() {
+	r.anomalyManager.ClearAll()
+	for _, gen := range r.generators {
+		gen.Reset()
+	}
+	log.Println("🔄 Simulator reset — all stations back to normal")
+}
+
 func (r *Runner) GetStatus() map[string]interface{} {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
 	activeAnomalies := r.anomalyManager.ListActive()
-	activeMap := make(map[string]interface{})
-	for code, anomaly := range activeAnomalies {
-		activeMap[code] = map[string]interface{}{
+	activeMap := make(map[string][]map[string]interface{})
+	for _, anomaly := range activeAnomalies {
+		activeMap[anomaly.StationCode] = append(activeMap[anomaly.StationCode], map[string]interface{}{
 			"type":              anomaly.Type,
 			"remaining_seconds": anomaly.RemainingSeconds(),
 			"duration_sec":      anomaly.DurationSec,
 			"injected_at":       anomaly.InjectedAt.Format(time.RFC3339),
 			"expires_at":        anomaly.ExpiresAt.Format(time.RFC3339),
-		}
+		})
 	}
 
 	var uptimeSec int64

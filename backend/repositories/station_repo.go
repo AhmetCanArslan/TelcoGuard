@@ -46,3 +46,7 @@ func (r *StationRepository) FindByRegion(region string) ([]models.BaseStation, e
 func (r *StationRepository) UpdateStatus(id uuid.UUID, status models.StationStatus) error {
 	return database.DB.Model(&models.BaseStation{}).Where("id = ?", id).Update("status", status).Error
 }
+
+func (r *StationRepository) ResetAllToActive() error {
+	return database.DB.Exec("UPDATE base_stations SET status = 'ACTIVE'").Error
+}

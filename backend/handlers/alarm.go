@@ -205,3 +205,22 @@ func ResolveAlarm(c *fiber.Ctx) error {
 	go Hub.BroadcastTyped(ws.MessageTypeAlarmUpdate, ws.AlarmPayload{Alarm: alarm})
 	return utils.Success(c, alarm, "Alarm resolved")
 }
+
+// ResetAllAlarms godoc
+// @Summary Reset all alarms and stations
+// @Description Delete all alarms and set all stations to ACTIVE status
+// @Tags alarms
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} utils.APIResponse
+// @Router /api/v1/alarms/reset [post]
+func ResetAllAlarms(c *fiber.Ctx) error {
+	if err := alarmService.DeleteAll(); err != nil {
+		return utils.InternalServerError(c, err.Error())
+	}
+	if err := stationService.ResetAllToActive(); err != nil {
+		return utils.InternalServerError(c, err.Error())
+	}
+	go Hub.BroadcastTyped(ws.MessageTypeAlarmUpdate, ws.AlarmPayload{})
+	return utils.Success(c, nil, "All alarms deleted and stations reset to ACTIVE")
+}

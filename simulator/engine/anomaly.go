@@ -61,14 +61,14 @@ type AnomalyHistoryEntry struct {
 
 type AnomalyManager struct {
 	mu         sync.RWMutex
-	anomalies  map[string]*ActiveAnomaly // station_code -> anomaly
+	anomalies  map[string]map[AnomalyType]*ActiveAnomaly // station_code -> anomaly_type -> anomaly
 	history    []AnomalyHistoryEntry
 	maxHistory int
 }
 
 func NewAnomalyManager() *AnomalyManager {
 	return &AnomalyManager{
-		anomalies:  make(map[string]*ActiveAnomaly),
+		anomalies:  make(map[string]map[AnomalyType]*ActiveAnomaly),
 		history:    make([]AnomalyHistoryEntry, 0),
 		maxHistory: 50,
 	}
@@ -78,31 +78,36 @@ func (am *AnomalyManager) Inject(stationCode string, anomalyType AnomalyType, du
 	am.mu.Lock()
 	defer am.mu.Unlock()
 
-	// If there's an existing active anomaly for this station, mark it as expired in history
-	if existing, ok := am.anomalies[stationCode]; ok && time.Now().Before(existing.ExpiresAt) {
-		now := time.Now()
-		am.addHistoryEntryLocked(AnomalyHistoryEntry{
-			StationCode: existing.StationCode,
-			AnomalyType: existing.Type,
-			DurationSec: existing.DurationSec,
-			InjectedAt:  existing.InjectedAt,
-			ExpiredAt:   &now,
-		})
+	if am.anomalies[stationCode] == nil {
+		am.anomalies[stationCode] = make(map[AnomalyType]*ActiveAnomaly)
 	}
 
-	am.anomalies[stationCode] = &ActiveAnomaly{
+	now := time.Now()
+	if existing, ok := am.anomalies[stationCode][anomalyType]; ok && now.Before(existing.ExpiresAt) {
+		existing.DurationSec += durationSec
+		existing.ExpiresAt = existing.ExpiresAt.Add(time.Duration(durationSec) * time.Second)
+		am.addHistoryEntryLocked(AnomalyHistoryEntry{
+			StationCode: stationCode,
+			AnomalyType: anomalyType,
+			DurationSec: durationSec,
+			InjectedAt:  now,
+		})
+		return
+	}
+
+	am.anomalies[stationCode][anomalyType] = &ActiveAnomaly{
 		Type:        anomalyType,
 		StationCode: stationCode,
 		DurationSec: durationSec,
-		InjectedAt:  time.Now(),
-		ExpiresAt:   time.Now().Add(time.Duration(durationSec) * time.Second),
+		InjectedAt:  now,
+		ExpiresAt:   now.Add(time.Duration(durationSec) * time.Second),
 	}
 
 	am.addHistoryEntryLocked(AnomalyHistoryEntry{
 		StationCode: stationCode,
 		AnomalyType: anomalyType,
 		DurationSec: durationSec,
-		InjectedAt:  time.Now(),
+		InjectedAt:  now,
 	})
 }
 
@@ -113,20 +118,23 @@ func (am *AnomalyManager) addHistoryEntryLocked(entry AnomalyHistoryEntry) {
 	}
 }
 
-func (am *AnomalyManager) Get(stationCode string) *ActiveAnomaly {
+func (am *AnomalyManager) Get(stationCode string) []*ActiveAnomaly {
 	am.mu.RLock()
 	defer am.mu.RUnlock()
 
-	anomaly, ok := am.anomalies[stationCode]
+	typeMap, ok := am.anomalies[stationCode]
 	if !ok {
 		return nil
 	}
 
-	if time.Now().After(anomaly.ExpiresAt) {
-		return nil
+	var active []*ActiveAnomaly
+	now := time.Now()
+	for _, anomaly := range typeMap {
+		if now.Before(anomaly.ExpiresAt) {
+			active = append(active, anomaly)
+		}
 	}
-
-	return anomaly
+	return active
 }
 
 func (am *AnomalyManager) Cleanup() []AnomalyHistoryEntry {
@@ -136,16 +144,23 @@ func (am *AnomalyManager) Cleanup() []AnomalyHistoryEntry {
 	now := time.Now()
 	var expired []AnomalyHistoryEntry
 
-	for code, anomaly := range am.anomalies {
-		if now.After(anomaly.ExpiresAt) {
-			expiredAt := now
-			expired = append(expired, AnomalyHistoryEntry{
-				StationCode: anomaly.StationCode,
-				AnomalyType: anomaly.Type,
-				DurationSec: anomaly.DurationSec,
-				InjectedAt:  anomaly.InjectedAt,
-				ExpiredAt:   &expiredAt,
-			})
+	for code, typeMap := range am.anomalies {
+		for aType, anomaly := range typeMap {
+			// Add a 2-second grace period to prevent premature cleanup
+			// caused by clock skew between backend and frontend
+			if now.After(anomaly.ExpiresAt.Add(2 * time.Second)) {
+				expiredAt := now
+				expired = append(expired, AnomalyHistoryEntry{
+					StationCode: anomaly.StationCode,
+					AnomalyType: anomaly.Type,
+					DurationSec: anomaly.DurationSec,
+					InjectedAt:  anomaly.InjectedAt,
+					ExpiredAt:   &expiredAt,
+				})
+				delete(typeMap, aType)
+			}
+		}
+		if len(typeMap) == 0 {
 			delete(am.anomalies, code)
 		}
 	}
@@ -192,27 +207,6 @@ func (am *AnomalyManager) ApplyAnomaly(station seed.SimStation, payload client.M
 	return payload
 }
 
-func (am *AnomalyManager) ListActive() map[string]*ActiveAnomaly {
-	am.mu.RLock()
-	defer am.mu.RUnlock()
-
-	result := make(map[string]*ActiveAnomaly)
-	now := time.Now()
-	for code, anomaly := range am.anomalies {
-		if now.Before(anomaly.ExpiresAt) {
-			// Return a copy without the mutex
-			result[code] = &ActiveAnomaly{
-				Type:        anomaly.Type,
-				StationCode: anomaly.StationCode,
-				DurationSec: anomaly.DurationSec,
-				InjectedAt:  anomaly.InjectedAt,
-				ExpiresAt:   anomaly.ExpiresAt,
-			}
-		}
-	}
-	return result
-}
-
 func (am *AnomalyManager) GetHistory() []AnomalyHistoryEntry {
 	am.mu.RLock()
 	defer am.mu.RUnlock()
@@ -220,4 +214,32 @@ func (am *AnomalyManager) GetHistory() []AnomalyHistoryEntry {
 	result := make([]AnomalyHistoryEntry, len(am.history))
 	copy(result, am.history)
 	return result
+}
+
+func (am *AnomalyManager) ListActive() []*ActiveAnomaly {
+	am.mu.RLock()
+	defer am.mu.RUnlock()
+
+	var result []*ActiveAnomaly
+	now := time.Now()
+	for _, typeMap := range am.anomalies {
+		for _, anomaly := range typeMap {
+			if now.Before(anomaly.ExpiresAt) {
+				result = append(result, &ActiveAnomaly{
+					Type:        anomaly.Type,
+					StationCode: anomaly.StationCode,
+					DurationSec: anomaly.DurationSec,
+					InjectedAt:  anomaly.InjectedAt,
+					ExpiresAt:   anomaly.ExpiresAt,
+				})
+			}
+		}
+	}
+	return result
+}
+
+func (am *AnomalyManager) ClearAll() {
+	am.mu.Lock()
+	defer am.mu.Unlock()
+	am.anomalies = make(map[string]map[AnomalyType]*ActiveAnomaly)
 }

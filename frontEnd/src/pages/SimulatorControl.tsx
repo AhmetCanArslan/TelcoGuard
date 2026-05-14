@@ -4,13 +4,14 @@ import {
   FaClipboardList, FaTrash, FaPowerOff, FaServer,
   FaClock, FaCheckCircle, FaExclamationTriangle,
   FaTimesCircle, FaSignal, FaTachometerAlt, FaUsers,
-  FaMicrochip, FaUserTimes, FaStopwatch, FaCloudRain, FaBan
+  FaMicrochip, FaUserTimes, FaStopwatch, FaCloudRain, FaBan,
+  FaUndo, FaSync
 } from 'react-icons/fa'
 import {
-  apiSimulatorStart, apiSimulatorStop,
+  apiSimulatorStart, apiSimulatorStop, apiSimulatorReset,
   apiSimulatorInjectAnomaly, apiSimulatorStatus,
   apiSimulatorStations, apiSimulatorSetInterval,
-  createSimulatorEventSource
+  createSimulatorEventSource, apiResetAllAlarms
 } from '../services/api'
 import type { AnomalyType, SimStation, SimulatorStatus, SimulatorEvent, TickSummary, AnomalyHistoryEntry } from '../types'
 
@@ -23,6 +24,15 @@ const anomalyTypes: { value: AnomalyType; label: string; desc: string; icon: Rea
 ]
 
 const durationPresets = [30, 60, 120, 300]
+
+type ActiveAnomalyView = {
+  station_code: string
+  type: AnomalyType
+  remaining_seconds: number
+  duration_sec: number
+  injected_at: string
+  expires_at: string
+}
 
 export default function SimulatorControl() {
   const [status, setStatus] = useState<SimulatorStatus | null>(null)
@@ -167,8 +177,41 @@ export default function SimulatorControl() {
     }
   }
 
-  const activeAnomalies = status?.active_anomalies || {}
-  const anomalyEntries = Object.entries(activeAnomalies)
+  const resetSimulator = async () => {
+    setActionLoading(true)
+    try {
+      await apiSimulatorReset()
+      await fetchInitialData()
+      addLog('Simülatör sıfırlandı — tüm istasyonlar normale döndü')
+    } catch (err) {
+      addLog(`Hata: ${err instanceof Error ? err.message : 'Sıfırlama başarısız'}`)
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
+  const refreshAll = async () => {
+    setActionLoading(true)
+    try {
+      await apiResetAllAlarms()
+      await apiSimulatorReset()
+      await fetchInitialData()
+      addLog('🔄 Tüm alarmlar silindi, istasyonlar ACTIVE yapıldı, simülatör sıfırlandı')
+    } catch (err) {
+      addLog(`Hata: ${err instanceof Error ? err.message : 'Refresh başarısız'}`)
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
+  const activeAnomalies = (status?.active_anomalies || {}) as unknown as Record<string, ActiveAnomalyView[]>
+  const anomalyEntries = Object.entries(activeAnomalies).flatMap(([stationCode, anomalies]) =>
+    (anomalies || []).map((anomaly, index) => ({
+      key: `${stationCode}-${anomaly.type}-${index}`,
+      stationCode,
+      ...anomaly,
+    }))
+  )
 
   const cardBase: React.CSSProperties = {
     background: 'var(--bg-elevated)',
@@ -204,9 +247,17 @@ export default function SimulatorControl() {
             transition: 'all 0.3s',
           }} title={sseConnected ? 'SSE Bağlı' : 'SSE Bağlı Değil'} />
         </div>
-        <button className="btn-primary" onClick={toggleSimulator} disabled={actionLoading}>
-          {status?.running ? <><FaStop /> Durdur</> : <><FaPlay /> Başlat</>}
-        </button>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <button className="btn-primary" onClick={refreshAll} disabled={actionLoading} style={{ background: 'var(--status-active)' }}>
+            <FaSync /> Refresh
+          </button>
+          <button className="btn-primary" onClick={resetSimulator} disabled={actionLoading} style={{ background: 'var(--primary-light)' }}>
+            <FaUndo /> Sıfırla
+          </button>
+          <button className="btn-primary" onClick={toggleSimulator} disabled={actionLoading}>
+            {status?.running ? <><FaStop /> Durdur</> : <><FaPlay /> Başlat</>}
+          </button>
+        </div>
       </div>
 
       {/* Status Cards */}
@@ -363,13 +414,13 @@ export default function SimulatorControl() {
               </p>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {anomalyEntries.map(([code, anomaly]) => {
-                  const expiresMs = new Date(anomaly.expires_at).getTime()
-                  const remainingSec = Math.max(0, Math.floor((expiresMs - now) / 1000))
-                  const pct = anomaly.duration_sec > 0 ? Math.max(0, Math.min(100, (remainingSec / anomaly.duration_sec) * 100)) : 0
-                  const anomalyInfo = anomalyTypes.find(a => a.value === anomaly.type)
+                {anomalyEntries.map(anomaly => {
+                    const expiresMs = new Date(anomaly.expires_at).getTime()
+                    const remainingSec = Math.max(0, Math.floor((expiresMs - now) / 1000))
+                    const pct = anomaly.duration_sec > 0 ? Math.max(0, Math.min(100, (remainingSec / anomaly.duration_sec) * 100)) : 0
+                    const anomalyInfo = anomalyTypes.find(a => a.value === anomaly.type)
                   return (
-                    <div key={code} style={{
+                      <div key={anomaly.key} style={{
                       padding: 12,
                       borderRadius: 'var(--radius-sm)',
                       background: 'rgba(255,255,255,0.03)',
@@ -379,7 +430,7 @@ export default function SimulatorControl() {
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                           <span style={{ fontSize: 16, color: anomalyInfo?.color || '#ef4444' }}>{anomalyInfo?.icon ? <anomalyInfo.icon /> : <FaBolt />}</span>
                           <div>
-                            <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)' }}>{code}</div>
+                            <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)' }}>{anomaly.stationCode}</div>
                             <div style={{ fontSize: 11, color: anomalyInfo?.color || 'var(--text-secondary)' }}>{anomalyInfo?.label || anomaly.type}</div>
                           </div>
                         </div>
@@ -417,14 +468,15 @@ export default function SimulatorControl() {
         <div className="chart-body">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 10 }}>
             {stations.map(s => {
-              const active = activeAnomalies[s.code]
+              const stationActive = activeAnomalies[s.code] || []
+              const active = stationActive[0]
               const anomalyInfo = active ? anomalyTypes.find(a => a.value === active.type) : null
               return (
                 <div key={s.code} style={{
                   padding: 12,
                   borderRadius: 'var(--radius-sm)',
-                  background: active ? `${anomalyInfo?.color || '#ef4444'}10` : 'rgba(255,255,255,0.02)',
-                  border: `1px solid ${active ? (anomalyInfo?.color || '#ef4444') + '40' : 'var(--border-color)'}`,
+                  background: stationActive.length > 0 ? `${anomalyInfo?.color || '#ef4444'}10` : 'rgba(255,255,255,0.02)',
+                  border: `1px solid ${stationActive.length > 0 ? (anomalyInfo?.color || '#ef4444') + '40' : 'var(--border-color)'}`,
                   cursor: 'pointer',
                   transition: 'all 0.15s',
                 }} onClick={() => setSelectedStation(s.code)}>
@@ -432,14 +484,14 @@ export default function SimulatorControl() {
                     <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)', fontFamily: 'var(--font-data)' }}>{s.code}</span>
                     <span style={{
                       width: 8, height: 8, borderRadius: '50%',
-                      background: active ? (anomalyInfo?.color || '#ef4444') : '#10b981',
-                      boxShadow: active ? `0 0 6px ${anomalyInfo?.color || '#ef4444'}` : 'none',
+                      background: stationActive.length > 0 ? (anomalyInfo?.color || '#ef4444') : '#10b981',
+                      boxShadow: stationActive.length > 0 ? `0 0 6px ${anomalyInfo?.color || '#ef4444'}` : 'none',
                     }} />
                   </div>
                   <div style={{ fontSize: 11, color: 'var(--text-secondary)', marginBottom: 4 }}>{s.name}</div>
                   {active && (
                     <div style={{ fontSize: 10, color: anomalyInfo?.color || '#ef4444', fontWeight: 600 }}>
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>{anomalyInfo?.icon ? <anomalyInfo.icon style={{ fontSize: 10 }} /> : <FaBolt style={{ fontSize: 10 }} />} {anomalyInfo?.label} — {active.remaining_seconds}s</span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>{anomalyInfo?.icon ? <anomalyInfo.icon style={{ fontSize: 10 }} /> : <FaBolt style={{ fontSize: 10 }} />} {anomalyInfo?.label || active.type} {stationActive.length > 1 ? `(+${stationActive.length - 1})` : ''} — {active.remaining_seconds}s</span>
                     </div>
                   )}
                   {!active && (
