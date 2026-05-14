@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: telcoguard_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: case1_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    container_name: telcoguard_backend
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: password
+      DB_NAME: case1_db
+      DB_SSLMODE: disable
+      SERVER_PORT: 3000
+      SERVER_HOST: 0.0.0.0
+    depends_on:
+      db:
+        condition: service_healthy
+
+  simulator:
+    build: ./simulator
+    container_name: telcoguard_simulator
+    ports:
+      - "3001:3001"
+    environment:
+      API_URL: http://backend:3000/api/v1
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: password
+      DB_NAME: case1_db
+    depends_on:
+      - backend
+
+  frontend:
+    build: ./frontEnd
+    container_name: telcoguard_frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - BACKEND_URL=http://backend:3000
+      - SIMULATOR_URL=http://simulator:3001
+      - WS_URL=ws://backend:3000
+    volumes:
+      - ./frontEnd/src:/app/src
+      - ./frontEnd/public:/app/public
+      - ./frontEnd/index.html:/app/index.html
+      - ./frontEnd/vite.config.ts:/app/vite.config.ts
+    depends_on:
+      - backend
+      - simulator
+
+volumes:
+  postgres_data:
