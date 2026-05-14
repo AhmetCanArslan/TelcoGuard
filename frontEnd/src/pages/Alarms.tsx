@@ -13,7 +13,7 @@ function exportToCSV(alarms: Alarm[]) {
     a.severity,
     a.status,
     `"${(a.message || '').replace(/"/g, '""')}"`,
-    a.assigned_to?.name || '-',
+    a.assigned_user?.name || '-',
     `"${(a.resolution_note || '').replace(/"/g, '""')}"`,
     new Date(a.created_at).toLocaleString('tr-TR'),
     a.resolved_at ? new Date(a.resolved_at).toLocaleString('tr-TR') : '-',
