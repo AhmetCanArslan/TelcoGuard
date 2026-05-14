@@ -42,12 +42,9 @@ services:
     ports:
       - "3001:3001"
     environment:
-      API_URL: http://backend:3000/api/v1
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: password
-      DB_NAME: case1_db
+      BACKEND_URL: http://backend:3000
+      SIMULATOR_SECRET: simulator-local-secret
+      TICK_INTERVAL_MS: 3000
     depends_on:
       - backend
 

@@ -14,7 +14,7 @@ func main() {
 
 	// Initialize the runner with seed stations
 	runner := engine.NewRunner()
-	go runner.Start()
+	// Runner starts manually via POST /api/v1/simulator/start
 
 	app := fiber.New(fiber.Config{
 		AppName: "TelcoGuard Simulator",

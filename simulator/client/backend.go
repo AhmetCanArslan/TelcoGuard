@@ -46,7 +46,15 @@ func (c *BackendClient) PostMetric(stationID string, payload MetricPayload) erro
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+config.AppConfig.SimulatorSecret)
 
-	resp, err := c.httpClient.Do(req)
+	// Retry up to 3 times with 1s delay
+	var resp *http.Response
+	for i := 0; i < 3; i++ {
+		resp, err = c.httpClient.Do(req)
+		if err == nil {
+			break
+		}
+		time.Sleep(1 * time.Second)
+	}
 	if err != nil {
 		return err
 	}
