@@ -46,9 +46,22 @@ export default function Dashboard() {
     const unsub2 = wsService.on('new_alarm', () => { fetchData() })
     const unsub3 = wsService.on('station_status', () => { fetchData() })
 
+    // Live engineer count: re-fetch summary when a user comes online/offline
+    const unsub4 = wsService.on('user_status', (msg) => {
+      const payload = msg.payload as { user_id: number; is_online: boolean }
+      setSummary(prev => {
+        if (!prev) return prev
+        const delta = payload.is_online ? 1 : -1
+        return {
+          ...prev,
+          online_engineers: Math.max(0, prev.online_engineers + delta)
+        }
+      })
+    })
+
     return () => {
       clearInterval(interval)
-      unsub1(); unsub2(); unsub3()
+      unsub1(); unsub2(); unsub3(); unsub4()
     }
   }, [fetchData])
 
