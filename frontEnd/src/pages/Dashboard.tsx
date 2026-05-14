@@ -18,7 +18,7 @@ export default function Dashboard() {
   const [alarms, setAlarms] = useState<Alarm[]>([])
   const [error, setError] = useState('')
 
-  const canViewAlarms = user?.role === 'NOC' || user?.role === 'ADMIN'
+  const canViewAlarms = user?.role === 'NOC_OPERATOR' || user?.role === 'ADMIN'
 
   const fetchData = useCallback(async () => {
     try {

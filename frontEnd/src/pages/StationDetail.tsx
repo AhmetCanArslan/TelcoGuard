@@ -21,7 +21,7 @@ export default function StationDetail() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  const canViewAlarms = user?.role === 'NOC' || user?.role === 'ADMIN'
+  const canViewAlarms = user?.role === 'NOC_OPERATOR' || user?.role === 'ADMIN'
 
   const fetchData = useCallback(async () => {
     if (!id) return
