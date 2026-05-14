@@ -1,0 +1,3016 @@
+{
+  "base_stations": [
+    {
+      "latitude": 41.061741,
+      "longitude": 29.034136,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-001",
+      "name": "Istanbul-Levent-Cell-001"
+    },
+    {
+      "latitude": 41.075820922852,
+      "longitude": 29.016952514648,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 854,
+      "status": "ACTIVE",
+      "code": "BSC-002",
+      "name": "Istanbul-Levent-Cell-002"
+    },
+    {
+      "latitude": 41.074447631836,
+      "longitude": 29.015579223633,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-003",
+      "name": "Istanbul-Levent-Cell-003"
+    },
+    {
+      "latitude": 41.074429,
+      "longitude": 29.013942,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-004",
+      "name": "Istanbul-Levent-Cell-004"
+    },
+    {
+      "latitude": 41.084643,
+      "longitude": 29.020731,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 878,
+      "status": "ACTIVE",
+      "code": "BSC-005",
+      "name": "Istanbul-Levent-Cell-005"
+    },
+    {
+      "latitude": 41.08223,
+      "longitude": 29.011459,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-006",
+      "name": "Istanbul-Levent-Cell-006"
+    },
+    {
+      "latitude": 41.070964,
+      "longitude": 29.029519,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 822,
+      "status": "ACTIVE",
+      "code": "BSC-007",
+      "name": "Istanbul-Levent-Cell-007"
+    },
+    {
+      "latitude": 41.078567504883,
+      "longitude": 29.01008605957,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-008",
+      "name": "Istanbul-Levent-Cell-008"
+    },
+    {
+      "latitude": 41.084060668945,
+      "longitude": 29.012832641602,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-009",
+      "name": "Istanbul-Levent-Cell-009"
+    },
+    {
+      "latitude": 41.079940795898,
+      "longitude": 29.012832641602,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-010",
+      "name": "Istanbul-Levent-Cell-010"
+    },
+    {
+      "latitude": 41.081894,
+      "longitude": 29.024307,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 822,
+      "status": "ACTIVE",
+      "code": "BSC-011",
+      "name": "Istanbul-Levent-Cell-011"
+    },
+    {
+      "latitude": 41.085433959961,
+      "longitude": 29.005966186523,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-012",
+      "name": "Istanbul-Levent-Cell-012"
+    },
+    {
+      "latitude": 41.066666,
+      "longitude": 29.009171,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-013",
+      "name": "Istanbul-Levent-Cell-013"
+    },
+    {
+      "latitude": 41.068954467773,
+      "longitude": 29.011459350586,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-014",
+      "name": "Istanbul-Levent-Cell-014"
+    },
+    {
+      "latitude": 41.077194213867,
+      "longitude": 29.008712768555,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-015",
+      "name": "Istanbul-Levent-Cell-015"
+    },
+    {
+      "latitude": 41.080075,
+      "longitude": 29.023589,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 822,
+      "status": "ACTIVE",
+      "code": "BSC-016",
+      "name": "Istanbul-Levent-Cell-016"
+    },
+    {
+      "latitude": 41.078567504883,
+      "longitude": 29.01008605957,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-017",
+      "name": "Istanbul-Levent-Cell-017"
+    },
+    {
+      "latitude": 41.08268737793,
+      "longitude": 29.007339477539,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-018",
+      "name": "Istanbul-Levent-Cell-018"
+    },
+    {
+      "latitude": 41.078567504883,
+      "longitude": 29.011459350586,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-019",
+      "name": "Istanbul-Levent-Cell-019"
+    },
+    {
+      "latitude": 41.081314086914,
+      "longitude": 29.034805297852,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-020",
+      "name": "Istanbul-Levent-Cell-020"
+    },
+    {
+      "latitude": 41.038193,
+      "longitude": 29.013107,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 911,
+      "status": "ACTIVE",
+      "code": "BSC-021",
+      "name": "Istanbul-Taksim-Cell-021"
+    },
+    {
+      "latitude": 41.023979,
+      "longitude": 29.022102,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 822,
+      "status": "ACTIVE",
+      "code": "BSC-022",
+      "name": "Istanbul-Taksim-Cell-022"
+    },
+    {
+      "latitude": 41.023635864258,
+      "longitude": 29.01969909668,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 846,
+      "status": "ACTIVE",
+      "code": "BSC-023",
+      "name": "Istanbul-Taksim-Cell-023"
+    },
+    {
+      "latitude": 41.038059,
+      "longitude": 29.013518,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 856,
+      "status": "ACTIVE",
+      "code": "BSC-024",
+      "name": "Istanbul-Taksim-Cell-024"
+    },
+    {
+      "latitude": 41.023635864258,
+      "longitude": 29.018325805664,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-025",
+      "name": "Istanbul-Taksim-Cell-025"
+    },
+    {
+      "latitude": 41.023635864258,
+      "longitude": 29.01969909668,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 894,
+      "status": "ACTIVE",
+      "code": "BSC-026",
+      "name": "Istanbul-Taksim-Cell-026"
+    },
+    {
+      "latitude": 41.023635864258,
+      "longitude": 29.021072387695,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 846,
+      "status": "ACTIVE",
+      "code": "BSC-027",
+      "name": "Istanbul-Taksim-Cell-027"
+    },
+    {
+      "latitude": 41.041488647461,
+      "longitude": 29.038925170898,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-028",
+      "name": "Istanbul-Taksim-Cell-028"
+    },
+    {
+      "latitude": 41.047374,
+      "longitude": 29.025977,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 846,
+      "status": "ACTIVE",
+      "code": "BSC-029",
+      "name": "Istanbul-Taksim-Cell-029"
+    },
+    {
+      "latitude": 41.047721,
+      "longitude": 29.026143,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 894,
+      "status": "ACTIVE",
+      "code": "BSC-030",
+      "name": "Istanbul-Taksim-Cell-030"
+    },
+    {
+      "latitude": 41.048355,
+      "longitude": 29.02694,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-031",
+      "name": "Istanbul-Taksim-Cell-031"
+    },
+    {
+      "latitude": 41.023635864258,
+      "longitude": 29.015579223633,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 878,
+      "status": "ACTIVE",
+      "code": "BSC-032",
+      "name": "Istanbul-Taksim-Cell-032"
+    },
+    {
+      "latitude": 41.045536,
+      "longitude": 29.033794,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 942,
+      "status": "ACTIVE",
+      "code": "BSC-033",
+      "name": "Istanbul-Taksim-Cell-033"
+    },
+    {
+      "latitude": 41.022949,
+      "longitude": 29.015579,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 870,
+      "status": "ACTIVE",
+      "code": "BSC-034",
+      "name": "Istanbul-Taksim-Cell-034"
+    },
+    {
+      "latitude": 41.023636,
+      "longitude": 29.020386,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 886,
+      "status": "ACTIVE",
+      "code": "BSC-035",
+      "name": "Istanbul-Taksim-Cell-035"
+    },
+    {
+      "latitude": 41.040939,
+      "longitude": 29.030136,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 830,
+      "status": "ACTIVE",
+      "code": "BSC-036",
+      "name": "Istanbul-Taksim-Cell-036"
+    },
+    {
+      "latitude": 41.046385,
+      "longitude": 29.020893,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 830,
+      "status": "ACTIVE",
+      "code": "BSC-037",
+      "name": "Istanbul-Taksim-Cell-037"
+    },
+    {
+      "latitude": 41.032288,
+      "longitude": 29.013244,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 883,
+      "status": "ACTIVE",
+      "code": "BSC-038",
+      "name": "Istanbul-Taksim-Cell-038"
+    },
+    {
+      "latitude": 41.041384,
+      "longitude": 29.03338,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 909,
+      "status": "ACTIVE",
+      "code": "BSC-039",
+      "name": "Istanbul-Taksim-Cell-039"
+    },
+    {
+      "latitude": 41.025009,
+      "longitude": 29.01329,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-040",
+      "name": "Istanbul-Taksim-Cell-040"
+    },
+    {
+      "latitude": 41.05110168457,
+      "longitude": 29.027938842773,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-041",
+      "name": "Istanbul-Taksim-Cell-041"
+    },
+    {
+      "latitude": 41.03943,
+      "longitude": 29.011803,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 877,
+      "status": "ACTIVE",
+      "code": "BSC-042",
+      "name": "Istanbul-Taksim-Cell-042"
+    },
+    {
+      "latitude": 41.039491,
+      "longitude": 29.032933,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 878,
+      "status": "ACTIVE",
+      "code": "BSC-043",
+      "name": "Istanbul-Taksim-Cell-043"
+    },
+    {
+      "latitude": 41.033249,
+      "longitude": 29.011116,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 822,
+      "status": "ACTIVE",
+      "code": "BSC-044",
+      "name": "Istanbul-Taksim-Cell-044"
+    },
+    {
+      "latitude": 41.042861938477,
+      "longitude": 29.037551879883,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-045",
+      "name": "Istanbul-Taksim-Cell-045"
+    },
+    {
+      "latitude": 41.044235229492,
+      "longitude": 29.014205932617,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-046",
+      "name": "Istanbul-Taksim-Cell-046"
+    },
+    {
+      "latitude": 41.047728,
+      "longitude": 29.024726,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 894,
+      "status": "ACTIVE",
+      "code": "BSC-047",
+      "name": "Istanbul-Taksim-Cell-047"
+    },
+    {
+      "latitude": 41.04348,
+      "longitude": 29.039035,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-048",
+      "name": "Istanbul-Taksim-Cell-048"
+    },
+    {
+      "latitude": 41.026672,
+      "longitude": 29.02006,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 942,
+      "status": "ACTIVE",
+      "code": "BSC-049",
+      "name": "Istanbul-Taksim-Cell-049"
+    },
+    {
+      "latitude": 41.023178,
+      "longitude": 29.031601,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-050",
+      "name": "Istanbul-Taksim-Cell-050"
+    },
+    {
+      "latitude": 41.04282,
+      "longitude": 29.012041,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 846,
+      "status": "ACTIVE",
+      "code": "BSC-051",
+      "name": "Istanbul-Taksim-Cell-051"
+    },
+    {
+      "latitude": 41.03874206543,
+      "longitude": 29.037551879883,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-052",
+      "name": "Istanbul-Taksim-Cell-052"
+    },
+    {
+      "latitude": 41.030871,
+      "longitude": 29.021052,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-053",
+      "name": "Istanbul-Taksim-Cell-053"
+    },
+    {
+      "latitude": 41.039183,
+      "longitude": 29.038467,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-054",
+      "name": "Istanbul-Taksim-Cell-054"
+    },
+    {
+      "latitude": 41.039624,
+      "longitude": 29.025272,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-055",
+      "name": "Istanbul-Taksim-Cell-055"
+    },
+    {
+      "latitude": 41.050644,
+      "longitude": 29.026109,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 842,
+      "status": "ACTIVE",
+      "code": "BSC-056",
+      "name": "Istanbul-Taksim-Cell-056"
+    },
+    {
+      "latitude": 41.042862,
+      "longitude": 29.012093,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 894,
+      "status": "ACTIVE",
+      "code": "BSC-057",
+      "name": "Istanbul-Taksim-Cell-057"
+    },
+    {
+      "latitude": 41.045151,
+      "longitude": 29.018097,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 838,
+      "status": "ACTIVE",
+      "code": "BSC-058",
+      "name": "Istanbul-Taksim-Cell-058"
+    },
+    {
+      "latitude": 41.033608,
+      "longitude": 29.025488,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-059",
+      "name": "Istanbul-Taksim-Cell-059"
+    },
+    {
+      "latitude": 41.050415,
+      "longitude": 29.029999,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-060",
+      "name": "Istanbul-Taksim-Cell-060"
+    },
+    {
+      "latitude": 41.043015,
+      "longitude": 29.010849,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 862,
+      "status": "ACTIVE",
+      "code": "BSC-061",
+      "name": "Istanbul-Taksim-Cell-061"
+    },
+    {
+      "latitude": 41.035211,
+      "longitude": 29.018325,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-062",
+      "name": "Istanbul-Taksim-Cell-062"
+    },
+    {
+      "latitude": 41.042633,
+      "longitude": 29.011459,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 846,
+      "status": "ACTIVE",
+      "code": "BSC-063",
+      "name": "Istanbul-Taksim-Cell-063"
+    },
+    {
+      "latitude": 41.049042,
+      "longitude": 29.028626,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-064",
+      "name": "Istanbul-Taksim-Cell-064"
+    },
+    {
+      "latitude": 41.049658,
+      "longitude": 29.029523,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-065",
+      "name": "Istanbul-Taksim-Cell-065"
+    },
+    {
+      "latitude": 41.027755737305,
+      "longitude": 29.030685424805,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-066",
+      "name": "Istanbul-Taksim-Cell-066"
+    },
+    {
+      "latitude": 41.040017,
+      "longitude": 29.01244,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 902,
+      "status": "ACTIVE",
+      "code": "BSC-067",
+      "name": "Istanbul-Taksim-Cell-067"
+    },
+    {
+      "latitude": 41.030502319336,
+      "longitude": 29.011459350586,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-068",
+      "name": "Istanbul-Taksim-Cell-068"
+    },
+    {
+      "latitude": 41.046458,
+      "longitude": 29.021218,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-069",
+      "name": "Istanbul-Taksim-Cell-069"
+    },
+    {
+      "latitude": 41.04914,
+      "longitude": 29.028527,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 846,
+      "status": "ACTIVE",
+      "code": "BSC-070",
+      "name": "Istanbul-Taksim-Cell-070"
+    },
+    {
+      "latitude": 41.0522,
+      "longitude": 29.023819,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 830,
+      "status": "ACTIVE",
+      "code": "BSC-071",
+      "name": "Istanbul-Taksim-Cell-071"
+    },
+    {
+      "latitude": 41.025925,
+      "longitude": 29.016037,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-072",
+      "name": "Istanbul-Taksim-Cell-072"
+    },
+    {
+      "latitude": 41.044235229492,
+      "longitude": 29.015579223633,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-073",
+      "name": "Istanbul-Taksim-Cell-073"
+    },
+    {
+      "latitude": 41.04357,
+      "longitude": 29.028708,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-074",
+      "name": "Istanbul-Taksim-Cell-074"
+    },
+    {
+      "latitude": 41.026383,
+      "longitude": 29.025192,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-075",
+      "name": "Istanbul-Taksim-Cell-075"
+    },
+    {
+      "latitude": 41.049311,
+      "longitude": 29.029295,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-076",
+      "name": "Istanbul-Taksim-Cell-076"
+    },
+    {
+      "latitude": 41.035995483398,
+      "longitude": 29.030685424805,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-077",
+      "name": "Istanbul-Taksim-Cell-077"
+    },
+    {
+      "latitude": 41.036682,
+      "longitude": 29.016952,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-078",
+      "name": "Istanbul-Taksim-Cell-078"
+    },
+    {
+      "latitude": 41.025009155273,
+      "longitude": 29.030685424805,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-079",
+      "name": "Istanbul-Taksim-Cell-079"
+    },
+    {
+      "latitude": 41.025009155273,
+      "longitude": 29.029312133789,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-080",
+      "name": "Istanbul-Taksim-Cell-080"
+    },
+    {
+      "latitude": 41.041031,
+      "longitude": 29.01741,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 858,
+      "status": "ACTIVE",
+      "code": "BSC-081",
+      "name": "Istanbul-Taksim-Cell-081"
+    },
+    {
+      "latitude": 41.048813,
+      "longitude": 29.031372,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 838,
+      "status": "ACTIVE",
+      "code": "BSC-082",
+      "name": "Istanbul-Taksim-Cell-082"
+    },
+    {
+      "latitude": 41.022949,
+      "longitude": 29.04007,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 838,
+      "status": "ACTIVE",
+      "code": "BSC-083",
+      "name": "Istanbul-Taksim-Cell-083"
+    },
+    {
+      "latitude": 41.02756,
+      "longitude": 29.01401,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 884,
+      "status": "ACTIVE",
+      "code": "BSC-084",
+      "name": "Istanbul-Taksim-Cell-084"
+    },
+    {
+      "latitude": 41.045609,
+      "longitude": 29.027939,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-085",
+      "name": "Istanbul-Taksim-Cell-085"
+    },
+    {
+      "latitude": 41.026383,
+      "longitude": 29.012284,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 857,
+      "status": "ACTIVE",
+      "code": "BSC-086",
+      "name": "Istanbul-Taksim-Cell-086"
+    },
+    {
+      "latitude": 41.026382446289,
+      "longitude": 29.015579223633,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-087",
+      "name": "Istanbul-Taksim-Cell-087"
+    },
+    {
+      "latitude": 41.048124,
+      "longitude": 29.024876,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-088",
+      "name": "Istanbul-Taksim-Cell-088"
+    },
+    {
+      "latitude": 41.035995483398,
+      "longitude": 29.027938842773,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-089",
+      "name": "Istanbul-Taksim-Cell-089"
+    },
+    {
+      "latitude": 41.037369,
+      "longitude": 29.029999,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 827,
+      "status": "ACTIVE",
+      "code": "BSC-090",
+      "name": "Istanbul-Taksim-Cell-090"
+    },
+    {
+      "latitude": 41.030502,
+      "longitude": 29.030685,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 822,
+      "status": "ACTIVE",
+      "code": "BSC-091",
+      "name": "Istanbul-Taksim-Cell-091"
+    },
+    {
+      "latitude": 41.046586,
+      "longitude": 29.02141,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 854,
+      "status": "ACTIVE",
+      "code": "BSC-092",
+      "name": "Istanbul-Taksim-Cell-092"
+    },
+    {
+      "latitude": 41.026221,
+      "longitude": 29.015579,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 926,
+      "status": "ACTIVE",
+      "code": "BSC-093",
+      "name": "Istanbul-Taksim-Cell-093"
+    },
+    {
+      "latitude": 40.991592,
+      "longitude": 29.033432,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-094",
+      "name": "Istanbul-Kadikoy-Cell-094"
+    },
+    {
+      "latitude": 40.979676,
+      "longitude": 29.040428,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-095",
+      "name": "Istanbul-Kadikoy-Cell-095"
+    },
+    {
+      "latitude": 40.987930297852,
+      "longitude": 29.03205871582,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-096",
+      "name": "Istanbul-Kadikoy-Cell-096"
+    },
+    {
+      "latitude": 40.98518371582,
+      "longitude": 29.025192260742,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-097",
+      "name": "Istanbul-Kadikoy-Cell-097"
+    },
+    {
+      "latitude": 40.99411,
+      "longitude": 29.038239,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-098",
+      "name": "Istanbul-Kadikoy-Cell-098"
+    },
+    {
+      "latitude": 40.993423461914,
+      "longitude": 29.038925170898,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-099",
+      "name": "Istanbul-Kadikoy-Cell-099"
+    },
+    {
+      "latitude": 40.98381,
+      "longitude": 29.02977,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 838,
+      "status": "ACTIVE",
+      "code": "BSC-100",
+      "name": "Istanbul-Kadikoy-Cell-100"
+    },
+    {
+      "latitude": 40.999603,
+      "longitude": 29.029312,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-101",
+      "name": "Istanbul-Kadikoy-Cell-101"
+    },
+    {
+      "latitude": 40.99479675293,
+      "longitude": 29.033432006836,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-102",
+      "name": "Istanbul-Kadikoy-Cell-102"
+    },
+    {
+      "latitude": 40.993423461914,
+      "longitude": 29.034805297852,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-103",
+      "name": "Istanbul-Kadikoy-Cell-103"
+    },
+    {
+      "latitude": 40.992508,
+      "longitude": 29.03389,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-104",
+      "name": "Istanbul-Kadikoy-Cell-104"
+    },
+    {
+      "latitude": 40.997762,
+      "longitude": 29.030238,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 846,
+      "status": "ACTIVE",
+      "code": "BSC-105",
+      "name": "Istanbul-Kadikoy-Cell-105"
+    },
+    {
+      "latitude": 40.979690551758,
+      "longitude": 29.021072387695,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-106",
+      "name": "Istanbul-Kadikoy-Cell-106"
+    },
+    {
+      "latitude": 40.990281,
+      "longitude": 29.025114,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 822,
+      "status": "ACTIVE",
+      "code": "BSC-107",
+      "name": "Istanbul-Kadikoy-Cell-107"
+    },
+    {
+      "latitude": 40.993423461914,
+      "longitude": 29.025192260742,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-108",
+      "name": "Istanbul-Kadikoy-Cell-108"
+    },
+    {
+      "latitude": 40.98518371582,
+      "longitude": 29.04167175293,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-109",
+      "name": "Istanbul-Kadikoy-Cell-109"
+    },
+    {
+      "latitude": 40.99479675293,
+      "longitude": 29.012832641602,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-110",
+      "name": "Istanbul-Kadikoy-Cell-110"
+    },
+    {
+      "latitude": 40.990676879883,
+      "longitude": 29.036178588867,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-111",
+      "name": "Istanbul-Kadikoy-Cell-111"
+    },
+    {
+      "latitude": 41.001663208008,
+      "longitude": 29.04167175293,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-112",
+      "name": "Istanbul-Kadikoy-Cell-112"
+    },
+    {
+      "latitude": 40.981063842773,
+      "longitude": 29.023818969727,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-113",
+      "name": "Istanbul-Kadikoy-Cell-113"
+    },
+    {
+      "latitude": 40.982883,
+      "longitude": 29.041028,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-114",
+      "name": "Istanbul-Kadikoy-Cell-114"
+    },
+    {
+      "latitude": 40.992050170898,
+      "longitude": 29.025192260742,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-115",
+      "name": "Istanbul-Kadikoy-Cell-115"
+    },
+    {
+      "latitude": 40.991364,
+      "longitude": 29.025192,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-116",
+      "name": "Istanbul-Kadikoy-Cell-116"
+    },
+    {
+      "latitude": 40.989303588867,
+      "longitude": 29.025192260742,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-117",
+      "name": "Istanbul-Kadikoy-Cell-117"
+    },
+    {
+      "latitude": 40.993423461914,
+      "longitude": 29.026565551758,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-118",
+      "name": "Istanbul-Kadikoy-Cell-118"
+    },
+    {
+      "latitude": 40.990709,
+      "longitude": 29.02999,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 866,
+      "status": "ACTIVE",
+      "code": "BSC-119",
+      "name": "Istanbul-Kadikoy-Cell-119"
+    },
+    {
+      "latitude": 40.990676879883,
+      "longitude": 29.029312133789,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-120",
+      "name": "Istanbul-Kadikoy-Cell-120"
+    },
+    {
+      "latitude": 40.986557006836,
+      "longitude": 29.025192260742,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-121",
+      "name": "Istanbul-Kadikoy-Cell-121"
+    },
+    {
+      "latitude": 40.986557006836,
+      "longitude": 29.026565551758,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-122",
+      "name": "Istanbul-Kadikoy-Cell-122"
+    },
+    {
+      "latitude": 40.987930297852,
+      "longitude": 29.012832641602,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-123",
+      "name": "Istanbul-Kadikoy-Cell-123"
+    },
+    {
+      "latitude": 40.980459,
+      "longitude": 29.021332,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 822,
+      "status": "ACTIVE",
+      "code": "BSC-124",
+      "name": "Istanbul-Kadikoy-Cell-124"
+    },
+    {
+      "latitude": 40.993423,
+      "longitude": 29.036179,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 822,
+      "status": "ACTIVE",
+      "code": "BSC-125",
+      "name": "Istanbul-Kadikoy-Cell-125"
+    },
+    {
+      "latitude": 40.99479675293,
+      "longitude": 29.037551879883,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 830,
+      "status": "ACTIVE",
+      "code": "BSC-126",
+      "name": "Istanbul-Kadikoy-Cell-126"
+    },
+    {
+      "latitude": 40.987930297852,
+      "longitude": 29.012832641602,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-127",
+      "name": "Istanbul-Kadikoy-Cell-127"
+    },
+    {
+      "latitude": 41.000289916992,
+      "longitude": 29.04167175293,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-128",
+      "name": "Istanbul-Kadikoy-Cell-128"
+    },
+    {
+      "latitude": 40.998051,
+      "longitude": 29.042319,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-129",
+      "name": "Istanbul-Kadikoy-Cell-129"
+    },
+    {
+      "latitude": 40.997887,
+      "longitude": 29.025879,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 822,
+      "status": "ACTIVE",
+      "code": "BSC-130",
+      "name": "Istanbul-Kadikoy-Cell-130"
+    },
+    {
+      "latitude": 40.983124,
+      "longitude": 29.037209,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 822,
+      "status": "ACTIVE",
+      "code": "BSC-131",
+      "name": "Istanbul-Kadikoy-Cell-131"
+    },
+    {
+      "latitude": 40.975570678711,
+      "longitude": 29.014205932617,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-132",
+      "name": "Istanbul-Kadikoy-Cell-132"
+    },
+    {
+      "latitude": 40.99205,
+      "longitude": 29.034119,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-133",
+      "name": "Istanbul-Kadikoy-Cell-133"
+    },
+    {
+      "latitude": 40.992508,
+      "longitude": 29.033432,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-134",
+      "name": "Istanbul-Kadikoy-Cell-134"
+    },
+    {
+      "latitude": 40.999832,
+      "longitude": 29.029846,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 934,
+      "status": "ACTIVE",
+      "code": "BSC-135",
+      "name": "Istanbul-Kadikoy-Cell-135"
+    },
+    {
+      "latitude": 40.99315,
+      "longitude": 29.037921,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 866,
+      "status": "ACTIVE",
+      "code": "BSC-136",
+      "name": "Istanbul-Kadikoy-Cell-136"
+    },
+    {
+      "latitude": 40.999741,
+      "longitude": 29.040298,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 830,
+      "status": "ACTIVE",
+      "code": "BSC-137",
+      "name": "Istanbul-Kadikoy-Cell-137"
+    },
+    {
+      "latitude": 41.000775,
+      "longitude": 29.036703,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-138",
+      "name": "Istanbul-Kadikoy-Cell-138"
+    },
+    {
+      "latitude": 40.990285,
+      "longitude": 29.041083,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 846,
+      "status": "ACTIVE",
+      "code": "BSC-139",
+      "name": "Istanbul-Kadikoy-Cell-139"
+    },
+    {
+      "latitude": 40.994625,
+      "longitude": 29.042015,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 854,
+      "status": "ACTIVE",
+      "code": "BSC-140",
+      "name": "Istanbul-Kadikoy-Cell-140"
+    },
+    {
+      "latitude": 40.989303588867,
+      "longitude": 29.023818969727,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-141",
+      "name": "Istanbul-Kadikoy-Cell-141"
+    },
+    {
+      "latitude": 40.985184,
+      "longitude": 29.036179,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-142",
+      "name": "Istanbul-Kadikoy-Cell-142"
+    },
+    {
+      "latitude": 40.987930297852,
+      "longitude": 29.03205871582,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-143",
+      "name": "Istanbul-Kadikoy-Cell-143"
+    },
+    {
+      "latitude": 40.983810424805,
+      "longitude": 29.033432006836,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-144",
+      "name": "Istanbul-Kadikoy-Cell-144"
+    },
+    {
+      "latitude": 41.017452,
+      "longitude": 28.956913,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-145",
+      "name": "Istanbul-Fatih-Cell-145"
+    },
+    {
+      "latitude": 41.008529663086,
+      "longitude": 28.948287963867,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-146",
+      "name": "Istanbul-Fatih-Cell-146"
+    },
+    {
+      "latitude": 41.00715637207,
+      "longitude": 28.948287963867,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 846,
+      "status": "ACTIVE",
+      "code": "BSC-147",
+      "name": "Istanbul-Fatih-Cell-147"
+    },
+    {
+      "latitude": 41.00853,
+      "longitude": 28.956572,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-148",
+      "name": "Istanbul-Fatih-Cell-148"
+    },
+    {
+      "latitude": 41.008529663086,
+      "longitude": 28.95378112793,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-149",
+      "name": "Istanbul-Fatih-Cell-149"
+    },
+    {
+      "latitude": 41.006333,
+      "longitude": 28.952133,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 839,
+      "status": "ACTIVE",
+      "code": "BSC-150",
+      "name": "Istanbul-Fatih-Cell-150"
+    },
+    {
+      "latitude": 41.002882,
+      "longitude": 28.947667,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-151",
+      "name": "Istanbul-Fatih-Cell-151"
+    },
+    {
+      "latitude": 41.009902954102,
+      "longitude": 28.949661254883,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-152",
+      "name": "Istanbul-Fatih-Cell-152"
+    },
+    {
+      "latitude": 41.012478,
+      "longitude": 28.968154,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 838,
+      "status": "ACTIVE",
+      "code": "BSC-153",
+      "name": "Istanbul-Fatih-Cell-153"
+    },
+    {
+      "latitude": 41.014966,
+      "longitude": 28.973924,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 838,
+      "status": "ACTIVE",
+      "code": "BSC-154",
+      "name": "Istanbul-Fatih-Cell-154"
+    },
+    {
+      "latitude": 41.018142700195,
+      "longitude": 28.971633911133,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-155",
+      "name": "Istanbul-Fatih-Cell-155"
+    },
+    {
+      "latitude": 41.015563,
+      "longitude": 28.975922,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 974,
+      "status": "ACTIVE",
+      "code": "BSC-156",
+      "name": "Istanbul-Fatih-Cell-156"
+    },
+    {
+      "latitude": 41.019042,
+      "longitude": 28.973737,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-157",
+      "name": "Istanbul-Fatih-Cell-157"
+    },
+    {
+      "latitude": 41.018142700195,
+      "longitude": 28.974380493164,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-158",
+      "name": "Istanbul-Fatih-Cell-158"
+    },
+    {
+      "latitude": 41.017092,
+      "longitude": 28.955708,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 822,
+      "status": "ACTIVE",
+      "code": "BSC-159",
+      "name": "Istanbul-Fatih-Cell-159"
+    },
+    {
+      "latitude": 41.008795,
+      "longitude": 28.968574,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 838,
+      "status": "ACTIVE",
+      "code": "BSC-160",
+      "name": "Istanbul-Fatih-Cell-160"
+    },
+    {
+      "latitude": 41.018142700195,
+      "longitude": 28.973007202148,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-161",
+      "name": "Istanbul-Fatih-Cell-161"
+    },
+    {
+      "latitude": 41.018142700195,
+      "longitude": 28.974380493164,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-162",
+      "name": "Istanbul-Fatih-Cell-162"
+    },
+    {
+      "latitude": 41.008301,
+      "longitude": 28.953781,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 838,
+      "status": "ACTIVE",
+      "code": "BSC-163",
+      "name": "Istanbul-Fatih-Cell-163"
+    },
+    {
+      "latitude": 41.005783081055,
+      "longitude": 28.951034545898,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-164",
+      "name": "Istanbul-Fatih-Cell-164"
+    },
+    {
+      "latitude": 41.005783081055,
+      "longitude": 28.97575378418,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-165",
+      "name": "Istanbul-Fatih-Cell-165"
+    },
+    {
+      "latitude": 41.005783081055,
+      "longitude": 28.977127075195,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-166",
+      "name": "Istanbul-Fatih-Cell-166"
+    },
+    {
+      "latitude": 41.015284,
+      "longitude": 28.971566,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 862,
+      "status": "ACTIVE",
+      "code": "BSC-167",
+      "name": "Istanbul-Fatih-Cell-167"
+    },
+    {
+      "latitude": 41.038742,
+      "longitude": 29.000473,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-168",
+      "name": "Istanbul-Besiktas-Cell-168"
+    },
+    {
+      "latitude": 41.040365,
+      "longitude": 29.007277,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 975,
+      "status": "ACTIVE",
+      "code": "BSC-169",
+      "name": "Istanbul-Besiktas-Cell-169"
+    },
+    {
+      "latitude": 41.051102,
+      "longitude": 29.008026,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-170",
+      "name": "Istanbul-Besiktas-Cell-170"
+    },
+    {
+      "latitude": 41.052475,
+      "longitude": 29.009399,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-171",
+      "name": "Istanbul-Besiktas-Cell-171"
+    },
+    {
+      "latitude": 41.04628,
+      "longitude": 29.020884,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-172",
+      "name": "Istanbul-Besiktas-Cell-172"
+    },
+    {
+      "latitude": 41.041935,
+      "longitude": 29.002623,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 819,
+      "status": "ACTIVE",
+      "code": "BSC-173",
+      "name": "Istanbul-Besiktas-Cell-173"
+    },
+    {
+      "latitude": 41.046346,
+      "longitude": 29.020918,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 830,
+      "status": "ACTIVE",
+      "code": "BSC-174",
+      "name": "Istanbul-Besiktas-Cell-174"
+    },
+    {
+      "latitude": 41.060807,
+      "longitude": 28.998396,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-175",
+      "name": "Istanbul-Besiktas-Cell-175"
+    },
+    {
+      "latitude": 41.041371,
+      "longitude": 29.006394,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-176",
+      "name": "Istanbul-Besiktas-Cell-176"
+    },
+    {
+      "latitude": 41.052474975586,
+      "longitude": 29.008712768555,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-177",
+      "name": "Istanbul-Besiktas-Cell-177"
+    },
+    {
+      "latitude": 41.042389,
+      "longitude": 29.006411,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 822,
+      "status": "ACTIVE",
+      "code": "BSC-178",
+      "name": "Istanbul-Besiktas-Cell-178"
+    },
+    {
+      "latitude": 41.042861938477,
+      "longitude": 29.004592895508,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-179",
+      "name": "Istanbul-Besiktas-Cell-179"
+    },
+    {
+      "latitude": 41.041218,
+      "longitude": 29.004188,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-180",
+      "name": "Istanbul-Besiktas-Cell-180"
+    },
+    {
+      "latitude": 41.055221557617,
+      "longitude": 28.99772644043,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-181",
+      "name": "Istanbul-Besiktas-Cell-181"
+    },
+    {
+      "latitude": 41.055222,
+      "longitude": 29.012146,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-182",
+      "name": "Istanbul-Besiktas-Cell-182"
+    },
+    {
+      "latitude": 41.05110168457,
+      "longitude": 29.008712768555,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-183",
+      "name": "Istanbul-Besiktas-Cell-183"
+    },
+    {
+      "latitude": 41.044009,
+      "longitude": 29.007521,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 854,
+      "status": "ACTIVE",
+      "code": "BSC-184",
+      "name": "Istanbul-Besiktas-Cell-184"
+    },
+    {
+      "latitude": 41.043596,
+      "longitude": 29.006842,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-185",
+      "name": "Istanbul-Besiktas-Cell-185"
+    },
+    {
+      "latitude": 41.052933,
+      "longitude": 29.000473,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-186",
+      "name": "Istanbul-Besiktas-Cell-186"
+    },
+    {
+      "latitude": 41.045608520508,
+      "longitude": 29.003219604492,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-187",
+      "name": "Istanbul-Besiktas-Cell-187"
+    },
+    {
+      "latitude": 41.042861938477,
+      "longitude": 29.000473022461,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-188",
+      "name": "Istanbul-Besiktas-Cell-188"
+    },
+    {
+      "latitude": 41.056594848633,
+      "longitude": 29.025192260742,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-189",
+      "name": "Istanbul-Besiktas-Cell-189"
+    },
+    {
+      "latitude": 41.055221557617,
+      "longitude": 29.01008605957,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-190",
+      "name": "Istanbul-Besiktas-Cell-190"
+    },
+    {
+      "latitude": 41.060257,
+      "longitude": 29.003677,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-191",
+      "name": "Istanbul-Besiktas-Cell-191"
+    },
+    {
+      "latitude": 41.05608,
+      "longitude": 29.009571,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 854,
+      "status": "ACTIVE",
+      "code": "BSC-192",
+      "name": "Istanbul-Besiktas-Cell-192"
+    },
+    {
+      "latitude": 41.065521,
+      "longitude": 29.007339,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-193",
+      "name": "Istanbul-Besiktas-Cell-193"
+    },
+    {
+      "latitude": 40.89592,
+      "longitude": 29.251785,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 830,
+      "status": "ACTIVE",
+      "code": "BSC-194",
+      "name": "Istanbul-Pendik-Cell-194"
+    },
+    {
+      "latitude": 40.895834,
+      "longitude": 29.251442,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-195",
+      "name": "Istanbul-Pendik-Cell-195"
+    },
+    {
+      "latitude": 40.896678,
+      "longitude": 29.251282,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-196",
+      "name": "Istanbul-Pendik-Cell-196"
+    },
+    {
+      "latitude": 40.891113,
+      "longitude": 29.233933,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-197",
+      "name": "Istanbul-Pendik-Cell-197"
+    },
+    {
+      "latitude": 40.894879,
+      "longitude": 29.228356,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-198",
+      "name": "Istanbul-Pendik-Cell-198"
+    },
+    {
+      "latitude": 40.888985,
+      "longitude": 29.22995,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 950,
+      "status": "ACTIVE",
+      "code": "BSC-199",
+      "name": "Istanbul-Pendik-Cell-199"
+    },
+    {
+      "latitude": 40.880814,
+      "longitude": 29.253433,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 830,
+      "status": "ACTIVE",
+      "code": "BSC-200",
+      "name": "Istanbul-Pendik-Cell-200"
+    },
+    {
+      "latitude": 40.880813598633,
+      "longitude": 29.254531860352,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-201",
+      "name": "Istanbul-Pendik-Cell-201"
+    },
+    {
+      "latitude": 40.880794,
+      "longitude": 29.254905,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-202",
+      "name": "Istanbul-Pendik-Cell-202"
+    },
+    {
+      "latitude": 40.890602,
+      "longitude": 29.237439,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-203",
+      "name": "Istanbul-Pendik-Cell-203"
+    },
+    {
+      "latitude": 40.882186889648,
+      "longitude": 29.240798950195,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-204",
+      "name": "Istanbul-Pendik-Cell-204"
+    },
+    {
+      "latitude": 40.879440307617,
+      "longitude": 29.22981262207,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-205",
+      "name": "Istanbul-Pendik-Cell-205"
+    },
+    {
+      "latitude": 40.883560180664,
+      "longitude": 29.231185913086,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-206",
+      "name": "Istanbul-Pendik-Cell-206"
+    },
+    {
+      "latitude": 40.894416,
+      "longitude": 29.229355,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 958,
+      "status": "ACTIVE",
+      "code": "BSC-207",
+      "name": "Istanbul-Pendik-Cell-207"
+    },
+    {
+      "latitude": 40.889033,
+      "longitude": 29.243124,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-208",
+      "name": "Istanbul-Pendik-Cell-208"
+    },
+    {
+      "latitude": 40.896378,
+      "longitude": 29.227524,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-209",
+      "name": "Istanbul-Pendik-Cell-209"
+    },
+    {
+      "latitude": 40.904221,
+      "longitude": 29.249557,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-210",
+      "name": "Istanbul-Pendik-Cell-210"
+    },
+    {
+      "latitude": 40.878467,
+      "longitude": 29.226581,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 830,
+      "status": "ACTIVE",
+      "code": "BSC-211",
+      "name": "Istanbul-Pendik-Cell-211"
+    },
+    {
+      "latitude": 40.886306762695,
+      "longitude": 29.227066040039,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-212",
+      "name": "Istanbul-Pendik-Cell-212"
+    },
+    {
+      "latitude": 40.893173,
+      "longitude": 29.244308,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 862,
+      "status": "ACTIVE",
+      "code": "BSC-213",
+      "name": "Istanbul-Pendik-Cell-213"
+    },
+    {
+      "latitude": 40.887680053711,
+      "longitude": 29.240798950195,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-214",
+      "name": "Istanbul-Pendik-Cell-214"
+    },
+    {
+      "latitude": 40.883011,
+      "longitude": 29.234756,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 830,
+      "status": "ACTIVE",
+      "code": "BSC-215",
+      "name": "Istanbul-Pendik-Cell-215"
+    },
+    {
+      "latitude": 40.889481,
+      "longitude": 29.234848,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-216",
+      "name": "Istanbul-Pendik-Cell-216"
+    },
+    {
+      "latitude": 40.88743,
+      "longitude": 29.233683,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 878,
+      "status": "ACTIVE",
+      "code": "BSC-217",
+      "name": "Istanbul-Pendik-Cell-217"
+    },
+    {
+      "latitude": 40.886306762695,
+      "longitude": 29.231185913086,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-218",
+      "name": "Istanbul-Pendik-Cell-218"
+    },
+    {
+      "latitude": 40.882874,
+      "longitude": 29.246479,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 966,
+      "status": "ACTIVE",
+      "code": "BSC-219",
+      "name": "Istanbul-Pendik-Cell-219"
+    },
+    {
+      "latitude": 40.875215,
+      "longitude": 29.254426,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 894,
+      "status": "ACTIVE",
+      "code": "BSC-220",
+      "name": "Istanbul-Pendik-Cell-220"
+    },
+    {
+      "latitude": 40.875713,
+      "longitude": 29.231774,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 846,
+      "status": "ACTIVE",
+      "code": "BSC-221",
+      "name": "Istanbul-Pendik-Cell-221"
+    },
+    {
+      "latitude": 40.87532043457,
+      "longitude": 29.236679077148,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-222",
+      "name": "Istanbul-Pendik-Cell-222"
+    },
+    {
+      "latitude": 40.891937,
+      "longitude": 29.241211,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 870,
+      "status": "ACTIVE",
+      "code": "BSC-223",
+      "name": "Istanbul-Pendik-Cell-223"
+    },
+    {
+      "latitude": 40.893435,
+      "longitude": 29.229224,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-224",
+      "name": "Istanbul-Pendik-Cell-224"
+    },
+    {
+      "latitude": 40.876236,
+      "longitude": 29.228439,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-225",
+      "name": "Istanbul-Pendik-Cell-225"
+    },
+    {
+      "latitude": 40.879440307617,
+      "longitude": 29.243545532227,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-226",
+      "name": "Istanbul-Pendik-Cell-226"
+    },
+    {
+      "latitude": 40.891799926758,
+      "longitude": 29.247665405273,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-227",
+      "name": "Istanbul-Pendik-Cell-227"
+    },
+    {
+      "latitude": 40.878067016602,
+      "longitude": 29.255905151367,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-228",
+      "name": "Istanbul-Pendik-Cell-228"
+    },
+    {
+      "latitude": 40.893173,
+      "longitude": 29.230499,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-229",
+      "name": "Istanbul-Pendik-Cell-229"
+    },
+    {
+      "latitude": 40.892258,
+      "longitude": 29.237137,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-230",
+      "name": "Istanbul-Pendik-Cell-230"
+    },
+    {
+      "latitude": 40.898666381836,
+      "longitude": 29.255905151367,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-231",
+      "name": "Istanbul-Pendik-Cell-231"
+    },
+    {
+      "latitude": 40.878067,
+      "longitude": 29.232559,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-232",
+      "name": "Istanbul-Pendik-Cell-232"
+    },
+    {
+      "latitude": 40.878656,
+      "longitude": 29.237954,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 902,
+      "status": "ACTIVE",
+      "code": "BSC-233",
+      "name": "Istanbul-Pendik-Cell-233"
+    },
+    {
+      "latitude": 40.878067016602,
+      "longitude": 29.235305786133,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-234",
+      "name": "Istanbul-Pendik-Cell-234"
+    },
+    {
+      "latitude": 40.882198,
+      "longitude": 29.248615,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-235",
+      "name": "Istanbul-Pendik-Cell-235"
+    },
+    {
+      "latitude": 40.888538,
+      "longitude": 29.237108,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-236",
+      "name": "Istanbul-Pendik-Cell-236"
+    },
+    {
+      "latitude": 40.874814,
+      "longitude": 29.252797,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 942,
+      "status": "ACTIVE",
+      "code": "BSC-237",
+      "name": "Istanbul-Pendik-Cell-237"
+    },
+    {
+      "latitude": 40.87532,
+      "longitude": 29.252548,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 862,
+      "status": "ACTIVE",
+      "code": "BSC-238",
+      "name": "Istanbul-Pendik-Cell-238"
+    },
+    {
+      "latitude": 40.888673,
+      "longitude": 29.237926,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-239",
+      "name": "Istanbul-Pendik-Cell-239"
+    },
+    {
+      "latitude": 40.891356,
+      "longitude": 29.227235,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 816,
+      "status": "ACTIVE",
+      "code": "BSC-240",
+      "name": "Istanbul-Pendik-Cell-240"
+    },
+    {
+      "latitude": 40.877217,
+      "longitude": 29.236984,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-241",
+      "name": "Istanbul-Pendik-Cell-241"
+    },
+    {
+      "latitude": 40.876693725586,
+      "longitude": 29.244918823242,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-242",
+      "name": "Istanbul-Pendik-Cell-242"
+    },
+    {
+      "latitude": 40.875778,
+      "longitude": 29.239883,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-243",
+      "name": "Istanbul-Pendik-Cell-243"
+    },
+    {
+      "latitude": 40.884078,
+      "longitude": 29.238175,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-244",
+      "name": "Istanbul-Pendik-Cell-244"
+    },
+    {
+      "latitude": 38.422288,
+      "longitude": 27.13338,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 838,
+      "status": "ACTIVE",
+      "code": "BSC-245",
+      "name": "Izmir-Konak-Cell-245"
+    },
+    {
+      "latitude": 38.422622680664,
+      "longitude": 27.13005065918,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-246",
+      "name": "Izmir-Konak-Cell-246"
+    },
+    {
+      "latitude": 38.422622680664,
+      "longitude": 27.131423950195,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-247",
+      "name": "Izmir-Konak-Cell-247"
+    },
+    {
+      "latitude": 38.412174,
+      "longitude": 27.13777,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-248",
+      "name": "Izmir-Konak-Cell-248"
+    },
+    {
+      "latitude": 38.42399597168,
+      "longitude": 27.147903442383,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-249",
+      "name": "Izmir-Konak-Cell-249"
+    },
+    {
+      "latitude": 38.422623,
+      "longitude": 27.137375,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-250",
+      "name": "Izmir-Konak-Cell-250"
+    },
+    {
+      "latitude": 38.417528,
+      "longitude": 27.14793,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-251",
+      "name": "Izmir-Konak-Cell-251"
+    },
+    {
+      "latitude": 38.428115844727,
+      "longitude": 27.141036987305,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-252",
+      "name": "Izmir-Konak-Cell-252"
+    },
+    {
+      "latitude": 38.418502807617,
+      "longitude": 27.13005065918,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-253",
+      "name": "Izmir-Konak-Cell-253"
+    },
+    {
+      "latitude": 38.417816,
+      "longitude": 27.130051,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-254",
+      "name": "Izmir-Konak-Cell-254"
+    },
+    {
+      "latitude": 38.430862426758,
+      "longitude": 27.135543823242,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-255",
+      "name": "Izmir-Konak-Cell-255"
+    },
+    {
+      "latitude": 38.428115844727,
+      "longitude": 27.141036987305,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-256",
+      "name": "Izmir-Konak-Cell-256"
+    },
+    {
+      "latitude": 38.406143188477,
+      "longitude": 27.154769897461,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-257",
+      "name": "Izmir-Konak-Cell-257"
+    },
+    {
+      "latitude": 38.424744,
+      "longitude": 27.134047,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-258",
+      "name": "Izmir-Konak-Cell-258"
+    },
+    {
+      "latitude": 38.421188,
+      "longitude": 27.137113,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-259",
+      "name": "Izmir-Konak-Cell-259"
+    },
+    {
+      "latitude": 38.433879,
+      "longitude": 27.151694,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 836,
+      "status": "ACTIVE",
+      "code": "BSC-260",
+      "name": "Izmir-Konak-Cell-260"
+    },
+    {
+      "latitude": 38.425369262695,
+      "longitude": 27.138290405273,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-261",
+      "name": "Izmir-Konak-Cell-261"
+    },
+    {
+      "latitude": 38.42308,
+      "longitude": 27.137833,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-262",
+      "name": "Izmir-Konak-Cell-262"
+    },
+    {
+      "latitude": 38.42399597168,
+      "longitude": 27.14241027832,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-263",
+      "name": "Izmir-Konak-Cell-263"
+    },
+    {
+      "latitude": 38.430862426758,
+      "longitude": 27.145156860352,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-264",
+      "name": "Izmir-Konak-Cell-264"
+    },
+    {
+      "latitude": 38.428637,
+      "longitude": 27.137322,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-265",
+      "name": "Izmir-Konak-Cell-265"
+    },
+    {
+      "latitude": 38.422622680664,
+      "longitude": 27.136917114258,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-266",
+      "name": "Izmir-Konak-Cell-266"
+    },
+    {
+      "latitude": 38.42399597168,
+      "longitude": 27.138290405273,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-267",
+      "name": "Izmir-Konak-Cell-267"
+    },
+    {
+      "latitude": 38.422623,
+      "longitude": 27.133942,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 838,
+      "status": "ACTIVE",
+      "code": "BSC-268",
+      "name": "Izmir-Konak-Cell-268"
+    },
+    {
+      "latitude": 38.425586,
+      "longitude": 27.139808,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 942,
+      "status": "ACTIVE",
+      "code": "BSC-269",
+      "name": "Izmir-Konak-Cell-269"
+    },
+    {
+      "latitude": 38.421249389648,
+      "longitude": 27.132797241211,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-270",
+      "name": "Izmir-Konak-Cell-270"
+    },
+    {
+      "latitude": 38.432235717773,
+      "longitude": 27.139663696289,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-271",
+      "name": "Izmir-Konak-Cell-271"
+    },
+    {
+      "latitude": 38.430862426758,
+      "longitude": 27.14241027832,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-272",
+      "name": "Izmir-Konak-Cell-272"
+    },
+    {
+      "latitude": 38.426742553711,
+      "longitude": 27.154769897461,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-273",
+      "name": "Izmir-Konak-Cell-273"
+    },
+    {
+      "latitude": 38.432236,
+      "longitude": 27.149002,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 830,
+      "status": "ACTIVE",
+      "code": "BSC-274",
+      "name": "Izmir-Konak-Cell-274"
+    },
+    {
+      "latitude": 38.423275,
+      "longitude": 27.144304,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-275",
+      "name": "Izmir-Konak-Cell-275"
+    },
+    {
+      "latitude": 38.42429,
+      "longitude": 27.145777,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-276",
+      "name": "Izmir-Konak-Cell-276"
+    },
+    {
+      "latitude": 38.421249389648,
+      "longitude": 27.13005065918,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-277",
+      "name": "Izmir-Konak-Cell-277"
+    },
+    {
+      "latitude": 38.422622680664,
+      "longitude": 27.158889770508,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-278",
+      "name": "Izmir-Konak-Cell-278"
+    },
+    {
+      "latitude": 38.428665,
+      "longitude": 27.133896,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 830,
+      "status": "ACTIVE",
+      "code": "BSC-279",
+      "name": "Izmir-Konak-Cell-279"
+    },
+    {
+      "latitude": 38.433937,
+      "longitude": 27.140585,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-280",
+      "name": "Izmir-Konak-Cell-280"
+    },
+    {
+      "latitude": 38.422784,
+      "longitude": 27.141873,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 822,
+      "status": "ACTIVE",
+      "code": "BSC-281",
+      "name": "Izmir-Konak-Cell-281"
+    },
+    {
+      "latitude": 38.422622680664,
+      "longitude": 27.141036987305,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-282",
+      "name": "Izmir-Konak-Cell-282"
+    },
+    {
+      "latitude": 38.418905,
+      "longitude": 27.134784,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 985,
+      "status": "ACTIVE",
+      "code": "BSC-283",
+      "name": "Izmir-Konak-Cell-283"
+    },
+    {
+      "latitude": 38.411636352539,
+      "longitude": 27.157516479492,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-284",
+      "name": "Izmir-Konak-Cell-284"
+    },
+    {
+      "latitude": 38.430801,
+      "longitude": 27.149775,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-285",
+      "name": "Izmir-Konak-Cell-285"
+    },
+    {
+      "latitude": 38.430862426758,
+      "longitude": 27.14241027832,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-286",
+      "name": "Izmir-Konak-Cell-286"
+    },
+    {
+      "latitude": 38.408889770508,
+      "longitude": 27.150650024414,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-287",
+      "name": "Izmir-Konak-Cell-287"
+    },
+    {
+      "latitude": 38.433609,
+      "longitude": 27.140694,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 822,
+      "status": "ACTIVE",
+      "code": "BSC-288",
+      "name": "Izmir-Konak-Cell-288"
+    },
+    {
+      "latitude": 38.425533,
+      "longitude": 27.137276,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-289",
+      "name": "Izmir-Konak-Cell-289"
+    },
+    {
+      "latitude": 38.421936,
+      "longitude": 27.130051,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-290",
+      "name": "Izmir-Konak-Cell-290"
+    },
+    {
+      "latitude": 38.425369262695,
+      "longitude": 27.139663696289,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-291",
+      "name": "Izmir-Konak-Cell-291"
+    },
+    {
+      "latitude": 38.409446,
+      "longitude": 27.14997,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 983,
+      "status": "ACTIVE",
+      "code": "BSC-292",
+      "name": "Izmir-Konak-Cell-292"
+    },
+    {
+      "latitude": 38.419829,
+      "longitude": 27.13936,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 862,
+      "status": "ACTIVE",
+      "code": "BSC-293",
+      "name": "Izmir-Konak-Cell-293"
+    },
+    {
+      "latitude": 38.430838,
+      "longitude": 27.137955,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 806,
+      "status": "ACTIVE",
+      "code": "BSC-294",
+      "name": "Izmir-Konak-Cell-294"
+    },
+    {
+      "latitude": 38.418502807617,
+      "longitude": 27.132797241211,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-295",
+      "name": "Izmir-Konak-Cell-295"
+    },
+    {
+      "latitude": 38.424656,
+      "longitude": 27.148121,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-296",
+      "name": "Izmir-Konak-Cell-296"
+    },
+    {
+      "latitude": 38.421707,
+      "longitude": 27.131424,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 814,
+      "status": "ACTIVE",
+      "code": "BSC-297",
+      "name": "Izmir-Konak-Cell-297"
+    },
+    {
+      "latitude": 38.432247,
+      "longitude": 27.150557,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-298",
+      "name": "Izmir-Konak-Cell-298"
+    },
+    {
+      "latitude": 39.870071411133,
+      "longitude": 32.792129516602,
+      "region": "İç Anadolu",
+      "type": "LTE",
+      "capacity": 798,
+      "status": "ACTIVE",
+      "code": "BSC-299",
+      "name": "Ankara-Cankaya-Cell-299"
+    },
+    {
+      "latitude": 39.895708,
+      "longitude": 32.785283,
+      "region": "İç Anadolu",
+      "type": "LTE",
+      "capacity": 1000,
+      "status": "ACTIVE",
+      "code": "BSC-300",
+      "name": "Ankara-Cankaya-Cell-300"
+    }
+  ],
+  "metadata": {
+    "source": "OpenCellID",
+    "endpoint": "https://opencellid.org/ajax/getCells.php",
+    "generated": "2026-05-14T20:01:24.477417",
+    "count": 300,
+    "api_key_provided": true,
+    "filter": {
+      "mcc": 286,
+      "net": 1,
+      "tiles": 8
+    }
+  }
+}

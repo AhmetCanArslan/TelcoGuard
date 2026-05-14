@@ -1,0 +1,255 @@
+{
+  "base_stations": [
+    {
+      "code": "BSC-001",
+      "name": "Levent-K1",
+      "latitude": 41.0732,
+      "longitude": 29.0199,
+      "region": "Marmara",
+      "type": "NR_5G",
+      "capacity": 1000,
+      "status": "ACTIVE"
+    },
+    {
+      "code": "BSC-002",
+      "name": "Kadıköy-M3",
+      "latitude": 40.9887,
+      "longitude": 29.0277,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 800,
+      "status": "ACTIVE"
+    },
+    {
+      "code": "BSC-003",
+      "name": "Taksim-A2",
+      "latitude": 41.0373,
+      "longitude": 29.0252,
+      "region": "Marmara",
+      "type": "NR_5G",
+      "capacity": 1200,
+      "status": "ACTIVE"
+    },
+    {
+      "code": "BSC-004",
+      "name": "Besiktaş-B1",
+      "latitude": 41.0516,
+      "longitude": 29.0112,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 950,
+      "status": "ACTIVE"
+    },
+    {
+      "code": "BSC-005",
+      "name": "Fatih-F2",
+      "latitude": 41.0096,
+      "longitude": 28.9624,
+      "region": "Marmara",
+      "type": "NR_5G",
+      "capacity": 1100,
+      "status": "ACTIVE"
+    },
+    {
+      "code": "BSC-006",
+      "name": "Eminönü-E1",
+      "latitude": 41.0094,
+      "longitude": 28.9784,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 850,
+      "status": "ACTIVE"
+    },
+    {
+      "code": "BSC-007",
+      "name": "Beyoğlu-BY1",
+      "latitude": 41.0257,
+      "longitude": 28.9828,
+      "region": "Marmara",
+      "type": "NR_5G",
+      "capacity": 1050,
+      "status": "ACTIVE"
+    },
+    {
+      "code": "BSC-008",
+      "name": "Şişli-S3",
+      "latitude": 41.0489,
+      "longitude": 29.0133,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 920,
+      "status": "ACTIVE"
+    },
+    {
+      "code": "BSC-009",
+      "name": "Bahçelievler-BA2",
+      "latitude": 41.0072,
+      "longitude": 28.8821,
+      "region": "Marmara",
+      "type": "NR_5G",
+      "capacity": 880,
+      "status": "ACTIVE"
+    },
+    {
+      "code": "BSC-010",
+      "name": "Bakırköy-BAK1",
+      "latitude": 40.9756,
+      "longitude": 28.8899,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 780,
+      "status": "ACTIVE"
+    },
+    {
+      "code": "BSC-011",
+      "name": "Maltepe-MAL1",
+      "latitude": 40.9619,
+      "longitude": 29.1342,
+      "region": "Marmara",
+      "type": "NR_5G",
+      "capacity": 920,
+      "status": "ACTIVE"
+    },
+    {
+      "code": "BSC-012",
+      "name": "Pendik-PEN1",
+      "latitude": 40.8897,
+      "longitude": 29.2410,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 850,
+      "status": "ACTIVE"
+    },
+    {
+      "code": "BSC-013",
+      "name": "Bağcılı-BAG1",
+      "latitude": 41.2268,
+      "longitude": 29.2046,
+      "region": "Marmara",
+      "type": "NR_5G",
+      "capacity": 1150,
+      "status": "ACTIVE"
+    },
+    {
+      "code": "BSC-014",
+      "name": "Eyüpsultan-EYU1",
+      "latitude": 41.0667,
+      "longitude": 28.9133,
+      "region": "Marmara",
+      "type": "LTE",
+      "capacity": 750,
+      "status": "ACTIVE"
+    },
+    {
+      "code": "BSC-015",
+      "name": "Avcilar-AVC1",
+      "latitude": 41.0085,
+      "longitude": 28.7454,
+      "region": "Marmara",
+      "type": "NR_5G",
+      "capacity": 1000,
+      "status": "ACTIVE"
+    },
+    {
+      "code": "BSC-016",
+      "name": "İzmir-Alsancak-IZ1",
+      "latitude": 38.4215,
+      "longitude": 27.1467,
+      "region": "Ege",
+      "type": "NR_5G",
+      "capacity": 1100,
+      "status": "ACTIVE"
+    },
+    {
+      "code": "BSC-017",
+      "name": "İzmir-Konak-IZ2",
+      "latitude": 38.4192,
+      "longitude": 27.1441,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 900,
+      "status": "ACTIVE"
+    },
+    {
+      "code": "BSC-018",
+      "name": "Aydın-AYD1",
+      "latitude": 37.8442,
+      "longitude": 27.8454,
+      "region": "Ege",
+      "type": "LTE",
+      "capacity": 650,
+      "status": "ACTIVE"
+    },
+    {
+      "code": "BSC-019",
+      "name": "Ankara-Çankaya-ANK1",
+      "latitude": 39.8817,
+      "longitude": 32.7940,
+      "region": "İç Anadolu",
+      "type": "NR_5G",
+      "capacity": 1050,
+      "status": "ACTIVE"
+    },
+    {
+      "code": "BSC-020",
+      "name": "Ankara-Keçiören-ANK2",
+      "latitude": 39.9500,
+      "longitude": 32.8500,
+      "region": "İç Anadolu",
+      "type": "LTE",
+      "capacity": 800,
+      "status": "ACTIVE"
+    }
+  ],
+  "threshold_configs": [
+    {
+      "metric_name": "cpu_usage",
+      "warning_threshold": 75.0,
+      "critical_threshold": 90.0,
+      "direction": "ABOVE",
+      "is_active": true
+    },
+    {
+      "metric_name": "memory_usage",
+      "warning_threshold": 80.0,
+      "critical_threshold": 95.0,
+      "direction": "ABOVE",
+      "is_active": true
+    },
+    {
+      "metric_name": "packet_loss",
+      "warning_threshold": 5.0,
+      "critical_threshold": 10.0,
+      "direction": "ABOVE",
+      "is_active": true
+    },
+    {
+      "metric_name": "latency",
+      "warning_threshold": 50.0,
+      "critical_threshold": 100.0,
+      "direction": "ABOVE",
+      "is_active": true
+    },
+    {
+      "metric_name": "rssi",
+      "warning_threshold": -80.0,
+      "critical_threshold": -90.0,
+      "direction": "BELOW",
+      "is_active": true
+    },
+    {
+      "metric_name": "connected_users_high",
+      "warning_threshold": 800,
+      "critical_threshold": 950,
+      "direction": "ABOVE",
+      "is_active": true
+    },
+    {
+      "metric_name": "connected_users_low",
+      "warning_threshold": 10,
+      "critical_threshold": 0,
+      "direction": "BELOW",
+      "is_active": true
+    }
+  ]
+}
