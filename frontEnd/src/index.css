@@ -526,23 +526,34 @@ a { color: inherit; text-decoration: none; }
 /* ---- Leaflet overrides ---- */
 .leaflet-tile-pane { filter: saturate(0.3) brightness(0.6) contrast(1.2); }
 
-.station-marker {
-  display: flex; align-items: center; justify-content: center;
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.3);
-  font-size: 10px;
-  font-weight: 700;
-  color: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+.pin-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   transition: transform 0.2s;
 }
 
-.station-marker:hover { transform: scale(1.3); }
-.station-marker.ACTIVE   { background: var(--status-active); }
-.station-marker.WARNING  { background: var(--accent); color: var(--bg-primary); }
-.station-marker.CRITICAL { background: var(--status-critical); animation: pulse-marker 1.5s infinite; }
-.station-marker.OFFLINE  { background: var(--status-offline); }
+.pin-marker:hover { transform: scale(1.2); }
+
+.pin-head {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.3);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.pin-stem {
+  width: 3px;
+  height: 12px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 0 0 2px 2px;
+  margin-top: -2px;
+}
+
+.pin-head.ACTIVE   { background: var(--status-active); }
+.pin-head.WARNING  { background: var(--accent); border-color: rgba(0,0,0,0.2); }
+.pin-head.CRITICAL { background: var(--status-critical); animation: pulse-marker 1.5s infinite; }
+.pin-head.OFFLINE  { background: var(--status-offline); }
 
 @keyframes pulse-marker {
   0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.5); }

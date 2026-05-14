@@ -15,10 +15,15 @@ function createStationIcon(status: string) {
 
   return L.divIcon({
     className: '',
-    html: `<div class="station-marker ${status}" style="background:${color}"></div>`,
-    iconSize: [28, 28],
-    iconAnchor: [14, 14],
-    popupAnchor: [0, -16],
+    html: `
+      <div class="pin-marker ${status}">
+        <div class="pin-head" style="background:${color}"></div>
+        <div class="pin-stem"></div>
+      </div>
+    `,
+    iconSize: [24, 36],
+    iconAnchor: [12, 36],
+    popupAnchor: [0, -32],
   })
 }
 
