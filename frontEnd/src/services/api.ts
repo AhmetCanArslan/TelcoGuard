@@ -6,7 +6,8 @@
 import type {
   BaseStation, Alarm, Metric, DashboardSummary, FieldEngineer,
   AlarmSeverity, AlarmStatus, SummaryOverview, TrendPoint,
-  EngineerAnalytics, FixedIssue, LocationAnalysis
+  EngineerAnalytics, FixedIssue, LocationAnalysis,
+  SimulatorStatus, SimStation, SimulatorEvent
 } from '../types'
 import { getAccessToken, getRefreshToken, setTokens, clearTokens } from './auth'
 
@@ -288,7 +289,26 @@ export async function apiSimulatorInjectAnomaly(
 }
 
 export async function apiSimulatorStatus() {
-  return simFetch<{ running: boolean; stations_count: number; metrics_sent: number }>('/status')
+  return simFetch<SimulatorStatus>('/status')
+}
+
+export async function apiSimulatorStations() {
+  return simFetch<SimStation[]>('/stations')
+}
+
+export async function apiSimulatorSetInterval(tickIntervalMs: number) {
+  return simFetch<{ tick_interval_ms: number }>('/interval', {
+    method: 'PATCH',
+    body: JSON.stringify({ tick_interval_ms: tickIntervalMs }),
+  })
+}
+
+export async function apiSimulatorConfig() {
+  return simFetch<{ tick_interval_ms: number; backend_url: string; server_host: string; server_port: string }>('/config')
+}
+
+export function createSimulatorEventSource(): EventSource {
+  return new EventSource('/api/simulator/stream')
 }
 
 export async function apiLogout(): Promise<void> {

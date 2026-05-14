@@ -58,6 +58,21 @@ func ProxySimulator(c *fiber.Ctx) error {
 	}
 	defer resp.Body.Close()
 
+	// For SSE (text/event-stream), stream directly without buffering
+	if resp.Header.Get("Content-Type") == "text/event-stream" {
+		c.Set("Content-Type", "text/event-stream")
+		c.Set("Cache-Control", "no-cache")
+		c.Set("Connection", "keep-alive")
+		c.Status(resp.StatusCode)
+
+		// Stream the response body directly to the client
+		_, err := io.Copy(c.Response().BodyWriter(), resp.Body)
+		if err != nil {
+			log.Printf("SSE stream error: %v", err)
+		}
+		return nil
+	}
+
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{

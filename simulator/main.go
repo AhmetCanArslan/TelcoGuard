@@ -5,6 +5,9 @@ import (
 	"case1/simulator/engine"
 	"case1/simulator/routes"
 	"log"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -43,6 +46,19 @@ func main() {
 	}))
 
 	routes.Setup(app, runner)
+
+	// Graceful shutdown
+	go func() {
+		sigChan := make(chan os.Signal, 1)
+		signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
+		<-sigChan
+
+		log.Println("🛑 Shutdown signal received, stopping simulator...")
+		runner.Stop()
+		if err := app.Shutdown(); err != nil {
+			log.Printf("❌ Server shutdown error: %v", err)
+		}
+	}()
 
 	addr := config.AppConfig.ServerHost + ":" + config.AppConfig.ServerPort
 	log.Printf("🚀 Simulator starting on http://%s", addr)
