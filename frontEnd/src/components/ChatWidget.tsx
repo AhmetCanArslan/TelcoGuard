@@ -109,7 +109,7 @@ export default function ChatWidget({ initialTarget, onClearInitial }: ChatWidget
             .map((u: any) => ({ id: u.id, name: u.name, is_online: u.is_online }))
         )
       })
-      .catch(() => {})
+      .catch(() => { })
   }, [user])
 
   // Update contacts online status via WS

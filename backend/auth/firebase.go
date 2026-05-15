@@ -10,6 +10,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"strings"
 	"sync"
@@ -367,7 +368,7 @@ func getFirebaseAccessToken() (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, jwt.MapClaims{
 		"iss":   firebaseSA.ClientEmail,
 		"sub":   firebaseSA.ClientEmail,
-		"scope": "https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/firebase.database https://www.googleapis.com/auth/firebase.identitytoolkit",
+		"scope": "https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/identitytoolkit",
 		"aud":   "https://oauth2.googleapis.com/token",
 		"iat":   now.Unix(),
 		"exp":   now.Add(time.Hour).Unix(),
@@ -384,8 +385,10 @@ func getFirebaseAccessToken() (string, error) {
 	}
 
 	// Exchange JWT for access token
-	data := fmt.Sprintf("grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=%s", tokenString)
-	req, err := http.NewRequest("POST", "https://oauth2.googleapis.com/token", strings.NewReader(data))
+	form := url.Values{}
+	form.Set("grant_type", "urn:ietf:params:oauth:grant-type:jwt-bearer")
+	form.Set("assertion", tokenString)
+	req, err := http.NewRequest("POST", "https://oauth2.googleapis.com/token", strings.NewReader(form.Encode()))
 	if err != nil {
 		return "", err
 	}
@@ -397,13 +400,24 @@ func getFirebaseAccessToken() (string, error) {
 	}
 	defer resp.Body.Close()
 
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("oauth token exchange failed (status %d): %s", resp.StatusCode, string(respBody))
+	}
+
 	var result struct {
 		AccessToken string `json:"access_token"`
 		TokenType   string `json:"token_type"`
 		ExpiresIn   int    `json:"expires_in"`
 	}
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+	if err := json.Unmarshal(respBody, &result); err != nil {
 		return "", err
+	}
+	if result.AccessToken == "" {
+		return "", fmt.Errorf("oauth token response missing access_token: %s", string(respBody))
 	}
 
 	return result.AccessToken, nil
@@ -583,5 +597,3 @@ func SendResetPasswordEmail(email string) error {
 	log.Printf("📧 Firebase password reset email sent to %s", email)
 	return nil
 }
-
-
