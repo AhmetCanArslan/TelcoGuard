@@ -32,7 +32,9 @@ func (r *AlarmRepository) FindByFilter(severity, status, stationID string, page,
 	var alarms []models.Alarm
 	var total int64
 
-	query := database.DB.Model(&models.Alarm{}).Preload("Station").Preload("AssignedUser")
+	query := database.DB.Model(&models.Alarm{}).
+		Joins("LEFT JOIN base_stations ON base_stations.id = alarms.station_id").
+		Preload("Station").Preload("AssignedUser")
 
 	if severity != "" {
 		query = query.Where("severity = ?", severity)
@@ -46,7 +48,7 @@ func (r *AlarmRepository) FindByFilter(severity, status, stationID string, page,
 
 	query.Count(&total)
 	offset := (page - 1) * perPage
-	result := query.Order("created_at DESC").Offset(offset).Limit(perPage).Find(&alarms)
+	result := query.Order("base_stations.capacity DESC, alarms.created_at DESC").Offset(offset).Limit(perPage).Find(&alarms)
 	return alarms, total, result.Error
 }
 
@@ -109,4 +111,13 @@ func (r *AlarmRepository) FindResolvedWithEngineer(page, perPage int) ([]models.
 	offset := (page - 1) * perPage
 	result := query.Order("resolved_at DESC").Offset(offset).Limit(perPage).Find(&alarms)
 	return alarms, total, result.Error
+}
+
+func (r *AlarmRepository) FindUnresolvedByStation(stationID uuid.UUID) ([]models.Alarm, error) {
+	var alarms []models.Alarm
+	result := database.DB.Where(
+		"station_id = ? AND status != ?",
+		stationID, models.AlarmStatusResolved,
+	).Find(&alarms)
+	return alarms, result.Error
 }

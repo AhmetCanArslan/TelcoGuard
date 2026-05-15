@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"case1/auth"
-	"case1/config"
 	"case1/database"
 	"case1/models"
 	"case1/utils"
@@ -199,13 +198,13 @@ func SendOTP(c *fiber.Ctx) error {
 
 	auth.SendOTP(req.Contact, req.Method, code)
 
-	if config.AppConfig.Env == "development" && !auth.IsFirebaseEnabled() {
-		return utils.Success(c, fiber.Map{
-			"code": code,
-		}, "OTP sent (dev mode)")
+	if req.Method == "email" && auth.IsSMTPConfigured() {
+		return utils.Success(c, nil, "OTP sent to your email")
 	}
 
-	return utils.Success(c, nil, "OTP sent successfully")
+	return utils.Success(c, fiber.Map{
+		"code": code,
+	}, "OTP sent")
 }
 
 // VerifyOTP godoc
@@ -337,6 +336,82 @@ func GetMe(c *fiber.Ctx) error {
 	}
 	user.Password = ""
 	return utils.Success(c, user, "User retrieved")
+}
+
+func SendPasswordResetEmail(c *fiber.Ctx) error {
+	var req struct {
+		Email string `json:"email"`
+	}
+	if err := c.BodyParser(&req); err != nil {
+		return utils.BadRequest(c, "Invalid request body")
+	}
+	if err := utils.ValidateEmail(req.Email); err != nil {
+		return utils.BadRequest(c, err.Error())
+	}
+
+	var user models.User
+	if err := database.DB.Where("email = ?", req.Email).First(&user).Error; err != nil {
+		return utils.NotFound(c, "Bu e-posta adresiyle kayıtlı kullanıcı bulunamadı")
+	}
+
+	// Sync user to Firebase Auth first so sendOobCode can find them
+	if auth.IsFirebaseEnabled() {
+		if _, err := auth.SyncFirebaseUser(user.Email, user.Phone, user.Name); err != nil {
+			log.Printf("⚠️ Failed to sync user to Firebase before reset: %v", err)
+		}
+	}
+
+	if err := auth.SendResetPasswordEmail(req.Email); err != nil {
+		log.Printf("⚠️ Firebase sendOobCode failed: %v", err)
+		return utils.InternalServerError(c, "Şifre sıfırlama e-postası gönderilemedi")
+	}
+
+	return utils.Success(c, nil, "Password reset email sent")
+}
+
+type ResetPasswordRequest struct {
+	Contact     string `json:"contact"`
+	OTPCode     string `json:"otp_code"`
+	NewPassword string `json:"new_password"`
+}
+
+func ResetPassword(c *fiber.Ctx) error {
+	var req ResetPasswordRequest
+	if err := c.BodyParser(&req); err != nil {
+		return utils.BadRequest(c, "Invalid request body")
+	}
+
+	if req.Contact == "" || req.OTPCode == "" || req.NewPassword == "" {
+		return utils.BadRequest(c, "Contact, OTP code and new password are required")
+	}
+
+	if err := utils.ValidatePassword(req.NewPassword); err != nil {
+		return utils.BadRequest(c, err.Error())
+	}
+
+	otp, err := auth.ValidateOTP(req.Contact, req.OTPCode)
+	if err != nil {
+		return utils.Unauthorized(c, err.Error())
+	}
+	auth.MarkOTPUsed(otp)
+
+	var user models.User
+	result := database.DB.Where("email = ?", req.Contact).First(&user)
+	if result.Error != nil {
+		result = database.DB.Where("phone = ?", req.Contact).First(&user)
+		if result.Error != nil {
+			return utils.NotFound(c, "User not found")
+		}
+	}
+
+	hashed, err := bcrypt.GenerateFromPassword([]byte(req.NewPassword), bcrypt.DefaultCost)
+	if err != nil {
+		return utils.InternalServerError(c, "Failed to hash password")
+	}
+
+	database.DB.Model(&user).Update("password", string(hashed))
+
+	return utils.Success(c, nil, "Password reset successfully")
 }
 
 func Logout(c *fiber.Ctx) error {

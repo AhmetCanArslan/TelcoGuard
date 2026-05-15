@@ -115,6 +115,10 @@ func (s *AlarmService) GetByAssignee(userID uint, status string) ([]models.Alarm
 	return s.repo.FindByAssignee(userID, status)
 }
 
+func (s *AlarmService) GetUnresolvedByStation(stationID uuid.UUID) ([]models.Alarm, error) {
+	return s.repo.FindUnresolvedByStation(stationID)
+}
+
 func (s *AlarmService) DeleteAll() error {
 	return s.repo.DeleteAll()
 }

@@ -117,6 +117,42 @@ export async function apiGetMe() {
   return res.data
 }
 
+/* ---- Firebase Password Reset ---- */
+
+export async function apiSendResetEmail(email: string) {
+  const res = await apiFetch<unknown>('/auth/send-reset-email', {
+    method: 'POST',
+    body: JSON.stringify({ email }),
+  }, false)
+  return res.data
+}
+
+/* ---- OTP & Password Reset (public endpoints) ---- */
+
+export async function apiSendOTP(contact: string, method: string) {
+  const res = await apiFetch<{ code?: string }>('/auth/otp/send', {
+    method: 'POST',
+    body: JSON.stringify({ contact, method }),
+  }, false)
+  return res.data
+}
+
+export async function apiVerifyOTP(contact: string, code: string) {
+  const res = await apiFetch<unknown>('/auth/otp/verify', {
+    method: 'POST',
+    body: JSON.stringify({ contact, code }),
+  }, false)
+  return res.data
+}
+
+export async function apiResetPassword(contact: string, otpCode: string, newPassword: string) {
+  const res = await apiFetch<unknown>('/auth/reset-password', {
+    method: 'POST',
+    body: JSON.stringify({ contact, otp_code: otpCode, new_password: newPassword }),
+  }, false)
+  return res.data
+}
+
 /* ---- Dashboard ---- */
 
 export async function apiGetDashboardSummary() {
@@ -169,6 +205,12 @@ export async function apiGetAlarms(filters?: {
   const res = await apiFetch<Alarm[]>(`/alarms${qs}`)
   return { data: res.data, meta: res.meta }
 }
+
+export async function apiGetMyAlarms() {
+  const res = await apiFetch<Alarm[]>('/alarms/assigned')
+  return res.data
+}
+
 
 export async function apiAcknowledgeAlarm(id: string) {
   const res = await apiFetch<Alarm>(`/alarms/${id}/acknowledge`, { method: 'PATCH' })

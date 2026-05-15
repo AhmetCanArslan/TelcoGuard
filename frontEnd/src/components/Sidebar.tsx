@@ -6,14 +6,16 @@ import {
 } from 'react-icons/fa'
 
 const navItems = [
-  { path: '/',           label: 'Dashboard',            icon: <FaTachometerAlt />, roles: undefined },
-  { path: '/alarms',     label: 'Alarm Yönetimi',       icon: <FaBell />,          roles: ['ADMIN', 'NOC_OPERATOR'] },
+  { path: '/',           label: 'Dashboard',            icon: <FaTachometerAlt />, roles: ['ADMIN', 'NOC_OPERATOR', 'NETWORK_MANAGER'] },
+  { path: '/alarms',     label: 'Alarmlar',             icon: <FaBell />,          roles: ['ADMIN', 'NOC_OPERATOR', 'FIELD_ENGINEER'] },
   { path: '/engineers',  label: 'Saha Mühendisleri',    icon: <FaHardHat />,       roles: ['ADMIN', 'NOC_OPERATOR'] },
   { path: '/reports',    label: 'Raporlama',            icon: <FaChartLine />,     roles: ['ADMIN', 'NOC_OPERATOR'] },
+  { path: '/metrics',    label: 'Metrikler',            icon: <FaChartBar />,     roles: ['ADMIN', 'NOC_OPERATOR'] },
   { path: '/summary',    label: 'Özet & Analiz',        icon: <FaChartBar />,      roles: ['ADMIN', 'NETWORK_MANAGER'] },
   { path: '/simulator',  label: 'Simülatör',            icon: <FaBolt />,          roles: ['ADMIN'] },
   { path: '/users',      label: 'Kullanıcı Yönetimi',   icon: <FaUserShield />,   roles: ['ADMIN'] },
 ]
+
 
 export default function Sidebar() {
   const location = useLocation()

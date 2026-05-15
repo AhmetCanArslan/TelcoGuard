@@ -9,10 +9,18 @@ import AlarmTable from '../components/AlarmTable'
 import { apiGetDashboardSummary, apiGetStations, apiGetAlarms } from '../services/api'
 import { wsService } from '../services/websocket'
 import { useAuth } from '../context/AuthContext'
+import { useNavigate } from 'react-router-dom'
 import type { BaseStation, Alarm, DashboardSummary } from '../types'
 
 export default function Dashboard() {
   const { user } = useAuth()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (user?.role === 'FIELD_ENGINEER') {
+      navigate('/alarms', { replace: true })
+    }
+  }, [user, navigate])
   const [summary, setSummary] = useState<DashboardSummary | null>(null)
   const [stations, setStations] = useState<BaseStation[]>([])
   const [alarms, setAlarms] = useState<Alarm[]>([])

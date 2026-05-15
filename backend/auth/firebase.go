@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"bytes"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/json"
@@ -366,7 +367,7 @@ func getFirebaseAccessToken() (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, jwt.MapClaims{
 		"iss":   firebaseSA.ClientEmail,
 		"sub":   firebaseSA.ClientEmail,
-		"scope": "https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/firebase.database",
+		"scope": "https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/firebase.database https://www.googleapis.com/auth/firebase.identitytoolkit",
 		"aud":   "https://oauth2.googleapis.com/token",
 		"iat":   now.Unix(),
 		"exp":   now.Add(time.Hour).Unix(),
@@ -428,3 +429,159 @@ func parseRSAPrivateKey(keyPEM string) (*rsa.PrivateKey, error) {
 
 	return nil, fmt.Errorf("not an RSA private key")
 }
+
+func SendSMSVerification(phoneNumber string) (string, error) {
+	if !IsFirebaseEnabled() {
+		return "", fmt.Errorf("firebase not enabled")
+	}
+	if config.AppConfig.FirebaseWebAPIKey == "" {
+		return "", fmt.Errorf("FIREBASE_WEB_API_KEY not configured")
+	}
+
+	url := fmt.Sprintf("https://identitytoolkit.googleapis.com/v1/accounts:sendVerificationCode?key=%s", config.AppConfig.FirebaseWebAPIKey)
+
+	body := map[string]interface{}{
+		"phoneNumber": phoneNumber,
+	}
+
+	jsonBody, err := json.Marshal(body)
+	if err != nil {
+		return "", fmt.Errorf("failed to marshal request: %w", err)
+	}
+
+	req, err := http.NewRequest("POST", url, bytes.NewReader(jsonBody))
+	if err != nil {
+		return "", fmt.Errorf("failed to create request: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := firebaseHTTPClient.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("firebase SMS request failed: %w", err)
+	}
+	defer resp.Body.Close()
+
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("failed to read response: %w", err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("firebase SMS error (status %d): %s", resp.StatusCode, string(respBody))
+	}
+
+	var result struct {
+		SessionInfo string `json:"sessionInfo"`
+	}
+	if err := json.Unmarshal(respBody, &result); err != nil {
+		return "", fmt.Errorf("failed to parse Firebase response: %w", err)
+	}
+
+	if result.SessionInfo == "" {
+		return "", fmt.Errorf("firebase returned empty sessionInfo")
+	}
+
+	sessionPreview := result.SessionInfo
+	if len(sessionPreview) > 20 {
+		sessionPreview = sessionPreview[:20]
+	}
+	log.Printf("📱 Firebase SMS sent to %s (sessionInfo: %s...)", phoneNumber, sessionPreview)
+	return result.SessionInfo, nil
+}
+
+func VerifySMSVerification(sessionInfo, code string) (string, error) {
+	if !IsFirebaseEnabled() {
+		return "", fmt.Errorf("firebase not enabled")
+	}
+	if config.AppConfig.FirebaseWebAPIKey == "" {
+		return "", fmt.Errorf("FIREBASE_WEB_API_KEY not configured")
+	}
+
+	url := fmt.Sprintf("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPhoneNumber?key=%s", config.AppConfig.FirebaseWebAPIKey)
+
+	body := map[string]interface{}{
+		"sessionInfo": sessionInfo,
+		"code":        code,
+	}
+
+	jsonBody, err := json.Marshal(body)
+	if err != nil {
+		return "", fmt.Errorf("failed to marshal request: %w", err)
+	}
+
+	req, err := http.NewRequest("POST", url, bytes.NewReader(jsonBody))
+	if err != nil {
+		return "", fmt.Errorf("failed to create request: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := firebaseHTTPClient.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("firebase verify request failed: %w", err)
+	}
+	defer resp.Body.Close()
+
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("failed to read response: %w", err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("firebase SMS verification error (status %d): %s", resp.StatusCode, string(respBody))
+	}
+
+	var result struct {
+		PhoneNumber string `json:"phoneNumber"`
+		LocalID     string `json:"localId"`
+	}
+	if err := json.Unmarshal(respBody, &result); err != nil {
+		return "", fmt.Errorf("failed to parse Firebase response: %w", err)
+	}
+
+	log.Printf("📱 Firebase SMS verified for phone: %s", result.PhoneNumber)
+	return result.PhoneNumber, nil
+}
+
+func SendResetPasswordEmail(email string) error {
+	if config.AppConfig.FirebaseWebAPIKey == "" {
+		return fmt.Errorf("FIREBASE_WEB_API_KEY not configured")
+	}
+
+	url := fmt.Sprintf("https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=%s", config.AppConfig.FirebaseWebAPIKey)
+
+	body := map[string]interface{}{
+		"requestType": "PASSWORD_RESET",
+		"email":       email,
+	}
+
+	jsonBody, err := json.Marshal(body)
+	if err != nil {
+		return fmt.Errorf("failed to marshal request: %w", err)
+	}
+
+	req, err := http.NewRequest("POST", url, bytes.NewReader(jsonBody))
+	if err != nil {
+		return fmt.Errorf("failed to create request: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := firebaseHTTPClient.Do(req)
+	if err != nil {
+		return fmt.Errorf("firebase sendOobCode request failed: %w", err)
+	}
+	defer resp.Body.Close()
+
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Errorf("failed to read response: %w", err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("firebase sendOobCode error (status %d): %s", resp.StatusCode, string(respBody))
+	}
+
+	log.Printf("📧 Firebase password reset email sent to %s", email)
+	return nil
+}
+
+

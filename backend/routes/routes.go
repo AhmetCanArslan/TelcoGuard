@@ -32,6 +32,8 @@ func Setup(app *fiber.App) {
 	authGroup.Post("/otp/send", handlers.SendOTP)
 	authGroup.Post("/otp/verify", handlers.VerifyOTP)
 	authGroup.Post("/refresh", handlers.RefreshToken)
+	authGroup.Post("/reset-password", handlers.ResetPassword)
+	authGroup.Post("/send-reset-email", handlers.SendPasswordResetEmail)
 
 	// Simulator metric ingest (public - uses simulator secret)
 	api.Post("/stations/:id/metrics", auth.SimulatorAuthRequired(), handlers.IngestMetric)

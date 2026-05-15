@@ -1,8 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
 import { FaDownload, FaFilter, FaTimes } from 'react-icons/fa'
 import AlarmTable from '../components/AlarmTable'
-import { apiGetAlarms, apiGetStations, apiAcknowledgeAlarm, apiAssignAlarm, apiResolveAlarm } from '../services/api'
-import type { Alarm, BaseStation, AlarmSeverity, AlarmStatus } from '../types'
+import EngineerSelectModal from '../components/EngineerSelectModal'
+import ResolveModal from '../components/ResolveModal'
+import { apiGetAlarms, apiGetMyAlarms, apiGetStations, apiAcknowledgeAlarm, apiAssignAlarm, apiResolveAlarm } from '../services/api'
+import { useAuth } from '../context/AuthContext'
+import type { Alarm, BaseStation, FieldEngineer, AlarmSeverity, AlarmStatus } from '../types'
 
 function exportToCSV(alarms: Alarm[]) {
   const headers = ['ID', 'İstasyon', 'Metrik', 'Şiddet', 'Durum', 'Mesaj', 'Atanan', 'Çözüm Notu', 'Oluşturulma', 'Çözülme']
@@ -50,36 +53,42 @@ export default function Alarms() {
   const [alarms, setAlarms] = useState<Alarm[]>([])
   const [stations, setStations] = useState<BaseStation[]>([])
   const [loading, setLoading] = useState(true)
+  const [assignTargetAlarmId, setAssignTargetAlarmId] = useState<string | null>(null)
+  const [resolveTargetAlarmId, setResolveTargetAlarmId] = useState<string | null>(null)
   const [filters, setFilters] = useState<AlarmFilters>(emptyFilters)
   const [showFilters, setShowFilters] = useState(false)
+  const { user } = useAuth()
 
   const fetchAlarms = useCallback(async () => {
     try {
-      const params: { severity?: AlarmSeverity; status?: AlarmStatus; station?: string; per_page: number } = { per_page: 200 }
-      if (filters.severity) params.severity = filters.severity as AlarmSeverity
-      if (filters.status) params.status = filters.status as AlarmStatus
-      if (filters.station) params.station = filters.station
+      let data: Alarm[] = []
+      if (user?.role === 'FIELD_ENGINEER') {
+        data = await apiGetMyAlarms()
+      } else {
+        const params: { severity?: AlarmSeverity; status?: AlarmStatus; station?: string; per_page: number } = { per_page: 200 }
+        if (filters.severity) params.severity = filters.severity as AlarmSeverity
+        if (filters.status) params.status = filters.status as AlarmStatus
+        if (filters.station) params.station = filters.station
+        const res = await apiGetAlarms(params)
+        data = res.data
 
-      const res = await apiGetAlarms(params)
-      let data = res.data
-
-      if (filters.dateFrom) {
-        const from = new Date(filters.dateFrom)
-        data = data.filter(a => new Date(a.created_at) >= from)
+        if (filters.dateFrom) {
+          const from = new Date(filters.dateFrom)
+          data = data.filter(a => new Date(a.created_at) >= from)
+        }
+        if (filters.dateTo) {
+          const to = new Date(filters.dateTo)
+          to.setHours(23, 59, 59, 999)
+          data = data.filter(a => new Date(a.created_at) <= to)
+        }
       }
-      if (filters.dateTo) {
-        const to = new Date(filters.dateTo)
-        to.setHours(23, 59, 59, 999)
-        data = data.filter(a => new Date(a.created_at) <= to)
-      }
-
       setAlarms(data)
     } catch {
       // silently fail
     } finally {
       setLoading(false)
     }
-  }, [filters])
+  }, [user, filters])
 
   useEffect(() => {
     fetchAlarms()
@@ -98,18 +107,28 @@ export default function Alarms() {
     } catch { /* show toast in the future */ }
   }
 
-  const handleAssign = async (id: string) => {
+  const handleAssign = (id: string) => {
+    setAssignTargetAlarmId(id)
+  }
+
+  const handleEngineerSelected = async (engineer: FieldEngineer) => {
+    if (!assignTargetAlarmId) return
     try {
-      await apiAssignAlarm(id)
+      await apiAssignAlarm(assignTargetAlarmId, engineer.id)
+      setAssignTargetAlarmId(null)
       fetchAlarms()
     } catch { /* show toast in the future */ }
   }
 
-  const handleResolve = async (id: string) => {
-    const note = prompt('Çözüm notu:')
-    if (!note) return
+  const handleResolve = (id: string) => {
+    setResolveTargetAlarmId(id)
+  }
+
+  const handleResolveConfirm = async (note: string) => {
+    if (!resolveTargetAlarmId) return
     try {
-      await apiResolveAlarm(id, note)
+      await apiResolveAlarm(resolveTargetAlarmId, note)
+      setResolveTargetAlarmId(null)
       fetchAlarms()
     } catch { /* show toast in the future */ }
   }
@@ -219,6 +238,20 @@ export default function Alarms() {
         onAssign={handleAssign}
         onResolve={handleResolve}
       />
+
+      {assignTargetAlarmId && (
+        <EngineerSelectModal
+          onSelect={handleEngineerSelected}
+          onClose={() => setAssignTargetAlarmId(null)}
+        />
+      )}
+
+      {resolveTargetAlarmId && (
+        <ResolveModal
+          onResolve={handleResolveConfirm}
+          onClose={() => setResolveTargetAlarmId(null)}
+        />
+      )}
     </>
   )
 }

@@ -32,6 +32,9 @@ services:
       DB_SSLMODE: disable
       SERVER_PORT: 3000
       SERVER_HOST: 0.0.0.0
+      ENV: development
+      FIREBASE_CREDENTIALS_PATH: /root/config/firebase-credentials.json
+      FIREBASE_WEB_API_KEY: AIzaSyCndrLTVkrWKZzlMP-YCs4CyHUjTzGYotI
       SIMULATOR_URL: http://simulator:3001
       DEFAULT_ADMIN_EMAIL: admin@turkcell.com
       DEFAULT_ADMIN_PASSWORD: admin
@@ -41,6 +44,9 @@ services:
       DEFAULT_SAHA_PASSWORD: saha
       DEFAULT_SEBEKE_EMAIL: sebeke@turkcell.com
       DEFAULT_SEBEKE_PASSWORD: sebeke
+
+    volumes:
+      - ./.config/case1turkcell-firebase-adminsdk-fbsvc-1f7cd7e6ad.json:/root/config/firebase-credentials.json
     depends_on:
       db:
         condition: service_healthy
