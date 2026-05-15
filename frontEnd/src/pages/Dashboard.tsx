@@ -77,7 +77,10 @@ export default function Dashboard() {
   return (
     <>
       <div className="page-header">
-        <h2>Şebeke Dashboard</h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <img src="/turkcell-logo.png" alt="Turkcell" style={{ height: 32, width: 'auto' }} />
+          <h2>Şebeke Dashboard</h2>
+        </div>
         <div className="live-badge">
           <span className="live-dot" />
           Canlı İzleme

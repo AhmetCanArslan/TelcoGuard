@@ -5,7 +5,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { FaShieldAlt, FaEnvelope, FaLock, FaSignInAlt, FaExclamationTriangle } from 'react-icons/fa'
+import { FaEnvelope, FaLock, FaSignInAlt, FaExclamationTriangle } from 'react-icons/fa'
 
 export default function Login() {
   const { login } = useAuth()
@@ -42,9 +42,11 @@ export default function Login() {
       <div className="login-bg-grid" />
       <div className="login-card">
         <div className="login-logo">
-          <div className="login-logo-icon">
-            <FaShieldAlt />
-          </div>
+          <img
+            src="/turkcell-logo.png"
+            alt="Turkcell"
+            style={{ display: 'block', height: 56, width: 'auto', margin: '0 auto 12px' }}
+          />
           <h1>TelcoGuard</h1>
           <p>Şebeke İzleme Platformu</p>
         </div>
