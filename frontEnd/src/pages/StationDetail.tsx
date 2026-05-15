@@ -2,13 +2,13 @@ import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
   FaArrowLeft, FaMicrochip, FaMemory, FaNetworkWired,
-  FaClock, FaSignal, FaUsers
+  FaClock, FaSignal, FaUsers, FaPowerOff, FaPlay
 } from 'react-icons/fa'
 import MetricChart from '../components/MetricChart'
 import AlarmTable from '../components/AlarmTable'
-import { apiGetStation, apiGetStationMetrics, apiGetAlarms } from '../services/api'
+import { apiGetStation, apiGetStationMetrics, apiGetAlarms, apiUpdateStationStatus } from '../services/api'
 import { useAuth } from '../context/AuthContext'
-import type { BaseStation, Metric, Alarm } from '../types'
+import type { BaseStation, Metric, Alarm, StationStatus } from '../types'
 
 export default function StationDetail() {
   const { id } = useParams<{ id: string }>()
@@ -20,8 +20,11 @@ export default function StationDetail() {
   const [alarms, setAlarms] = useState<Alarm[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [statusUpdating, setStatusUpdating] = useState(false)
 
   const canViewAlarms = user?.role === 'NOC_OPERATOR' || user?.role === 'ADMIN'
+  const canToggleStatus = user?.role === 'ADMIN' || user?.role === 'NOC_OPERATOR'
+  const isOffline = station?.status === 'OFFLINE'
 
   const fetchData = useCallback(async () => {
     if (!id) return
@@ -41,11 +44,27 @@ export default function StationDetail() {
     }
   }, [id, canViewAlarms])
 
+  const handleToggleStatus = async () => {
+    if (!station || statusUpdating) return
+    setStatusUpdating(true)
+    try {
+      const newStatus: StationStatus = station.status === 'OFFLINE' ? 'ACTIVE' : 'OFFLINE'
+      const updated = await apiUpdateStationStatus(station.id, newStatus)
+      setStation(updated)
+    } catch (err) {
+      // Silently fail
+    } finally {
+      setStatusUpdating(false)
+    }
+  }
+
   useEffect(() => {
     fetchData()
-    const interval = setInterval(fetchData, 2000)
-    return () => clearInterval(interval)
-  }, [fetchData])
+    if (!isOffline) {
+      const interval = setInterval(fetchData, 2000)
+      return () => clearInterval(interval)
+    }
+  }, [fetchData, isOffline])
 
   if (loading) {
     return <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 120 }}><div className="loading-spinner" /></div>
@@ -75,10 +94,33 @@ export default function StationDetail() {
           <h2>{station.name} <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>({station.code})</span></h2>
           <p>{station.region} • {station.type === 'NR_5G' ? '5G NR' : '4G LTE'} • Kapasite: {station.capacity}</p>
         </div>
-        <span className={`station-status-pill ${station.status}`}>{station.status}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {canToggleStatus && (
+            <button
+              className={`btn-primary ${isOffline ? 'btn-resolve-confirm' : ''}`}
+              onClick={handleToggleStatus}
+              disabled={statusUpdating}
+              style={{
+                background: isOffline 
+                  ? 'linear-gradient(135deg, var(--status-active), #059669)' 
+                  : 'linear-gradient(135deg, var(--status-critical), #DC2626)',
+                padding: '8px 16px',
+              }}
+            >
+              {statusUpdating ? (
+                <span className="loading-spinner" style={{ width: 14, height: 14, borderWidth: 2 }} />
+              ) : isOffline ? (
+                <><FaPlay style={{ marginRight: 6 }} /> Aktif Et</>
+              ) : (
+                <><FaPowerOff style={{ marginRight: 6 }} /> Çevrimdışı Yap</>
+              )}
+            </button>
+          )}
+          <span className={`station-status-pill ${station.status}`}>{station.status}</span>
+        </div>
       </div>
 
-      {latest && (
+      {latest && !isOffline && (
         <div className="stats-grid" style={{ marginBottom: 24 }}>
           <div className="stat-card">
             <div className="stat-icon yellow"><FaMicrochip /></div>
@@ -107,36 +149,48 @@ export default function StationDetail() {
         </div>
       )}
 
-      <div className="metrics-grid">
-        <MetricChart title="CPU Kullanımı" metrics={chartMetrics} dataKey="cpu_usage" unit="%"
-          color="#FFCB05"
-          warningThreshold={{ value: 75, label: 'Uyarı', color: '#FFCB05' }}
-          criticalThreshold={{ value: 90, label: 'Kritik', color: '#EF4444' }}
-        />
-        <MetricChart title="Bellek Kullanımı" metrics={chartMetrics} dataKey="memory_usage" unit="%"
-          color="#1A6BC4"
-          warningThreshold={{ value: 80, label: 'Uyarı', color: '#FFCB05' }}
-          criticalThreshold={{ value: 95, label: 'Kritik', color: '#EF4444' }}
-        />
-        <MetricChart title="Paket Kaybı" metrics={chartMetrics} dataKey="packet_loss" unit="%"
-          color="#EF4444"
-          warningThreshold={{ value: 5, label: 'Uyarı', color: '#FFCB05' }}
-          criticalThreshold={{ value: 10, label: 'Kritik', color: '#EF4444' }}
-        />
-        <MetricChart title="Gecikme (Latency)" metrics={chartMetrics} dataKey="latency" unit="ms"
-          color="#10B981"
-          warningThreshold={{ value: 50, label: 'Uyarı', color: '#FFCB05' }}
-          criticalThreshold={{ value: 100, label: 'Kritik', color: '#EF4444' }}
-        />
-        <MetricChart title="Sinyal Güçlüğü (RSSI)" metrics={chartMetrics} dataKey="rssi" unit="dBm"
-          color="#A78BFA"
-        />
-        <MetricChart title="Bağlı Kullanıcı" metrics={chartMetrics} dataKey="connected_users" unit="adet"
-          color="#FFCB05"
-          warningThreshold={{ value: 800, label: 'Uyarı', color: '#FFCB05' }}
-          criticalThreshold={{ value: 950, label: 'Kritik', color: '#EF4444' }}
-        />
-      </div>
+      {isOffline && (
+        <div className="chart-panel" style={{ marginBottom: 24, textAlign: 'center', padding: 40 }}>
+          <FaPowerOff style={{ fontSize: 48, color: 'var(--status-offline)', marginBottom: 16 }} />
+          <h3 style={{ color: 'var(--text-secondary)', marginBottom: 8 }}>İstasyon Çevrimdışı</h3>
+          <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>
+            Bu istasyon şu anda çevrimdışı. Veri akışı durduruldu ve alarm üretilmiyor.
+          </p>
+        </div>
+      )}
+
+      {!isOffline && (
+        <div className="metrics-grid">
+          <MetricChart title="CPU Kullanımı" metrics={chartMetrics} dataKey="cpu_usage" unit="%"
+            color="#FFCB05"
+            warningThreshold={{ value: 75, label: 'Uyarı', color: '#FFCB05' }}
+            criticalThreshold={{ value: 90, label: 'Kritik', color: '#EF4444' }}
+          />
+          <MetricChart title="Bellek Kullanımı" metrics={chartMetrics} dataKey="memory_usage" unit="%"
+            color="#1A6BC4"
+            warningThreshold={{ value: 80, label: 'Uyarı', color: '#FFCB05' }}
+            criticalThreshold={{ value: 95, label: 'Kritik', color: '#EF4444' }}
+          />
+          <MetricChart title="Paket Kaybı" metrics={chartMetrics} dataKey="packet_loss" unit="%"
+            color="#EF4444"
+            warningThreshold={{ value: 5, label: 'Uyarı', color: '#FFCB05' }}
+            criticalThreshold={{ value: 10, label: 'Kritik', color: '#EF4444' }}
+          />
+          <MetricChart title="Gecikme (Latency)" metrics={chartMetrics} dataKey="latency" unit="ms"
+            color="#10B981"
+            warningThreshold={{ value: 50, label: 'Uyarı', color: '#FFCB05' }}
+            criticalThreshold={{ value: 100, label: 'Kritik', color: '#EF4444' }}
+          />
+          <MetricChart title="Sinyal Güçlüğü (RSSI)" metrics={chartMetrics} dataKey="rssi" unit="dBm"
+            color="#A78BFA"
+          />
+          <MetricChart title="Bağlı Kullanıcı" metrics={chartMetrics} dataKey="connected_users" unit="adet"
+            color="#FFCB05"
+            warningThreshold={{ value: 800, label: 'Uyarı', color: '#FFCB05' }}
+            criticalThreshold={{ value: 950, label: 'Kritik', color: '#EF4444' }}
+          />
+        </div>
+      )}
 
       {canViewAlarms && alarms.length > 0 && (
         <div style={{ marginTop: 24 }}>

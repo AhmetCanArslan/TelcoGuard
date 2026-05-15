@@ -186,6 +186,14 @@ export async function apiGetLatestMetric(id: string) {
   return res.data
 }
 
+export async function apiUpdateStationStatus(id: string, status: string) {
+  const res = await apiFetch<BaseStation>(`/stations/${id}/status`, {
+    method: 'PATCH',
+    body: JSON.stringify({ status }),
+  })
+  return res.data
+}
+
 /* ---- Alarms ---- */
 
 export async function apiGetAlarms(filters?: {

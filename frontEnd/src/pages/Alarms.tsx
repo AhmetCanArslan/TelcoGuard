@@ -236,7 +236,7 @@ export default function Alarms() {
         alarms={alarms}
         onAcknowledge={handleAcknowledge}
         onAssign={handleAssign}
-        onResolve={handleResolve}
+        onResolve={user?.role !== 'NOC_OPERATOR' ? handleResolve : undefined}
       />
 
       {assignTargetAlarmId && (

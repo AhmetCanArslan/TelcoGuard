@@ -13,8 +13,9 @@ import (
 )
 
 var (
-	metricService = services.NewMetricService()
-	anomalyEngine = anomaly.NewEngine()
+	metricService  = services.NewMetricService()
+	anomalyEngine  = anomaly.NewEngine()
+	stationService = services.NewStationService()
 )
 
 func init() {
@@ -46,6 +47,12 @@ func IngestMetric(c *fiber.Ctx) error {
 	stationID, err := uuid.Parse(c.Params("id"))
 	if err != nil {
 		return utils.BadRequest(c, "Invalid station ID")
+	}
+
+	// Check if station is offline - skip metric processing for offline stations
+	station, err := stationService.GetByID(stationID)
+	if err == nil && station.Status == models.StationStatusOffline {
+		return utils.Success(c, nil, "Station is offline, metric ignored")
 	}
 
 	var payload MetricPayload

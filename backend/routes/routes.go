@@ -61,6 +61,7 @@ func Setup(app *fiber.App) {
 	stations.Get("/:id", handlers.GetStation)
 	stations.Get("/:id/metrics", handlers.GetMetrics)
 	stations.Get("/:id/metrics/latest", handlers.GetLatestMetric)
+	stations.Patch("/:id/status", handlers.UpdateStationStatus)
 
 	// Alarms (Management: Admin, NOC | Field Operations: Engineer)
 	alarms := protected.Group("/alarms")
@@ -69,7 +70,7 @@ func Setup(app *fiber.App) {
 	alarms.Get("/:id", auth.RequireRole(models.RoleAdmin, models.RoleNOCOperator, models.RoleFieldEngineer), handlers.GetAlarm)
 	alarms.Patch("/:id/acknowledge", auth.RequireRole(models.RoleAdmin, models.RoleNOCOperator), handlers.AcknowledgeAlarm)
 	alarms.Patch("/:id/assign", auth.RequireRole(models.RoleAdmin, models.RoleNOCOperator), handlers.AssignAlarm)
-	alarms.Patch("/:id/resolve", auth.RequireRole(models.RoleAdmin, models.RoleNOCOperator, models.RoleFieldEngineer), handlers.ResolveAlarm)
+	alarms.Patch("/:id/resolve", auth.RequireRole(models.RoleAdmin, models.RoleFieldEngineer), handlers.ResolveAlarm)
 	alarms.Post("/reset", auth.RequireRole(models.RoleAdmin, models.RoleNOCOperator), handlers.ResetAllAlarms)
 
 	// Dashboard
