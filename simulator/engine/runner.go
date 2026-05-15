@@ -117,6 +117,14 @@ func (r *Runner) InjectAnomaly(stationCode string, anomalyType AnomalyType, dura
 	log.Printf("💉 Injected %s into %s for %d seconds", anomalyType, stationCode, durationSec)
 }
 
+func (r *Runner) ResetAll() {
+	r.anomalyManager.ClearAll()
+	for _, gen := range r.generators {
+		gen.Reset()
+	}
+	log.Println("🔄 Simulator reset — all stations back to normal")
+}
+
 func (r *Runner) GetStatus() map[string]interface{} {
 	r.mu.RLock()
 	defer r.mu.RUnlock()

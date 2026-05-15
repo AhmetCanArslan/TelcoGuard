@@ -14,6 +14,7 @@ import (
 var (
 	alarmService      = services.NewAlarmService()
 	assignmentService = services.NewAssignmentService()
+	stationService    = services.NewStationService()
 )
 
 // ListAlarms godoc
@@ -210,6 +211,7 @@ func ResolveAlarm(c *fiber.Ctx) error {
 	return utils.Success(c, alarm, "Alarm resolved")
 }
 
+<<<<<<< HEAD
 func recalculateStationStatus(stationID uuid.UUID) {
 	unresolved, err := alarmService.GetUnresolvedByStation(stationID)
 	if err != nil {
@@ -254,4 +256,23 @@ func recalculateStationStatus(stationID uuid.UUID) {
 		OldStatus: oldStatus,
 		NewStatus: string(newStatus),
 	})
+}
+
+// ResetAllAlarms godoc
+// @Summary Reset all alarms and stations
+// @Description Delete all alarms and set all stations to ACTIVE status
+// @Tags alarms
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} utils.APIResponse
+// @Router /api/v1/alarms/reset [post]
+func ResetAllAlarms(c *fiber.Ctx) error {
+	if err := alarmService.DeleteAll(); err != nil {
+		return utils.InternalServerError(c, err.Error())
+	}
+	if err := stationService.ResetAllToActive(); err != nil {
+		return utils.InternalServerError(c, err.Error())
+	}
+	go Hub.BroadcastTyped(ws.MessageTypeAlarmUpdate, ws.AlarmPayload{})
+	return utils.Success(c, nil, "All alarms deleted and stations reset to ACTIVE")
 }

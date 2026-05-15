@@ -14,6 +14,7 @@ func Setup(app *fiber.App, runner *engine.Runner) {
 	sim := api.Group("/simulator")
 	sim.Post("/start", handler.StartSimulator(runner))
 	sim.Post("/stop", handler.StopSimulator(runner))
+	sim.Post("/reset", handler.ResetSimulator(runner))
 	sim.Post("/inject-anomaly", handler.InjectAnomaly(runner))
 	sim.Get("/status", handler.Status(runner))
 

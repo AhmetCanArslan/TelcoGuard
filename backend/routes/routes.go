@@ -70,6 +70,7 @@ func Setup(app *fiber.App) {
 	alarms.Patch("/:id/acknowledge", auth.RequireRole(models.RoleAdmin, models.RoleNOCOperator), handlers.AcknowledgeAlarm)
 	alarms.Patch("/:id/assign", auth.RequireRole(models.RoleAdmin, models.RoleNOCOperator), handlers.AssignAlarm)
 	alarms.Patch("/:id/resolve", auth.RequireRole(models.RoleAdmin, models.RoleNOCOperator, models.RoleFieldEngineer), handlers.ResolveAlarm)
+	alarms.Post("/reset", auth.RequireRole(models.RoleAdmin, models.RoleNOCOperator), handlers.ResetAllAlarms)
 
 	// Dashboard
 	protected.Get("/dashboard/summary", handlers.DashboardSummary)

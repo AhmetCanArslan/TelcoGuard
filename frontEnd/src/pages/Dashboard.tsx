@@ -21,18 +21,19 @@ export default function Dashboard() {
       navigate('/alarms', { replace: true })
     }
   }, [user, navigate])
-
   const [summary, setSummary] = useState<DashboardSummary | null>(null)
   const [stations, setStations] = useState<BaseStation[]>([])
   const [alarms, setAlarms] = useState<Alarm[]>([])
   const [error, setError] = useState('')
+
+  const canViewAlarms = user?.role === 'NOC_OPERATOR' || user?.role === 'ADMIN'
 
   const fetchData = useCallback(async () => {
     try {
       const [s, st, al] = await Promise.all([
         apiGetDashboardSummary(),
         apiGetStations(),
-        apiGetAlarms({ per_page: 10 }),
+        canViewAlarms ? apiGetAlarms({ per_page: 10 }) : Promise.resolve({ data: [] }),
       ])
       setSummary(s)
       setStations(st)
@@ -40,7 +41,7 @@ export default function Dashboard() {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Veri yüklenemedi')
     }
-  }, [])
+  }, [canViewAlarms])
 
   useEffect(() => {
     fetchData()
@@ -92,7 +93,7 @@ export default function Dashboard() {
         <NetworkMap stations={stations} />
       </div>
 
-      <AlarmTable alarms={alarms} compact />
+      {canViewAlarms && <AlarmTable alarms={alarms} compact />}
     </>
   )
 }

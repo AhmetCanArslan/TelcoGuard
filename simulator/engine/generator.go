@@ -63,6 +63,11 @@ func (g *Generator) randomInt(base, noise int) int {
 	return base + rand.Intn(noise*2+1) - noise
 }
 
+func (g *Generator) Reset() {
+	// Reset is implicit — the generator always produces normal values
+	// No state to reset, anomalies are cleared separately
+}
+
 func clamp(v, min, max float64) float64 {
 	return math.Max(min, math.Min(max, v))
 }

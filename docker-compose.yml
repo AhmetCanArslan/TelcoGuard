@@ -38,6 +38,15 @@ services:
       SIMULATOR_URL: http://simulator:3001
     volumes:
       - ./.config/case1turkcell-firebase-adminsdk-fbsvc-1f7cd7e6ad.json:/root/config/firebase-credentials.json
+    environment:
+      DEFAULT_ADMIN_EMAIL: admin@turkcell.com
+      DEFAULT_ADMIN_PASSWORD: admin
+      DEFAULT_NOC_EMAIL: noc@turkcell.com
+      DEFAULT_NOC_PASSWORD: noc
+      DEFAULT_SAHA_EMAIL: saha@turkcell.com
+      DEFAULT_SAHA_PASSWORD: saha
+      DEFAULT_SEBEKE_EMAIL: sebeke@turkcell.com
+      DEFAULT_SEBEKE_PASSWORD: sebeke
     depends_on:
       db:
         condition: service_healthy
