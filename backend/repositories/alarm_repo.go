@@ -66,6 +66,22 @@ func (r *AlarmRepository) FindOpenByStationAndMetric(stationID uuid.UUID, metric
 	return &alarm, nil
 }
 
+func (r *AlarmRepository) FindOpenByStation(stationID uuid.UUID) (*models.Alarm, error) {
+	var alarm models.Alarm
+	result := database.DB.Where(
+		"station_id = ? AND status != ? AND created_at > ?",
+		stationID, models.AlarmStatusResolved, time.Now().Add(-5*time.Minute),
+	).First(&alarm)
+
+	if result.Error == gorm.ErrRecordNotFound {
+		return nil, nil
+	}
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &alarm, nil
+}
+
 func (r *AlarmRepository) FindByAssignee(userID uint, status string) ([]models.Alarm, error) {
 	var alarms []models.Alarm
 	query := database.DB.Where("assigned_to = ?", userID).Preload("Station")

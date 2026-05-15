@@ -1,16 +1,14 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import {
-  FaBroadcastTower, FaBolt, FaPlay, FaStop,
-  FaClipboardList, FaTrash, FaPowerOff, FaServer,
-  FaClock, FaCheckCircle, FaExclamationTriangle,
-  FaTimesCircle, FaSignal, FaTachometerAlt, FaUsers,
-  FaMicrochip, FaUserTimes, FaStopwatch, FaCloudRain, FaBan
+  FaBolt, FaPlay, FaStop, FaTrash, FaPowerOff, FaServer,
+  FaCheckCircle, FaExclamationTriangle, FaSignal, FaTachometerAlt,
+  FaMicrochip, FaUserTimes, FaStopwatch, FaCloudRain, FaBan, FaList
 } from 'react-icons/fa'
 import {
   apiSimulatorStart, apiSimulatorStop,
   apiSimulatorInjectAnomaly, apiSimulatorStatus,
   apiSimulatorStations, apiSimulatorSetInterval,
-  createSimulatorEventSource
+  apiResetAllAlarms, createSimulatorEventSource
 } from '../services/api'
 import type { AnomalyType, SimStation, SimulatorStatus, SimulatorEvent, TickSummary, AnomalyHistoryEntry } from '../types'
 
@@ -187,6 +185,19 @@ export default function SimulatorControl() {
     }
   }
 
+  const resetAll = async () => {
+    if (!confirm('Tüm istasyonları yeşile çevirip tüm alarmları silmek istediğinize emin misiniz?')) return
+    setActionLoading(true)
+    try {
+      await apiResetAllAlarms()
+      addLog('Tüm istasyonlar yeşile çevrildi ve alarmlar silindi', 'success')
+    } catch (err) {
+      addLog('Hata: ' + (err instanceof Error ? err.message : 'Sıfırlama başarısız'), 'error')
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
   // Normalize anomalies from backend (handles both old single-object and new array formats)
   const activeAnomalies = normalizeAnomalies(status?.active_anomalies)
   const anomalyEntries = Object.entries(activeAnomalies).flatMap(([stationCode, anomalies]) =>
@@ -227,9 +238,14 @@ export default function SimulatorControl() {
             transition: 'all 0.3s',
           }} title={sseConnected ? 'SSE Bağlı' : 'SSE Bağlı Değil'} />
         </div>
-        <button className="btn-primary" onClick={toggleSimulator} disabled={actionLoading}>
-          {status?.running ? <><FaStop /> Durdur</> : <><FaPlay /> Başlat</>}
-        </button>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button className="btn-primary" onClick={resetAll} disabled={actionLoading} style={{ background: 'linear-gradient(135deg, #10b981, #059669)' }}>
+            <FaCheckCircle /> Sıfırla
+          </button>
+          <button className="btn-primary" onClick={toggleSimulator} disabled={actionLoading}>
+            {status?.running ? <><FaStop /> Durdur</> : <><FaPlay /> Başlat</>}
+          </button>
+        </div>
       </div>
 
       {/* Status Cards */}
@@ -533,7 +549,7 @@ export default function SimulatorControl() {
         {/* Event Log */}
         <div className="alarm-panel">
           <div className="alarm-panel-header">
-            <h3><FaClipboardList /> Olay Günlüğü</h3>
+            <h3><FaList /> Olay Günlüğü</h3>
             <button className="filter-btn" onClick={() => setLogs([])}><FaTrash /> Temizle</button>
           </div>
           <div style={{ padding: 16, maxHeight: 300, overflowY: 'auto' }}>

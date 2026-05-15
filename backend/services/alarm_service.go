@@ -20,21 +20,21 @@ func NewAlarmService() *AlarmService {
 }
 
 func (s *AlarmService) CreateOrUpdate(stationID uuid.UUID, metricName string, severity models.AlarmSeverity, message string) (*models.Alarm, error) {
-	// Check for duplicate within 5 minutes
-	existing, err := s.repo.FindOpenByStationAndMetric(stationID, metricName)
+	// Check for any open alarm for this station within 5 minutes
+	existing, err := s.repo.FindOpenByStation(stationID)
 	if err != nil {
 		return nil, err
 	}
 
 	if existing != nil {
-		// Update existing alarm
-		existing.Severity = severity
-		existing.Message = message
-		existing.CreatedAt = time.Now()
+		// Resolve previous alarm and create new one
+		now := time.Now()
+		existing.Status = models.AlarmStatusResolved
+		existing.ResolutionNote = "Replaced by new alarm"
+		existing.ResolvedAt = &now
 		if err := s.repo.Update(existing); err != nil {
 			return nil, err
 		}
-		return existing, nil
 	}
 
 	// Create new alarm
