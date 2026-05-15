@@ -172,8 +172,44 @@ func AssignAlarm(c *fiber.Ctx) error {
 	return utils.Success(c, alarm, "Alarm assigned")
 }
 
+type RejectRequest struct {
+	RejectionNote string `json:"rejection_note"`
+}
+
 type ResolveRequest struct {
 	ResolutionNote string `json:"resolution_note"`
+}
+
+// RejectAlarm godoc
+// @Summary Reject alarm
+// @Description Reject an assigned alarm (field engineer cannot handle it)
+// @Tags alarms
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path string true "Alarm ID (UUID)"
+// @Param request body RejectRequest true "Rejection details"
+// @Success 200 {object} utils.APIResponse{data=models.Alarm}
+// @Failure 400 {object} utils.APIResponse
+// @Router /api/v1/alarms/{id}/reject [patch]
+func RejectAlarm(c *fiber.Ctx) error {
+	id, err := uuid.Parse(c.Params("id"))
+	if err != nil {
+		return utils.BadRequest(c, "Invalid alarm ID")
+	}
+
+	var req RejectRequest
+	if err := c.BodyParser(&req); err != nil {
+		return utils.BadRequest(c, "Invalid request body")
+	}
+
+	alarm, err := alarmService.Reject(id, req.RejectionNote)
+	if err != nil {
+		return utils.BadRequest(c, err.Error())
+	}
+	go Hub.BroadcastTyped(ws.MessageTypeAlarmUpdate, ws.AlarmPayload{Alarm: alarm})
+
+	return utils.Success(c, alarm, "Alarm rejected")
 }
 
 // ResolveAlarm godoc

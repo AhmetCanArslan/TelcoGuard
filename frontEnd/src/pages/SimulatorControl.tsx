@@ -55,6 +55,7 @@ export default function SimulatorControl() {
   const [actionLoading, setActionLoading] = useState(false)
   const [sseConnected, setSseConnected] = useState(false)
   const [now, setNow] = useState(Date.now())
+  const [justInjected, setJustInjected] = useState<string | null>(null)
   const esRef = useRef<EventSource | null>(null)
 
   const addLog = (msg: string, type: 'info' | 'error' | 'success' | 'warn' = 'info') => {
@@ -103,6 +104,8 @@ export default function SimulatorControl() {
           } else if (msg.type === 'anomaly_injected') {
             const a = msg.payload as AnomalyHistoryEntry
             addLog(`Anomali enjekte edildi: ${a.anomaly_type} → ${a.station_code}`, 'info')
+            setJustInjected(a.station_code)
+            setTimeout(() => setJustInjected(null), 2000)
           } else if (msg.type === 'anomaly_expired') {
             const a = msg.payload as AnomalyHistoryEntry
             addLog(`Anomali süresi doldu: ${a.anomaly_type} → ${a.station_code}`, 'warn')
@@ -460,14 +463,16 @@ export default function SimulatorControl() {
               const hasActive = stationAnomalies.length > 0
               const primaryAnomaly = hasActive ? stationAnomalies[0] : null
               const primaryInfo = primaryAnomaly ? anomalyTypes.find(a => a.value === primaryAnomaly.type) : null
+              const isJustInjected = justInjected === s.code
               return (
                 <div key={s.code} style={{
                   padding: 12,
                   borderRadius: 'var(--radius-sm)',
-                  background: hasActive ? `${primaryInfo?.color || '#ef4444'}10` : 'rgba(255,255,255,0.02)',
-                  border: `1px solid ${hasActive ? (primaryInfo?.color || '#ef4444') + '40' : 'var(--border-color)'}`,
+                  background: isJustInjected ? 'rgba(255,203,5,0.25)' : (hasActive ? `${primaryInfo?.color || '#ef4444'}10` : 'rgba(255,255,255,0.02)'),
+                  border: `1px solid ${isJustInjected ? '#FFCB05' : (hasActive ? (primaryInfo?.color || '#ef4444') + '40' : 'var(--border-color)')}`,
+                  boxShadow: isJustInjected ? '0 0 20px rgba(255,203,5,0.5)' : 'none',
                   cursor: 'pointer',
-                  transition: 'all 0.15s',
+                  transition: 'all 0.3s',
                 }} onClick={() => setSelectedStation(s.code)}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                     <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)', fontFamily: 'var(--font-data)' }}>{s.code}</span>

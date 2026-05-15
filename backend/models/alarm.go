@@ -20,6 +20,7 @@ const (
 	AlarmStatusAcknowledged  AlarmStatus = "ACKNOWLEDGED"
 	AlarmStatusInProgress    AlarmStatus = "IN_PROGRESS"
 	AlarmStatusResolved      AlarmStatus = "RESOLVED"
+	AlarmStatusRejected      AlarmStatus = "REJECTED"
 )
 
 type Alarm struct {
@@ -33,9 +34,11 @@ type Alarm struct {
 	AssignedTo      *uint         `gorm:"index" json:"assigned_to,omitempty"`
 	AssignedUser    *User         `gorm:"foreignKey:AssignedTo" json:"assigned_user,omitempty"`
 	ResolutionNote  string        `gorm:"type:text" json:"resolution_note,omitempty"`
+	RejectionNote   string        `gorm:"type:text" json:"rejection_note,omitempty"`
 	CreatedAt       time.Time     `gorm:"not null;index" json:"created_at"`
 	AcknowledgedAt  *time.Time    `json:"acknowledged_at,omitempty"`
 	ResolvedAt      *time.Time    `json:"resolved_at,omitempty"`
+	RejectedAt      *time.Time    `json:"rejected_at,omitempty"`
 }
 
 func (Alarm) TableName() string {

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FaBell, FaExclamationCircle, FaExclamationTriangle, FaCheck, FaUserPlus } from 'react-icons/fa'
+import { FaBell, FaExclamationCircle, FaExclamationTriangle, FaCheck, FaTimes, FaUserPlus } from 'react-icons/fa'
 import type { Alarm, AlarmStatus } from '../types'
 
 interface Props {
@@ -9,6 +9,7 @@ interface Props {
   onAcknowledge?: (id: string) => void
   onAssign?: (id: string) => void
   onResolve?: (id: string) => void
+  onReject?: (id: string) => void
 }
 
 const statusLabels: Record<AlarmStatus, string> = {
@@ -16,9 +17,10 @@ const statusLabels: Record<AlarmStatus, string> = {
   ACKNOWLEDGED: 'Kabul Edildi',
   IN_PROGRESS: 'Müdahale',
   RESOLVED: 'Çözüldü',
+  REJECTED: 'Reddedildi',
 }
 
-export default function AlarmTable({ alarms, compact = false, onAcknowledge, onAssign, onResolve }: Props) {
+export default function AlarmTable({ alarms, compact = false, onAcknowledge, onAssign, onResolve, onReject }: Props) {
   const navigate = useNavigate()
   const [filter, setFilter] = useState<string>('ALL')
 
@@ -58,8 +60,9 @@ export default function AlarmTable({ alarms, compact = false, onAcknowledge, onA
             <th>Durum</th>
             <th>Mesaj</th>
             <th>Zaman</th>
+            {!compact && <th>Not</th>}
             {!compact && <th>Atanan</th>}
-            {!compact && (onAcknowledge || onAssign || onResolve) && <th>İşlem</th>}
+            {!compact && (onAcknowledge || onAssign || onResolve || onReject) && <th>İşlem</th>}
           </tr>
         </thead>
         <tbody>
@@ -87,11 +90,16 @@ export default function AlarmTable({ alarms, compact = false, onAcknowledge, onA
                 {new Date(alarm.created_at).toLocaleTimeString('tr-TR')}
               </td>
               {!compact && (
+                <td style={{ fontSize: 12, color: 'var(--text-muted)', maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {alarm.rejection_note || alarm.resolution_note || '—'}
+                </td>
+              )}
+              {!compact && (
                 <td style={{ color: alarm.assigned_user ? 'var(--text-primary)' : 'var(--text-muted)' }}>
                   {alarm.assigned_user?.name || '—'}
                 </td>
               )}
-              {!compact && (onAcknowledge || onAssign || onResolve) && (
+              {!compact && (onAcknowledge || onAssign || onResolve || onReject) && (
                 <td onClick={e => e.stopPropagation()}>
                   <div className="alarm-actions">
                     {alarm.status === 'OPEN' && onAcknowledge && (
@@ -104,9 +112,14 @@ export default function AlarmTable({ alarms, compact = false, onAcknowledge, onA
                         <FaUserPlus />
                       </button>
                     )}
-                    {alarm.status !== 'RESOLVED' && onResolve && (
+                    {alarm.status !== 'RESOLVED' && alarm.status !== 'REJECTED' && onResolve && (
                       <button className="alarm-action-btn resolve" onClick={() => onResolve(alarm.id)} title="Çöz">
                         <FaCheck />
+                      </button>
+                    )}
+                    {alarm.status === 'IN_PROGRESS' && onReject && (
+                      <button className="alarm-action-btn reject" onClick={() => onReject(alarm.id)} title="Reddet">
+                        <FaTimes />
                       </button>
                     )}
                   </div>

@@ -994,6 +994,7 @@ a { color: inherit; text-decoration: none; }
 .status-badge.ACKNOWLEDGED  { background: rgba(255,203,5,0.1); color: var(--accent); }
 .status-badge.IN_PROGRESS   { background: rgba(3,78,162,0.15); color: var(--primary-light); }
 .status-badge.RESOLVED      { background: rgba(16,185,129,0.1); color: var(--status-active); }
+.status-badge.REJECTED      { background: rgba(239,68,68,0.1); color: #ef4444; }
 
 /* Alarm action buttons */
 .alarm-actions { display: flex; gap: 4px; }
@@ -1006,6 +1007,7 @@ a { color: inherit; text-decoration: none; }
 }
 .alarm-action-btn:hover { background: var(--accent-glow); color: var(--accent); }
 .alarm-action-btn.resolve:hover { background: rgba(16,185,129,0.1); color: var(--status-active); }
+.alarm-action-btn.reject:hover { background: rgba(239,68,68,0.1); color: #ef4444; }
 
 /* ---- Charts ---- */
 .chart-panel {

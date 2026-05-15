@@ -85,6 +85,28 @@ func (s *AlarmService) Assign(alarmID uuid.UUID, userID uint) (*models.Alarm, er
 	return alarm, nil
 }
 
+func (s *AlarmService) Reject(alarmID uuid.UUID, rejectionNote string) (*models.Alarm, error) {
+	alarm, err := s.repo.FindByID(alarmID)
+	if err != nil {
+		return nil, err
+	}
+	if alarm.Status != models.AlarmStatusInProgress {
+		return nil, fmt.Errorf("alarm is not in progress")
+	}
+	if alarm.AssignedTo == nil {
+		return nil, fmt.Errorf("alarm is not assigned to anyone")
+	}
+	now := time.Now()
+	alarm.Status = models.AlarmStatusRejected
+	alarm.AssignedTo = nil
+	alarm.RejectionNote = rejectionNote
+	alarm.RejectedAt = &now
+	if err := s.repo.Update(alarm); err != nil {
+		return nil, err
+	}
+	return alarm, nil
+}
+
 func (s *AlarmService) Resolve(alarmID uuid.UUID, resolutionNote string) (*models.Alarm, error) {
 	alarm, err := s.repo.FindByID(alarmID)
 	if err != nil {

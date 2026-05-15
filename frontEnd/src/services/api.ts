@@ -233,6 +233,14 @@ export async function apiAssignAlarm(id: string, userId?: number) {
   return res.data
 }
 
+export async function apiRejectAlarm(id: string, rejectionNote: string) {
+  const res = await apiFetch<Alarm>(`/alarms/${id}/reject`, {
+    method: 'PATCH',
+    body: JSON.stringify({ rejection_note: rejectionNote }),
+  })
+  return res.data
+}
+
 export async function apiResolveAlarm(id: string, resolutionNote: string) {
   const res = await apiFetch<Alarm>(`/alarms/${id}/resolve`, {
     method: 'PATCH',
