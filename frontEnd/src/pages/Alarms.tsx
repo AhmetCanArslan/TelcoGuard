@@ -1,16 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
 import { FaDownload, FaFilter, FaTimes } from 'react-icons/fa'
 import AlarmTable from '../components/AlarmTable'
-<<<<<<< HEAD
 import EngineerSelectModal from '../components/EngineerSelectModal'
 import ResolveModal from '../components/ResolveModal'
-import { apiGetAlarms, apiGetMyAlarms, apiAcknowledgeAlarm, apiAssignAlarm, apiResolveAlarm } from '../services/api'
+import { apiGetAlarms, apiGetMyAlarms, apiGetStations, apiAcknowledgeAlarm, apiAssignAlarm, apiResolveAlarm } from '../services/api'
 import { useAuth } from '../context/AuthContext'
-import type { Alarm, FieldEngineer } from '../types'
-=======
-import { apiGetAlarms, apiGetStations, apiAcknowledgeAlarm, apiAssignAlarm, apiResolveAlarm } from '../services/api'
-import type { Alarm, BaseStation, AlarmSeverity, AlarmStatus } from '../types'
->>>>>>> 3f87a8002121cffcc3b1b08684aec670e6bb4334
+import type { Alarm, BaseStation, FieldEngineer, AlarmSeverity, AlarmStatus } from '../types'
 
 function exportToCSV(alarms: Alarm[]) {
   const headers = ['ID', 'İstasyon', 'Metrik', 'Şiddet', 'Durum', 'Mesaj', 'Atanan', 'Çözüm Notu', 'Oluşturulma', 'Çözülme']

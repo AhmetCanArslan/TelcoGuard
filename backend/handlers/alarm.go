@@ -14,7 +14,6 @@ import (
 var (
 	alarmService      = services.NewAlarmService()
 	assignmentService = services.NewAssignmentService()
-	stationService    = services.NewStationService()
 )
 
 // ListAlarms godoc
@@ -211,7 +210,6 @@ func ResolveAlarm(c *fiber.Ctx) error {
 	return utils.Success(c, alarm, "Alarm resolved")
 }
 
-<<<<<<< HEAD
 func recalculateStationStatus(stationID uuid.UUID) {
 	unresolved, err := alarmService.GetUnresolvedByStation(stationID)
 	if err != nil {
