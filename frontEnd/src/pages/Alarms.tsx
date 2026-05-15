@@ -3,7 +3,7 @@ import { FaDownload, FaFilter, FaTimes } from 'react-icons/fa'
 import AlarmTable from '../components/AlarmTable'
 import EngineerSelectModal from '../components/EngineerSelectModal'
 import ResolveModal from '../components/ResolveModal'
-import { apiGetAlarms, apiGetMyAlarms, apiGetStations, apiAcknowledgeAlarm, apiAssignAlarm, apiResolveAlarm } from '../services/api'
+import { apiGetAlarms, apiGetMyAlarms, apiGetStations, apiAcknowledgeAlarm, apiAssignAlarm, apiResolveAlarm, apiRejectAlarm } from '../services/api'
 import { useAuth } from '../context/AuthContext'
 import type { Alarm, BaseStation, FieldEngineer, AlarmSeverity, AlarmStatus } from '../types'
 
@@ -55,6 +55,7 @@ export default function Alarms() {
   const [loading, setLoading] = useState(true)
   const [assignTargetAlarmId, setAssignTargetAlarmId] = useState<string | null>(null)
   const [resolveTargetAlarmId, setResolveTargetAlarmId] = useState<string | null>(null)
+  const [rejectTargetAlarmId, setRejectTargetAlarmId] = useState<string | null>(null)
   const [filters, setFilters] = useState<AlarmFilters>(emptyFilters)
   const [showFilters, setShowFilters] = useState(false)
   const { user } = useAuth()
@@ -82,6 +83,26 @@ export default function Alarms() {
           data = data.filter(a => new Date(a.created_at) <= to)
         }
       }
+
+      const now = new Date()
+      const fiveMinAgo = new Date(now.getTime() - 5 * 60 * 1000)
+      const latestByStation = new Map<string, Alarm>()
+
+      for (const alarm of data) {
+        if (alarm.status === 'RESOLVED') continue
+        const alarmTime = new Date(alarm.created_at)
+        if (alarmTime < fiveMinAgo) continue
+        
+        const existing = latestByStation.get(alarm.station_id)
+        if (!existing || alarmTime > new Date(existing.created_at)) {
+          latestByStation.set(alarm.station_id, alarm)
+        }
+      }
+
+      data = Array.from(latestByStation.values()).sort((a, b) => 
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      )
+
       setAlarms(data)
     } catch {
       // silently fail
@@ -129,6 +150,19 @@ export default function Alarms() {
     try {
       await apiResolveAlarm(resolveTargetAlarmId, note)
       setResolveTargetAlarmId(null)
+      fetchAlarms()
+    } catch { /* show toast in the future */ }
+  }
+
+  const handleReject = (id: string) => {
+    setRejectTargetAlarmId(id)
+  }
+
+  const handleRejectConfirm = async (note: string) => {
+    if (!rejectTargetAlarmId) return
+    try {
+      await apiRejectAlarm(rejectTargetAlarmId, note)
+      setRejectTargetAlarmId(null)
       fetchAlarms()
     } catch { /* show toast in the future */ }
   }
@@ -208,6 +242,7 @@ export default function Alarms() {
                 <option value="ACKNOWLEDGED">Kabul Edildi</option>
                 <option value="IN_PROGRESS">Müdahale</option>
                 <option value="RESOLVED">Çözüldü</option>
+                <option value="REJECTED">Reddedildi</option>
               </select>
             </div>
             <div className="filter-group">
@@ -237,6 +272,7 @@ export default function Alarms() {
         onAcknowledge={handleAcknowledge}
         onAssign={handleAssign}
         onResolve={user?.role !== 'NOC_OPERATOR' ? handleResolve : undefined}
+        onReject={user?.role === 'FIELD_ENGINEER' ? handleReject : undefined}
       />
 
       {assignTargetAlarmId && (
@@ -250,6 +286,16 @@ export default function Alarms() {
         <ResolveModal
           onResolve={handleResolveConfirm}
           onClose={() => setResolveTargetAlarmId(null)}
+        />
+      )}
+
+      {rejectTargetAlarmId && (
+        <ResolveModal
+          onResolve={handleRejectConfirm}
+          onClose={() => setRejectTargetAlarmId(null)}
+          title="Reddetme Nedeni"
+          confirmLabel="Reddet"
+          placeholder="Reddetme nedenini kısaca açıklayın..."
         />
       )}
     </>

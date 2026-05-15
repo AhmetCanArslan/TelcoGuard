@@ -30,7 +30,7 @@ export interface Metric {
 }
 
 export type AlarmSeverity = 'WARNING' | 'CRITICAL';
-export type AlarmStatus = 'OPEN' | 'ACKNOWLEDGED' | 'IN_PROGRESS' | 'RESOLVED';
+export type AlarmStatus = 'OPEN' | 'ACKNOWLEDGED' | 'IN_PROGRESS' | 'RESOLVED' | 'REJECTED';
 
 export interface Alarm {
   id: string;
@@ -43,9 +43,11 @@ export interface Alarm {
   assigned_to?: number;
   assigned_user?: { id: number; name: string; email: string; role: string };
   resolution_note?: string;
+  rejection_note?: string;
   created_at: string;
   acknowledged_at?: string;
   resolved_at?: string;
+  rejected_at?: string;
 }
 
 export interface DashboardSummary {

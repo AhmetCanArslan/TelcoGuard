@@ -4,9 +4,12 @@ import { FaTimes, FaCheck } from 'react-icons/fa'
 interface Props {
   onResolve: (note: string) => void
   onClose: () => void
+  title?: string
+  confirmLabel?: string
+  placeholder?: string
 }
 
-export default function ResolveModal({ onResolve, onClose }: Props) {
+export default function ResolveModal({ onResolve, onClose, title = 'Çözüm Notu', confirmLabel = 'Çöz', placeholder = 'Çözüm ile ilgili kısa bir açıklama yazın...' }: Props) {
   const [note, setNote] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -35,7 +38,7 @@ export default function ResolveModal({ onResolve, onClose }: Props) {
     <div className="modal-overlay" onClick={handleOverlayClick}>
       <div className="modal-card">
         <div className="modal-header">
-          <h3>Cozum Notu</h3>
+          <h3>{title}</h3>
           <button className="modal-close-btn" onClick={onClose}>
             <FaTimes />
           </button>
@@ -48,7 +51,7 @@ export default function ResolveModal({ onResolve, onClose }: Props) {
             value={note}
             onChange={e => setNote(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Cozum ile ilgili kisa bir aciklama yazin..."
+            placeholder={placeholder}
             rows={4}
           />
 
@@ -62,7 +65,7 @@ export default function ResolveModal({ onResolve, onClose }: Props) {
               disabled={!note.trim()}
             >
               <FaCheck />
-              Coz
+              {confirmLabel}
             </button>
           </div>
         </div>
