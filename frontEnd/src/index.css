@@ -1102,6 +1102,37 @@ a { color: inherit; text-decoration: none; }
   gap: 8px;
 }
 
+/* ---- Chat Contact List ---- */
+.chat-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: all var(--transition);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.chat-contact-item:hover {
+  background: var(--accent-glow);
+}
+.chat-contact-item.offline { opacity: 0.6; }
+.chat-contact-item.offline:hover { opacity: 1; }
+
+.chat-contact-avatar {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+  color: var(--accent);
+  border: 2px solid var(--status-active);
+  font-family: var(--font-data);
+  flex-shrink: 0;
+}
+.chat-contact-avatar.offline {
+  border-color: var(--status-offline);
+}
+
 /* ---- Chat Bubbles ---- */
 .chat-bubble {
   max-width: 78%;

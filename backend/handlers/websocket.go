@@ -3,6 +3,7 @@ package handlers
 import (
 	"case1/auth"
 	"case1/websocket"
+	"log"
 
 	fiberws "github.com/gofiber/websocket/v2"
 )
@@ -19,9 +20,15 @@ func WebSocketHandler(c *fiberws.Conn) {
 	tokenString := c.Query("token")
 	var userID uint
 
-	if tokenString != "" {
+	if tokenString == "" {
+		log.Printf("🔑 WS: No token provided")
+	} else {
+		log.Printf("🔑 WS: Token received (len=%d, prefix=%s...)", len(tokenString), tokenString[:min(20, len(tokenString))])
 		if claims, err := auth.ValidateAccessToken(tokenString); err == nil {
 			userID = claims.UserID
+			log.Printf("🔑 WS: Token valid, UserID=%d", userID)
+		} else {
+			log.Printf("🔑 WS: Token invalid: %v", err)
 		}
 	}
 
@@ -31,4 +38,11 @@ func WebSocketHandler(c *fiberws.Conn) {
 
 	go client.WriteMessage()
 	client.ReadMessage()
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }
