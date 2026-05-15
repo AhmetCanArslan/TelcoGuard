@@ -10,6 +10,8 @@ export type WSMessageType =
   | 'alarm_update'
   | 'dashboard_snapshot'
   | 'user_status'
+  | 'chat_message'
+  | 'forward_alarm'
 
 export interface WSMessage {
   type: WSMessageType
@@ -35,7 +37,7 @@ class WebSocketService {
     if (this.ws?.readyState === WebSocket.OPEN) return
 
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
-    const token = localStorage.getItem('telcoguard_access_token')
+    const token = localStorage.getItem('tg_access_token')
     this.url = `${protocol}//${window.location.host}/ws${token ? `?token=${token}` : ''}`
 
     try {
@@ -75,6 +77,15 @@ class WebSocketService {
     }
     this.ws?.close()
     this.ws = null
+  }
+
+  /** Send a typed message to the backend via WebSocket */
+  send(msg: WSMessage) {
+    if (this.ws?.readyState === WebSocket.OPEN) {
+      this.ws.send(JSON.stringify(msg))
+    } else {
+      console.warn('[WS] Cannot send – socket not open')
+    }
   }
 
   on(type: WSMessageType, listener: Listener) {
