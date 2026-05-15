@@ -317,7 +317,6 @@ export default function Dashboard() {
 
   return (
     <div className="dash-v2">
-      <ParticleField />
 
       {/* ---- Header ---- */}
       <motion.div
@@ -338,8 +337,6 @@ export default function Dashboard() {
         <div className="dash-header-right">
           <motion.div
             className="dash-time-display"
-            animate={{ opacity: [0.7, 1, 0.7] }}
-            transition={{ duration: 3, repeat: Infinity }}
           >
             {timeStr}
           </motion.div>

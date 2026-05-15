@@ -251,7 +251,6 @@ a { color: inherit; text-decoration: none; }
     transparent 60%
   );
   background-size: 200% 100%;
-  animation: shimmerSlide 5s ease-in-out infinite;
   pointer-events: none;
 }
 
@@ -2246,7 +2245,6 @@ a { color: inherit; text-decoration: none; }
   inset: 0;
   background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.02) 50%, transparent 60%);
   background-size: 200% 100%;
-  animation: shimmerSlide 5s ease-in-out infinite;
   pointer-events: none;
 }
 

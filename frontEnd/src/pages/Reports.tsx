@@ -202,7 +202,6 @@ export default function Reports() {
 
   return (
     <div className="rpt-page">
-      <ReportParticles />
 
       {/* Header */}
       <motion.div className="rpt-header" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
@@ -408,8 +407,6 @@ export default function Reports() {
                           <td>
                             <div className="rpt-health-indicator">
                               <motion.span className="rpt-health-dot" style={{ background: hColor, boxShadow: `0 0 8px ${hColor}60` }}
-                                animate={{ scale: [1, 1.3, 1], opacity: [1, 0.6, 1] }}
-                                transition={{ duration: 2, repeat: Infinity }}
                               />
                               <span style={{ color: hColor, fontWeight: 700 }}>{health}</span>
                             </div>

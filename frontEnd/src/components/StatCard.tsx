@@ -110,8 +110,6 @@ export default function StatCard({ icon, value, label, colorClass = 'yellow', in
         <motion.div
           className="stat-card-icon-ring"
           style={{ background: colors.gradient }}
-          animate={{ rotate: 360 }}
-          transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
         />
         <div className="stat-card-icon" style={{ color: colors.text }}>
           {icon}
