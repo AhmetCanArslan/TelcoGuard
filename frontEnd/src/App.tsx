@@ -1,7 +1,9 @@
+import { useState, useCallback } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import Sidebar from './components/Sidebar'
+import ChatWidget from './components/ChatWidget'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import StationDetail from './pages/StationDetail'
@@ -32,6 +34,16 @@ function ProtectedPage({ children, allowedRoles }: { children: React.ReactNode; 
 }
 
 export default function App() {
+  const [chatTarget, setChatTarget] = useState<{ id: number; name: string } | null>(null)
+
+  const handleOpenChat = useCallback((target: { id: number; name: string }) => {
+    setChatTarget(target)
+  }, [])
+
+  const handleClearChatTarget = useCallback(() => {
+    setChatTarget(null)
+  }, [])
+
   return (
     <AuthProvider>
       <Routes>
@@ -40,7 +52,11 @@ export default function App() {
         <Route path="/" element={<ProtectedPage><Dashboard /></ProtectedPage>} />
         <Route path="/stations/:id" element={<ProtectedPage><StationDetail /></ProtectedPage>} />
         <Route path="/alarms" element={<ProtectedPage allowedRoles={['ADMIN', 'NOC_OPERATOR', 'FIELD_ENGINEER']}><Alarms /></ProtectedPage>} />
-        <Route path="/engineers" element={<ProtectedPage allowedRoles={['ADMIN', 'NOC_OPERATOR']}><Engineers /></ProtectedPage>} />
+        <Route path="/engineers" element={
+          <ProtectedPage allowedRoles={['ADMIN', 'NOC_OPERATOR']}>
+            <Engineers onOpenChat={handleOpenChat} />
+          </ProtectedPage>
+        } />
         <Route path="/reports" element={<ProtectedPage allowedRoles={['ADMIN', 'NOC_OPERATOR']}><Reports /></ProtectedPage>} />
           <Route path="/metrics" element={<ProtectedPage allowedRoles={['ADMIN', 'NOC_OPERATOR']}><Metrics /></ProtectedPage>} />
         <Route path="/simulator" element={<ProtectedPage allowedRoles={['ADMIN']}><SimulatorControl /></ProtectedPage>} />
@@ -48,7 +64,9 @@ export default function App() {
         <Route path="/summary" element={<ProtectedPage allowedRoles={['ADMIN', 'NETWORK_MANAGER']}><Summary /></ProtectedPage>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+
+      {/* Global floating chat widget + notification toasts */}
+      <ChatWidget initialTarget={chatTarget} onClearInitial={handleClearChatTarget} />
     </AuthProvider>
   )
 }
-

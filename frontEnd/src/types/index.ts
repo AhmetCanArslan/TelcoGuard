@@ -159,3 +159,83 @@ export interface LocationAnalysis {
   critical_count: number;
   offline_count: number;
 }
+
+/* ======================================================
+   Simulator Types
+   ====================================================== */
+
+export interface SimStation {
+  id: string;
+  code: string;
+  name: string;
+  lat: number;
+  lng: number;
+  region: string;
+  type: string;
+  capacity: number;
+  cpu_base: number;
+  cpu_noise: number;
+  memory_base: number;
+  memory_noise: number;
+  packet_base: number;
+  packet_noise: number;
+  latency_base: number;
+  latency_noise: number;
+  rssi_base: number;
+  rssi_noise: number;
+  users_base: number;
+  users_noise: number;
+}
+
+export interface ActiveAnomaly {
+  type: AnomalyType;
+  remaining_seconds: number;
+  duration_sec: number;
+  injected_at: string;
+  expires_at: string;
+}
+
+export interface AnomalyHistoryEntry {
+  station_code: string;
+  anomaly_type: AnomalyType;
+  duration_sec: number;
+  injected_at: string;
+  expired_at?: string;
+}
+
+export interface TickSummary {
+  tick_number: number;
+  stations_sent: number;
+  stations_failed: number;
+  tick_duration_ms: number;
+  backend_latency_ms: number;
+}
+
+export interface SimulatorStatus {
+  running: boolean;
+  tick_interval_ms: number;
+  station_count: number;
+  tick_count: number;
+  metrics_sent: number;
+  metrics_failed: number;
+  uptime_seconds: number;
+  last_tick_at: string;
+  last_tick_duration_ms: number;
+  avg_tick_duration_ms: number;
+  last_backend_latency_ms: number;
+  active_anomalies: Record<string, ActiveAnomaly>;
+  anomaly_history: AnomalyHistoryEntry[];
+  backend_url: string;
+}
+
+export type SimulatorEventType =
+  | 'simulator_status'
+  | 'tick_complete'
+  | 'anomaly_injected'
+  | 'anomaly_expired';
+
+export interface SimulatorEvent {
+  type: SimulatorEventType;
+  timestamp: string;
+  payload: SimulatorStatus | TickSummary | AnomalyHistoryEntry;
+}

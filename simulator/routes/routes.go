@@ -9,6 +9,9 @@ import (
 
 func Setup(app *fiber.App, runner *engine.Runner) {
 	app.Get("/health", handler.Health)
+	app.Get("/api/v1/simulator/config", handler.GetConfig)
+	app.Get("/api/v1/simulator/stations", handler.ListStations(runner))
+	app.Get("/api/v1/simulator/stream", handler.SSEStream(runner))
 
 	api := app.Group("/api/v1")
 	sim := api.Group("/simulator")
@@ -17,6 +20,7 @@ func Setup(app *fiber.App, runner *engine.Runner) {
 	sim.Post("/reset", handler.ResetSimulator(runner))
 	sim.Post("/inject-anomaly", handler.InjectAnomaly(runner))
 	sim.Get("/status", handler.Status(runner))
+	sim.Patch("/interval", handler.SetInterval(runner))
 
 	app.Use(func(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{

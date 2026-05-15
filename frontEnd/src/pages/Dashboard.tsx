@@ -54,9 +54,15 @@ export default function Dashboard() {
     const unsub2 = wsService.on('new_alarm', () => { fetchData() })
     const unsub3 = wsService.on('station_status', () => { fetchData() })
 
+    // Live engineer count: re-fetch summary when a user comes online/offline
+    // (backend counts only FIELD_ENGINEER role, so delta approach is unreliable)
+    const unsub4 = wsService.on('user_status', () => {
+      apiGetDashboardSummary().then(s => setSummary(s)).catch(() => {})
+    })
+
     return () => {
       clearInterval(interval)
-      unsub1(); unsub2(); unsub3()
+      unsub1(); unsub2(); unsub3(); unsub4()
     }
   }, [fetchData])
 
