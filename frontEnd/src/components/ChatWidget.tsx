@@ -81,6 +81,29 @@ export default function ChatWidget({ initialTarget, onClearInitial }: ChatWidget
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
+const playNotificationSound = () => {
+  try {
+    const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)()
+    const oscillator = audioCtx.createOscillator()
+    const gainNode = audioCtx.createGain()
+    
+    oscillator.type = 'sine'
+    oscillator.frequency.setValueAtTime(880, audioCtx.currentTime)
+    oscillator.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.1)
+    
+    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime)
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1)
+    
+    oscillator.connect(gainNode)
+    gainNode.connect(audioCtx.destination)
+    
+    oscillator.start()
+    oscillator.stop(audioCtx.currentTime + 0.1)
+  } catch (err) {
+    // Ignore errors (e.g. if browser blocks autoplay before user interaction)
+  }
+}
+
   // Listen to incoming chat_message
   useEffect(() => {
     if (!user) return
@@ -88,6 +111,8 @@ export default function ChatWidget({ initialTarget, onClearInitial }: ChatWidget
     const unsubChat = wsService.on('chat_message', (msg: WSMessage) => {
       const p = msg.payload as ChatMessage
       if (p.sender_id === user.id) return // ignore own echo
+
+      playNotificationSound()
 
       // If chat is open with this sender, add inline
       if (open && targetUser?.id === p.sender_id) {
@@ -109,6 +134,9 @@ export default function ChatWidget({ initialTarget, onClearInitial }: ChatWidget
     const unsubAlarm = wsService.on('forward_alarm', (msg: WSMessage) => {
       const p = msg.payload as ForwardedAlarm
       if (p.sender_id === user.id) return
+      
+      playNotificationSound()
+      
       setUnreadCount(c => c + 1)
       const t: ToastItem = {
         id: ++toastId,

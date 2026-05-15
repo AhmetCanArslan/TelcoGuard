@@ -48,6 +48,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const u: StoredUser = { id: me.id, name: me.name, email: me.email, role: me.role }
         setUser(u)
         setStoredUser(u)
+        wsService.connect()
       })
       .catch(() => {
         clearTokens()
@@ -67,6 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     setUser(u)
     setStoredUser(u)
+    wsService.connect()
   }, [])
 
   const logout = useCallback(() => {

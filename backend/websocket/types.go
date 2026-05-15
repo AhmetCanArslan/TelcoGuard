@@ -5,14 +5,14 @@ import "encoding/json"
 type MessageType string
 
 const (
-	MessageTypeMetricUpdate     MessageType = "metric_update"
-	MessageTypeStationStatus    MessageType = "station_status"
-	MessageTypeNewAlarm         MessageType = "new_alarm"
-	MessageTypeAlarmUpdate      MessageType = "alarm_update"
+	MessageTypeMetricUpdate      MessageType = "metric_update"
+	MessageTypeStationStatus     MessageType = "station_status"
+	MessageTypeNewAlarm          MessageType = "new_alarm"
+	MessageTypeAlarmUpdate       MessageType = "alarm_update"
 	MessageTypeDashboardSnapshot MessageType = "dashboard_snapshot"
-	MessageTypeSubscribe        MessageType = "subscribe"
-	MessageTypeUnsubscribe      MessageType = "unsubscribe"
-	MessageTypeUserStatus       MessageType = "user_status"
+	MessageTypeSubscribe         MessageType = "subscribe"
+	MessageTypeUnsubscribe       MessageType = "unsubscribe"
+	MessageTypeUserStatus        MessageType = "user_status"
 )
 
 type WSMessage struct {
@@ -49,4 +49,25 @@ type DashboardSnapshotPayload struct {
 type UserStatusPayload struct {
 	UserID   uint `json:"user_id"`
 	IsOnline bool `json:"is_online"`
+}
+
+const (
+	MessageTypeChatMessage  MessageType = "chat_message"
+	MessageTypeForwardAlarm MessageType = "forward_alarm"
+)
+
+type ChatMessagePayload struct {
+	SenderID   int    `json:"sender_id"`
+	SenderName string `json:"sender_name,omitempty"`
+	ReceiverID int    `json:"receiver_id"`
+	Type       string `json:"type"`
+	Content    string `json:"content"`
+	Timestamp  string `json:"timestamp"`
+}
+
+type ForwardAlarmPayload struct {
+	SenderID   int         `json:"sender_id"`
+	SenderName string      `json:"sender_name,omitempty"`
+	ReceiverID int         `json:"receiver_id"`
+	Alarm      interface{} `json:"alarm"`
 }

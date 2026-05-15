@@ -7,20 +7,27 @@ import (
 	"log"
 )
 
+type directMsg struct {
+	targetUserID uint
+	data         []byte
+}
+
 type Hub struct {
-	clients    map[*Client]bool
-	broadcast  chan []byte
-	register   chan *Client
+	clients         map[*Client]bool
+	broadcast       chan []byte
+	direct          chan directMsg
+	register        chan *Client
 	unregister      chan *Client
 	userConnections map[uint]int
 }
 
 func NewHub() *Hub {
 	return &Hub{
-		clients:    make(map[*Client]bool),
-		broadcast:  make(chan []byte, 256),
-		register:   make(chan *Client),
-		unregister: make(chan *Client),
+		clients:         make(map[*Client]bool),
+		broadcast:       make(chan []byte, 256),
+		direct:          make(chan directMsg, 256),
+		register:        make(chan *Client),
+		unregister:      make(chan *Client),
 		userConnections: make(map[uint]int),
 	}
 }
@@ -33,7 +40,6 @@ func (h *Hub) Run() {
 			log.Printf("🔌 Client connected. UserID: %d. Total: %d", client.UserID, len(h.clients))
 			if client.UserID > 0 {
 				h.userConnections[client.UserID]++
-				// Only update DB and broadcast if this is the first connection
 				if h.userConnections[client.UserID] == 1 {
 					database.DB.Model(&models.User{}).Where("id = ?", client.UserID).Update("is_online", true)
 					h.BroadcastTyped(MessageTypeUserStatus, UserStatusPayload{UserID: client.UserID, IsOnline: true})
@@ -47,7 +53,6 @@ func (h *Hub) Run() {
 				log.Printf("🔌 Client disconnected. UserID: %d. Total: %d", client.UserID, len(h.clients))
 				if client.UserID > 0 {
 					h.userConnections[client.UserID]--
-					// Only update DB and broadcast if this was the last connection
 					if h.userConnections[client.UserID] <= 0 {
 						delete(h.userConnections, client.UserID)
 						database.DB.Model(&models.User{}).Where("id = ?", client.UserID).Update("is_online", false)
@@ -64,6 +69,23 @@ func (h *Hub) Run() {
 					close(client.send)
 					delete(h.clients, client)
 				}
+			}
+
+		case dm := <-h.direct:
+			sent := false
+			for client := range h.clients {
+				if client.UserID == dm.targetUserID {
+					select {
+					case client.send <- dm.data:
+						sent = true
+					default:
+						close(client.send)
+						delete(h.clients, client)
+					}
+				}
+			}
+			if !sent {
+				log.Printf("⚠️ SendToUser: user %d not found or offline", dm.targetUserID)
 			}
 		}
 	}
@@ -88,6 +110,29 @@ func (h *Hub) BroadcastTyped(msgType MessageType, payload interface{}) {
 		return
 	}
 	h.Broadcast(bytes)
+}
+
+// SendToUser sends a message to a specific user through the hub's event loop (thread-safe).
+func (h *Hub) SendToUser(userID uint, msgType MessageType, payload interface{}) {
+	data, err := json.Marshal(payload)
+	if err != nil {
+		log.Printf("SendToUser marshal payload error: %v", err)
+		return
+	}
+
+	msg := WSMessage{
+		Type:    msgType,
+		Payload: data,
+	}
+
+	bytes, err := json.Marshal(msg)
+	if err != nil {
+		log.Printf("SendToUser marshal msg error: %v", err)
+		return
+	}
+
+	log.Printf("📩 SendToUser: routing %s to user %d (%d bytes)", msgType, userID, len(bytes))
+	h.direct <- directMsg{targetUserID: userID, data: bytes}
 }
 
 func (h *Hub) Register(client *Client) {

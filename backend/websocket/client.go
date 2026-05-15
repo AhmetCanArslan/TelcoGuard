@@ -39,10 +39,34 @@ func (c *Client) ReadMessage() {
 
 		if messageType == websocket.TextMessage {
 			var msg WSMessage
-			if err := json.Unmarshal(data, &msg); err == nil {
-				if msg.Type == MessageTypeSubscribe || msg.Type == MessageTypeUnsubscribe {
-					log.Printf("Client %s topic: %s", msg.Type, msg.Topic)
+			if err := json.Unmarshal(data, &msg); err != nil {
+				log.Printf("❌ Failed to unmarshal WS message from user %d: %v", c.UserID, err)
+				continue
+			}
+
+			log.Printf("📨 WS recv from user %d: type=%s", c.UserID, msg.Type)
+
+			switch msg.Type {
+			case MessageTypeSubscribe, MessageTypeUnsubscribe:
+				log.Printf("Client %s topic: %s", msg.Type, msg.Topic)
+
+			case MessageTypeChatMessage:
+				var chatPayload ChatMessagePayload
+				if err := json.Unmarshal(msg.Payload, &chatPayload); err != nil {
+					log.Printf("❌ Failed to unmarshal chat payload: %v", err)
+					continue
 				}
+				log.Printf("💬 Chat: user %d -> user %d", chatPayload.SenderID, chatPayload.ReceiverID)
+				c.hub.SendToUser(uint(chatPayload.ReceiverID), MessageTypeChatMessage, chatPayload)
+
+			case MessageTypeForwardAlarm:
+				var alarmPayload ForwardAlarmPayload
+				if err := json.Unmarshal(msg.Payload, &alarmPayload); err != nil {
+					log.Printf("❌ Failed to unmarshal alarm payload: %v", err)
+					continue
+				}
+				log.Printf("🚨 ForwardAlarm: user %d -> user %d", alarmPayload.SenderID, alarmPayload.ReceiverID)
+				c.hub.SendToUser(uint(alarmPayload.ReceiverID), MessageTypeForwardAlarm, alarmPayload)
 			}
 		}
 	}

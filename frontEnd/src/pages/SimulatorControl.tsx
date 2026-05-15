@@ -4,13 +4,14 @@ import {
   FaClipboardList, FaTrash, FaPowerOff, FaServer,
   FaClock, FaCheckCircle, FaExclamationTriangle,
   FaTimesCircle, FaSignal, FaTachometerAlt, FaUsers,
-  FaMicrochip, FaUserTimes, FaStopwatch, FaCloudRain, FaBan
+  FaMicrochip, FaUserTimes, FaStopwatch, FaCloudRain, FaBan,
+  FaSync, FaUndo
 } from 'react-icons/fa'
 import {
-  apiSimulatorStart, apiSimulatorStop,
+  apiSimulatorStart, apiSimulatorStop, apiSimulatorReset,
   apiSimulatorInjectAnomaly, apiSimulatorStatus,
   apiSimulatorStations, apiSimulatorSetInterval,
-  createSimulatorEventSource
+  createSimulatorEventSource, apiResetAllAlarms
 } from '../services/api'
 import type { AnomalyType, SimStation, SimulatorStatus, SimulatorEvent, TickSummary, AnomalyHistoryEntry } from '../types'
 
@@ -163,6 +164,33 @@ export default function SimulatorControl() {
     }
   }
 
+  const resetSimulator = async () => {
+    setActionLoading(true)
+    try {
+      await apiSimulatorReset()
+      await fetchInitialData()
+      addLog('Simülatör sıfırlandı — tüm istasyonlar normale döndü', 'success')
+    } catch (err) {
+      addLog('Hata: ' + (err instanceof Error ? err.message : 'Sıfırlama başarısız'), 'error')
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
+  const refreshAll = async () => {
+    setActionLoading(true)
+    try {
+      await apiResetAllAlarms()
+      await apiSimulatorReset()
+      await fetchInitialData()
+      addLog('🔄 Tüm alarmlar silindi, istasyonlar ACTIVE yapıldı, simülatör sıfırlandı', 'success')
+    } catch (err) {
+      addLog('Hata: ' + (err instanceof Error ? err.message : 'Refresh başarısız'), 'error')
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
   const injectAnomaly = async () => {
     if (!selectedStation) return
     setActionLoading(true)
@@ -227,9 +255,17 @@ export default function SimulatorControl() {
             transition: 'all 0.3s',
           }} title={sseConnected ? 'SSE Bağlı' : 'SSE Bağlı Değil'} />
         </div>
-        <button className="btn-primary" onClick={toggleSimulator} disabled={actionLoading}>
-          {status?.running ? <><FaStop /> Durdur</> : <><FaPlay /> Başlat</>}
-        </button>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <button className="btn-primary" onClick={refreshAll} disabled={actionLoading} style={{ background: '#10b981' }}>
+            <FaSync /> Refresh
+          </button>
+          <button className="btn-primary" onClick={resetSimulator} disabled={actionLoading} style={{ background: '#f59e0b' }}>
+            <FaUndo /> DB Sıfırla
+          </button>
+          <button className="btn-primary" onClick={toggleSimulator} disabled={actionLoading}>
+            {status?.running ? <><FaStop /> Durdur</> : <><FaPlay /> Başlat</>}
+          </button>
+        </div>
       </div>
 
       {/* Status Cards */}

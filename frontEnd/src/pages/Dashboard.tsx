@@ -39,7 +39,6 @@ export default function Dashboard() {
     fetchData()
     const interval = setInterval(fetchData, 30000)
 
-    wsService.connect()
     const unsub1 = wsService.on('dashboard_snapshot', (msg) => {
       setSummary(msg.payload as DashboardSummary)
     })
@@ -69,7 +68,10 @@ export default function Dashboard() {
   return (
     <>
       <div className="page-header">
-        <h2>Şebeke Dashboard</h2>
+        <div className="page-header-brand">
+          <img src="/turkcell-logo.png" alt="Turkcell" className="page-header-logo" />
+          <h2>Şebeke Dashboard</h2>
+        </div>
         <div className="live-badge">
           <span className="live-dot" />
           Canlı İzleme
